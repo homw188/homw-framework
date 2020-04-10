@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	
+	<!-- 加载配置属性文件 -->
+	<context:property-placeholder ignore-unresolvable="true" location="classpath:conf/jdbc.properties" />
+	
+	<!-- 配置数据源，基于c3p0连接池  -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="${jdbc.driverClass}"/>
+		<property name="jdbcUrl" value="${jdbc.url}"/>
+		<property name="user" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+		
+		<!-- 当连接池中的连接用完时，C3P0一次性创建新连接的数目，默认值:3 -->
+		<property name="acquireIncrement" value="3"/>
+		<!-- 连接池中保留的最小连接数，默认值:3 -->
+		<property name="minPoolSize" value="3"/>
+		<!-- 连接池中保留的最大连接数 ，默认值:15 -->
+		<property name="maxPoolSize" value="15"/>
+		<!-- 初始化时创建的连接数，应在minPoolSize与maxPoolSize之间取值 ，默认值:3 -->
+		<property name="initialPoolSize" value="3"/>
+		<!-- 最大空闲时间，超过空闲时间的不在使用的连接将被丢弃。0表示永不丢弃 ，默认值:0 -->
+		<property name="maxIdleTime" value="0"/>
+		<!-- 定义在从数据库获取新连接失败后重复尝试获取的次数 ，默认值:30 -->
+		<property name="acquireRetryAttempts" value="30"/>
+		<!-- 两次连接中间隔时间，单位毫秒 ，默认值:1000  -->
+		<property name="acquireRetryDelay" value="1000"/>
+		<!-- JDBC的标准参数，用以控制数据源内加载的PreparedStatement数量。
+			但由于预缓存的Statement属 于单个Connection而不是整个连接池。
+			所以设置这个参数需要考虑到多方面的因素，如果maxStatements与 maxStatementsPerConnection均为0，则缓存被关闭 ，默认值:0  -->
+		<property name="maxStatements" value="0"/>
+		<!-- 连接池内单个连接所拥有的最大缓存Statement数  ，默认值:0 -->
+		<property name="maxStatementsPerConnection" value="0"/>
+		<!-- 隔多少秒检查所有连接池中的空闲连接  ，默认值:0 -->
+		<property name="idleConnectionTestPeriod" value="0"/>
+		<!-- 连接关闭时默认将所有未提交的操作回滚 ，默认值:false  -->
+		<property name="autoCommitOnClose" value="false"/>
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="mapperLocations" value="classpath:mappings/**/*.xml"/>
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+	</bean>
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+		<property name="basePackage" value="com.homw.test.dao"/>
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+</beans>

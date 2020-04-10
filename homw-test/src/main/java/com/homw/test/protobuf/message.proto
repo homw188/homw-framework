@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+message proto_data {
+	int32 code = 1;
+	string userName = 2;
+	bool gender = 3;
+}

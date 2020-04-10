@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+                        "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+<taglib>
+	<tlib-version>1.0</tlib-version>
+	<jsp-version>1.2</jsp-version>
+	<short-name>m</short-name>
+	<uri>/WEB-INF/tlds/menu</uri>
+	<display-name>自定义菜单标签</display-name>
+	
+	<tag>
+		<name>menu</name>
+		<tag-class>com.homw.test.tag.MenuTag</tag-class>
+		<body-content>Empty</body-content>
+	</tag>
+</taglib>

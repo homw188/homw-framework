@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.homw.tool.dao.PayRecordGenerateDao">
+	<select id="queryListMissingPayRecord" resultType="com.homw.tool.entity.AgreementEntity">
+		SELECT a.* FROM huge_agreement a 
+		WHERE NOT EXISTS (SELECT * FROM huge_rent_room_payrecord r WHERE r.`AGREEMENT_ID` = a.`AGREEMENT_ID` AND r.`SPACE_ID` = #{spaceId}) AND a.`SPACE_ID` = #{spaceId}
+	</select>
+	
+	<insert id="saveBatchRecord" parameterType="com.homw.tool.entity.PayRecordEntity">
+	    INSERT INTO huge_rent_room_payrecord (PAYER_ID, PAYER_TYPE, PAYER_NAME, 
+			AGREEMENT_ID, RECORD_STATUS, TOTAL_AMT, 
+			PAY_AMT, SPACE_ID, ORDER_TYPE, 
+			PERIOD, RENT_PERIOD_NUM, YEAR, 
+			MONTH, STATUS, VERSION, 
+			CREATE_USER_ID, CREATE_TIME, CREATE_USER_TYPE, 
+			UPDATE_USER_ID, UPDATE_TIME, UPDATE_USER_TYPE, 
+			START_TIME, END_TIME
+		) VALUES 
+	    <foreach collection="list" index="index" item="item" separator=",">
+		(
+			#{item.payerId, jdbcType=BIGINT}, 
+			#{item.payerType, jdbcType=VARCHAR},
+			#{item.payerName, jdbcType=VARCHAR},
+			#{item.agreementId, jdbcType=BIGINT},
+			#{item.recordStatus, jdbcType=VARCHAR},
+			#{item.totalAmt, jdbcType=DECIMAL},
+			#{item.payAmt, jdbcType=DECIMAL}, 
+			#{item.spaceId, jdbcType=BIGINT}, 
+			#{item.orderType, jdbcType=VARCHAR},
+			#{item.period, jdbcType=VARCHAR},
+			#{item.rentPeriodNum, jdbcType=SMALLINT}, 
+			#{item.year, jdbcType=CHAR},
+			#{item.month, jdbcType=CHAR}, 
+			#{item.status, jdbcType=SMALLINT},
+			#{item.version, jdbcType=INTEGER},
+			#{item.createUserId, jdbcType=BIGINT}, 
+			#{item.createTime, jdbcType=BIGINT},
+			#{item.createUserType, jdbcType=VARCHAR},
+			#{item.updateUserId, jdbcType=BIGINT},
+			#{item.updateTime, jdbcType=BIGINT},
+			#{item.updateUserType, jdbcType=VARCHAR},
+			#{item.startTime, jdbcType=BIGINT}, 
+			#{item.endTime, jdbcType=BIGINT}
+		)
+	    </foreach>
+	</insert>
+</mapper>

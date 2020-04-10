@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.homw.tool.dao.LampsKeyUpdateDao">
+	<select id="selectLocationList" resultType="com.homw.tool.entity.LightSerialLocationEntity">
+		SELECT s.`id`, s.`location_data` FROM t_light_serial_location s WHERE s.`location_data` IS NOT NULL AND s.`lamps_key` IS NULL 
+	</select>
+	<select id="selectLampList" resultType="com.homw.tool.entity.LightlampsEntity">
+		SELECT * FROM t_light_lamps s WHERE s.`is_valid` = 'Y'
+	</select>
+	<update id="updateBatch">
+        <foreach collection="list" item="item" separator=";">
+            update t_light_serial_location set lamps_key = #{item.lampsKey} where id = #{item.id}
+        </foreach>
+	</update>
+</mapper>

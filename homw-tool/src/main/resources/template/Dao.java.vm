@@ -1,0 +1,15 @@
+package ${package}.dao;
+
+import ${package}.entity.${className}Entity;
+import com.psiot.parking.common.dao.BaseDao;
+
+/**
+ * ${comments}
+ * 
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+public interface ${className}Dao extends BaseDao<${className}Entity> {
+	
+}

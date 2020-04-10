@@ -1,0 +1,47 @@
+[INFO][2020-04-03 11:20:35] com.homw.tool.application.AbstractApplication.start(AbstractApplication.java:27) Start application KedaMeterReadApp... 
+[INFO][2020-04-03 11:20:35] org.springframework.context.support.AbstractApplicationContext.prepareRefresh(AbstractApplicationContext.java:581) Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@3f38dd0: startup date [Fri Apr 03 11:20:35 CST 2020]; root of context hierarchy 
+[INFO][2020-04-03 11:20:35] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-context.xml] 
+[INFO][2020-04-03 11:20:36] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-jdbc.xml] 
+[INFO][2020-04-03 11:20:36] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:172) Loading properties file from class path resource [conf/jdbc.properties] 
+[INFO][2020-04-03 11:20:38] com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:715) {dataSource-1} inited 
+[INFO][2020-04-03 11:20:39] com.homw.tool.api.keda.KDZTService.readWaterValue(KDZTService.java:279) start readWaterValue... 
+[INFO][2020-04-03 11:20:39] com.homw.tool.api.keda.SocketToolThreadSafe.connectServer(SocketToolThreadSafe.java:38) start connectServer... 
+[INFO][2020-04-03 11:20:39] com.homw.tool.api.keda.SocketToolThreadSafe.connectServer(SocketToolThreadSafe.java:47) response: cmd::Successful 
+[INFO][2020-04-03 11:20:39] com.homw.tool.api.keda.SocketToolThreadSafe.SendData(SocketToolThreadSafe.java:97) send packet: cccc00ff68000000000000680011016810872616111700000103901f0016162416 
+[INFO][2020-04-03 11:20:45] com.homw.tool.api.keda.SocketToolThreadSafe$1.call(SocketToolThreadSafe.java:119) socket resp: cccc00ff6800000000000068ff24006810872616111700008116901f00002400002d00240000000000000000000020003e168516 
+[INFO][2020-04-03 11:20:45] com.homw.tool.api.keda.KDZTService.readWaterValue(KDZTService.java:286) backData: cccc00ff6800000000000068ff24006810872616111700008116901f00002400002d00240000000000000000000020003e168516 
+[INFO][2020-04-03 11:20:45] com.homw.tool.application.impl.KedaMeterReadApp.execute(KedaMeterReadApp.java:57) back data is: 1711162687,24.0 
+[INFO][2020-04-03 11:20:45] com.homw.tool.application.impl.KedaMeterReadApp.execute(KedaMeterReadApp.java:63) ammeter value is: 24 
+[INFO][2020-04-03 11:20:45] org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:964) Closing org.springframework.context.support.ClassPathXmlApplicationContext@3f38dd0: startup date [Fri Apr 03 11:20:35 CST 2020]; root of context hierarchy 
+[INFO][2020-04-03 11:20:45] com.alibaba.druid.pool.DruidDataSource.close(DruidDataSource.java:1444) {dataSource-1} closed 
+[INFO][2020-04-03 11:20:45] com.homw.tool.application.AbstractApplication.completed(AbstractApplication.java:116) Application KedaMeterReadApp completed. 
+[INFO][2020-04-03 16:52:48] com.homw.tool.application.AbstractApplication.start(AbstractApplication.java:27) Start application KedaMeterReadApp... 
+[INFO][2020-04-03 16:52:48] org.springframework.context.support.AbstractApplicationContext.prepareRefresh(AbstractApplicationContext.java:581) Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@39fe9ce1: startup date [Fri Apr 03 16:52:48 CST 2020]; root of context hierarchy 
+[INFO][2020-04-03 16:52:48] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-context.xml] 
+[INFO][2020-04-03 16:52:49] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-jdbc.xml] 
+[INFO][2020-04-03 16:52:49] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:172) Loading properties file from class path resource [conf/jdbc.properties] 
+[INFO][2020-04-03 16:52:51] com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:715) {dataSource-1} inited 
+[INFO][2020-04-03 16:52:52] com.homw.tool.api.keda.SocketToolThreadSafe.connectServer(SocketToolThreadSafe.java:38) start connectServer... 
+[INFO][2020-04-03 16:52:52] com.homw.tool.api.keda.SocketToolThreadSafe.connectServer(SocketToolThreadSafe.java:47) response: cmd::Successful 
+[INFO][2020-04-03 16:52:52] com.homw.tool.api.keda.SocketToolThreadSafe.SendData(SocketToolThreadSafe.java:97) send packet: cccc00df6899220022180868110469333312c316 
+[INFO][2020-04-03 16:53:00] com.homw.tool.application.impl.KedaMeterReadApp.execute(KedaMeterReadApp.java:57) back data is: Err,-1 
+[INFO][2020-04-03 16:53:00] com.homw.tool.application.impl.KedaMeterReadApp.execute(KedaMeterReadApp.java:63) ammeter value is: 0 
+[INFO][2020-04-03 16:53:00] com.homw.tool.api.keda.SocketToolThreadSafe$1.call(SocketToolThreadSafe.java:119) socket resp: null 
+[INFO][2020-04-03 16:53:00] org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:964) Closing org.springframework.context.support.ClassPathXmlApplicationContext@39fe9ce1: startup date [Fri Apr 03 16:52:48 CST 2020]; root of context hierarchy 
+[INFO][2020-04-03 16:53:00] com.alibaba.druid.pool.DruidDataSource.close(DruidDataSource.java:1444) {dataSource-1} closed 
+[INFO][2020-04-03 16:53:00] com.homw.tool.application.AbstractApplication.completed(AbstractApplication.java:116) Application KedaMeterReadApp completed. 
+[INFO][2020-04-03 16:56:46] com.homw.tool.application.AbstractApplication.start(AbstractApplication.java:27) Start application KedaMeterReadApp... 
+[INFO][2020-04-03 16:56:46] org.springframework.context.support.AbstractApplicationContext.prepareRefresh(AbstractApplicationContext.java:581) Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@6ae354b6: startup date [Fri Apr 03 16:56:46 CST 2020]; root of context hierarchy 
+[INFO][2020-04-03 16:56:47] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-context.xml] 
+[INFO][2020-04-03 16:56:47] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-jdbc.xml] 
+[INFO][2020-04-03 16:56:47] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:172) Loading properties file from class path resource [conf/jdbc.properties] 
+[INFO][2020-04-03 16:56:50] com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:715) {dataSource-1} inited 
+[INFO][2020-04-03 16:56:51] com.homw.tool.api.keda.SocketToolThreadSafe.connectServer(SocketToolThreadSafe.java:38) start connectServer... 
+[INFO][2020-04-03 16:56:51] com.homw.tool.api.keda.SocketToolThreadSafe.connectServer(SocketToolThreadSafe.java:47) response: cmd::Successful 
+[INFO][2020-04-03 16:56:51] com.homw.tool.api.keda.SocketToolThreadSafe.SendData(SocketToolThreadSafe.java:97) send packet: cccc00df6899220022180868110469333312c316 
+[INFO][2020-04-03 16:56:59] com.homw.tool.api.keda.SocketToolThreadSafe$1.call(SocketToolThreadSafe.java:119) socket resp: null 
+[INFO][2020-04-03 16:56:59] com.homw.tool.application.impl.KedaMeterReadApp.execute(KedaMeterReadApp.java:57) back data is: Err,-1 
+[INFO][2020-04-03 16:56:59] com.homw.tool.application.impl.KedaMeterReadApp.execute(KedaMeterReadApp.java:63) ammeter value is: 0 
+[INFO][2020-04-03 16:56:59] org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:964) Closing org.springframework.context.support.ClassPathXmlApplicationContext@6ae354b6: startup date [Fri Apr 03 16:56:46 CST 2020]; root of context hierarchy 
+[INFO][2020-04-03 16:56:59] com.alibaba.druid.pool.DruidDataSource.close(DruidDataSource.java:1444) {dataSource-1} closed 
+[INFO][2020-04-03 16:56:59] com.homw.tool.application.AbstractApplication.completed(AbstractApplication.java:116) Application KedaMeterReadApp completed. 

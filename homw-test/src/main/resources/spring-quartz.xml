@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	<!-- 1：定义任务的bean，这里使用JobDetailFactoryBean，也可以使用MethodInvokingJobDetailFactoryBean ，配置类似-->
+	<bean id="remindJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<!-- 指定job的名称 -->
+		<property name="name" value="remind.job"/>
+		<!-- 指定job的分组 -->
+		<property name="group" value="my.group"/>
+		<!-- 指定具体的job类 -->
+		<property name="jobClass" value="com.homw.test.quartz.job.RemindJob"/>
+		<!-- 必须设置为true，如果为false，当没有活动的触发器与之关联时会在调度器中会删除该任务  -->
+        <property name="durability" value="true"/>
+        <!-- 指定spring容器的key，如果不设定在job中的datamap中是获取不到spring容器的  -->
+        <property name="applicationContextJobDataKey" value="applicationContext"/>
+	</bean>
+	
+	<!-- 定义触发器的bean，定义一个Cron的Trigger，一个触发器只能和一个任务进行绑定 -->
+	<bean id="remindConTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<!-- 指定Trigger的名称  -->
+        <property name="name" value="remind.cron.trigger"/>
+       	<!-- 指定Trigger分组的名称  -->
+        <property name="group" value="my.group"/>
+		<!-- 指定Tirgger绑定的Job -->
+		<property name="jobDetail" ref="remindJobDetail"/>
+		<!-- 指定Cron 的表达式 ，当前是每隔1s运行一次 -->
+		<property name="cronExpression" value="0/3 * * * * ?"/>
+	</bean>
+	
+	<!-- 定义触发器的bean，定义一个simple的Trigger，一个触发器只能和一个任务进行绑定 -->
+	<bean id="remindSimpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<!-- 指定Trigger的名称  -->
+        <property name="name" value="remind.simple.trigger"/>
+       	<!-- 指定Trigger分组的名称  -->
+        <property name="group" value="my.group"/>
+        <!-- 指定Tirgger绑定的Job -->
+		<property name="jobDetail" ref="remindJobDetail"/>
+		<!-- 指定Trigger的延迟时间 3s后运行 -->
+		<property name="startDelay" value="3000"/>
+		<!-- 指定Trigger的重复间隔  1s -->
+		<property name="repeatInterval" value="1000"/>
+		<!-- 指定Trigger的重复次数 -->
+		<property name="repeatCount" value="5"/>
+	</bean>
+	
+	<!-- 解决quartz的job无法注入spring对象 -->
+	<bean id="jobFactory" class="com.homw.test.quartz.job.JobFactory"/>
+	
+	<!-- 定义调度器，并将Trigger注册到调度器中 -->
+	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<!--  --><ref bean="remindConTrigger"/>
+				<ref bean="remindSimpleTrigger"/>
+			</list>
+		</property>
+		<property name="autoStartup" value="true"/>
+		<property name="configLocation" value="classpath:conf/quartz.properties"/>
+		<property name="jobFactory" ref="jobFactory"/>
+		<property name="dataSource" ref="dataSource"/>
+		<property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+	</bean>
+</beans>

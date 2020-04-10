@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- scanPeriod 单位: milliseconds, seconds, minutes or hours -->
+<configuration scan="false" scanPeriod="1 minutes" debug="false">
+	<!-- 日志文件根目录 -->
+	<property name="log.root" value="${user.home}/logs"/>
+	
+	<!-- debug日志文件路径 -->
+	<property name="log.file.debug" value="${log.root}/debug.log"/>
+	<!-- error日志文件路径 -->
+	<property name="log.file.error" value="${log.root}/error.log"/>
+	
+	<!-- debug日志压缩文件路径，%d{yyyy-MM-dd}文件滚动日期格式（每天：yyyy-MM-dd（默认）；每星期：yyyy-ww；每月：yyyy-MM），%i指定索引 -->
+	<!-- 每隔半天：yyyy-MM-dd-a；每小时：yyyy-MM-dd-HH；每分钟：yyyy-MM-dd-HH-mm -->
+	<property name="log.archive.debug" value="${log.root}/debug+%d{yyyy-MM}_%i.log.zip"/>
+	<!-- error日志压缩文件路径 -->
+	<property name="log.archive.error" value="${log.root}/error+%d{yyyy-MM}_%i.log.zip"/>
+	
+	<!-- 日志编码 -->
+	<property name="log.encoding.gbk" value="GBK"/>
+	<property name="log.encoding.utf8" value="UTF-8"/>
+	
+	<!-- 日志留存时间，单位：天 -->
+	<property name="log.history" value="180"/>
+	<!-- 日志文件滚动压缩大小 -->
+	<property name="log.file.size" value="30MB"/>
+	
+	<!-- error日志格式 -->
+	<property name="log.pattern.error" value="%d{yyyy-MM-dd HH:mm:ss.SSS} |-%-5level [%thread] - %msg%n"/>
+	<!-- debug日志格式 -->
+	<property name="log.pattern.debug" value="%d{yyyy-MM-dd HH:mm:ss.SSS} |-%-5level [%thread] %logger{128} - %msg%n"/>
+	
+	<!-- 过滤重复日志，TurboFilter过滤效率高，不依赖于logEvent -->
+	<turboFilter class="ch.qos.logback.classic.turbo.DuplicateMessageFilter">
+		<AllowedRepetitions>5</AllowedRepetitions>
+		<CacheSize>100</CacheSize>
+	</turboFilter>
+	
+	<!-- 控制台输出配置 -->
+	<appender name="info-std-out" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- 不输出error级别日志，格式冗余 -->
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>DENY</onMatch>
+			<onMismatch>NEUTRAL</onMismatch>
+		</filter>
+		
+		<!-- 输出流，默认System.out -->
+		<target>System.out</target>
+		
+		<encoder class="ch.qos.logback.classic.PatternLayout">
+			<charset>${log.encoding.utf8}</charset>
+			<pattern>${log.pattern.debug}</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- debug日志文件输出配置 -->
+	<appender name="debug-file-out" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.file.debug}</file>
+		<!-- 追加日志到原文件结尾，如果false则情况现存文件，默认是true -->
+		<append>true</append>
+		
+		<!-- 过滤非debug日志 -->
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>
+			<onMatch>DENY</onMatch>
+			<onMismatch>NEUTRAL</onMismatch>
+		</filter>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>DENY</onMatch>
+			<onMismatch>NEUTRAL</onMismatch>
+		</filter>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>NEUTRAL</onMismatch>
+		</filter>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>NEUTRAL</onMismatch>
+		</filter>
+		
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${log.archive.debug}</fileNamePattern>
+			<!-- 控制日志压缩文件保存的数量，删除旧的文件，默认单位：天 -->
+			<maxHistory>${log.history}</maxHistory>
+			<!-- 日志文件不能超过10M(默认)，否则日志文件会以索引0开始 -->
+			<maxFileSize>${log.file.size}</maxFileSize>
+		</rollingPolicy>
+		
+		<encoder class="ch.qos.logback.classic.PatternLayout">
+			<charset>${log.encoding.gbk}</charset>
+			<pattern>${log.pattern.debug}</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- error日志文件输出配置 -->
+	<appender name="err-file-out" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.file.error}</file>
+		<append>true</append>
+		
+		<!-- 过滤非error日志 -->
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+			<onMatch>DENY</onMatch>
+			<onMismatch>NEUTRAL</onMismatch>
+		</filter>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>DENY</onMatch>
+			<onMismatch>NEUTRAL</onMismatch>
+		</filter>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>NEUTRAL</onMismatch>
+		</filter>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>NEUTRAL</onMismatch>
+		</filter>
+		
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${log.archive.error}</fileNamePattern>
+			<maxHistory>${log.history}</maxHistory>
+			<maxFileSize>${log.file.size}</maxFileSize>
+		</rollingPolicy>
+		
+		<encoder class="ch.qos.logback.classic.PatternLayout">
+			<charset>${log.encoding.gbk}</charset>
+			<pattern>${log.pattern.debug}</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- spring-framework日志输出级别设置 -->
+	<logger name="org.springframework" level="ERROR" additivity="true"/>
+
+	<!-- root logger, level: TRACE, DEBUG, INFO, WARN, ERROR, ALL, OFF, INHERITED/NULL-->
+	<root level="DEBUG">
+		<!-- 项目发布，建议去除控制台输出info-std-out -->
+		<appender-ref ref="info-std-out"/>
+		<appender-ref ref="debug-file-out"/>
+		<appender-ref ref="err-file-out"/>
+	</root>
+</configuration>

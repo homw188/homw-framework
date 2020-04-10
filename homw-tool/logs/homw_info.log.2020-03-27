@@ -1,0 +1,70 @@
+[INFO][2020-03-27 13:01:48] com.homw.tool.application.AbstractApplication.start(AbstractApplication.java:27) Start application KedeMeterReadApp... 
+[INFO][2020-03-27 13:01:48] org.springframework.context.support.AbstractApplicationContext.prepareRefresh(AbstractApplicationContext.java:581) Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@3a46192c: startup date [Fri Mar 27 13:01:48 CST 2020]; root of context hierarchy 
+[INFO][2020-03-27 13:01:48] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-context.xml] 
+[INFO][2020-03-27 13:01:49] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-mybatis.xml] 
+[INFO][2020-03-27 13:01:50] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:172) Loading properties file from class path resource [config/jdbc.properties] 
+[INFO][2020-03-27 13:01:50] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:172) Loading properties file from URL [file:D:/ide-workspace/eclipse-photon-workspace/homw/homw-tool/homw.properties] 
+[WARN][2020-03-27 13:01:50] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:181) Could not load properties from URL [file:D:/ide-workspace/eclipse-photon-workspace/homw/homw-tool/homw.properties]: D:\ide-workspace\eclipse-photon-workspace\homw\homw-tool\homw.properties (系统找不到指定的文件。) 
+[INFO][2020-03-27 13:01:52] com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:715) {dataSource-1} inited 
+[INFO][2020-03-27 13:01:52] com.homw.tool.api.kede.KedeElecOpenUtil.ztcx(KedeElecOpenUtil.java:27) send data: 680259781100006803083235B43A34333333E116 
+[INFO][2020-03-27 13:02:04] com.homw.tool.api.kede.KedeElecOpenUtil.ztcx(KedeElecOpenUtil.java:29) back data: null 
+[INFO][2020-03-27 13:02:04] com.homw.tool.application.impl.KedeMeterReadApp.execute(KedeMeterReadApp.java:48) ammeter value is: null 
+[INFO][2020-03-27 13:02:04] org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:964) Closing org.springframework.context.support.ClassPathXmlApplicationContext@3a46192c: startup date [Fri Mar 27 13:01:48 CST 2020]; root of context hierarchy 
+[INFO][2020-03-27 13:02:04] com.alibaba.druid.pool.DruidDataSource.close(DruidDataSource.java:1444) {dataSource-1} closed 
+[INFO][2020-03-27 13:02:04] com.homw.tool.application.AbstractApplication.completed(AbstractApplication.java:116) Application KedeMeterReadApp completed. 
+[INFO][2020-03-27 13:08:14] com.homw.tool.application.AbstractApplication.start(AbstractApplication.java:27) Start application KedeMeterReadApp... 
+[INFO][2020-03-27 13:08:14] org.springframework.context.support.AbstractApplicationContext.prepareRefresh(AbstractApplicationContext.java:581) Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@1023f599: startup date [Fri Mar 27 13:08:14 CST 2020]; root of context hierarchy 
+[INFO][2020-03-27 13:08:14] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-context.xml] 
+[INFO][2020-03-27 13:08:15] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-mybatis.xml] 
+[INFO][2020-03-27 13:08:15] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:172) Loading properties file from class path resource [config/jdbc.properties] 
+[INFO][2020-03-27 13:08:15] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:172) Loading properties file from URL [file:D:/ide-workspace/eclipse-photon-workspace/homw/homw-tool/homw.properties] 
+[WARN][2020-03-27 13:08:15] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:181) Could not load properties from URL [file:D:/ide-workspace/eclipse-photon-workspace/homw/homw-tool/homw.properties]: D:\ide-workspace\eclipse-photon-workspace\homw\homw-tool\homw.properties (系统找不到指定的文件。) 
+[INFO][2020-03-27 13:08:17] com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:715) {dataSource-1} inited 
+[INFO][2020-03-27 13:08:18] com.homw.tool.api.kede.KedeElecOpenUtil.ztcx(KedeElecOpenUtil.java:27) send data: 680259781100006803083235B43A34333333E116 
+[INFO][2020-03-27 13:08:29] com.homw.tool.api.kede.KedeElecOpenUtil.ztcx(KedeElecOpenUtil.java:29) back data: null 
+[INFO][2020-03-27 13:08:29] com.homw.tool.application.impl.KedeMeterReadApp.execute(KedeMeterReadApp.java:48) ammeter value is: null 
+[INFO][2020-03-27 13:08:29] org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:964) Closing org.springframework.context.support.ClassPathXmlApplicationContext@1023f599: startup date [Fri Mar 27 13:08:14 CST 2020]; root of context hierarchy 
+[INFO][2020-03-27 13:08:29] com.alibaba.druid.pool.DruidDataSource.close(DruidDataSource.java:1444) {dataSource-1} closed 
+[INFO][2020-03-27 13:08:29] com.homw.tool.application.AbstractApplication.completed(AbstractApplication.java:116) Application KedeMeterReadApp completed. 
+[INFO][2020-03-27 13:22:07] com.homw.tool.application.AbstractApplication.start(AbstractApplication.java:27) Start application KedeMeterReadApp... 
+[INFO][2020-03-27 13:22:07] org.springframework.context.support.AbstractApplicationContext.prepareRefresh(AbstractApplicationContext.java:581) Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@1023f599: startup date [Fri Mar 27 13:22:07 CST 2020]; root of context hierarchy 
+[INFO][2020-03-27 13:22:07] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-context.xml] 
+[INFO][2020-03-27 13:22:08] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-mybatis.xml] 
+[INFO][2020-03-27 13:22:08] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:172) Loading properties file from class path resource [config/jdbc.properties] 
+[INFO][2020-03-27 13:22:08] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:172) Loading properties file from URL [file:D:/ide-workspace/eclipse-photon-workspace/homw/homw-tool/homw.properties] 
+[WARN][2020-03-27 13:22:08] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:181) Could not load properties from URL [file:D:/ide-workspace/eclipse-photon-workspace/homw/homw-tool/homw.properties]: D:\ide-workspace\eclipse-photon-workspace\homw\homw-tool\homw.properties (系统找不到指定的文件。) 
+[INFO][2020-03-27 13:22:10] com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:715) {dataSource-1} inited 
+[INFO][2020-03-27 13:22:11] com.homw.tool.api.kede.KedeElecOpenUtil.ztcx(KedeElecOpenUtil.java:27) send data: 680259781100006803083235B43A34333333E116 
+[INFO][2020-03-27 13:22:23] com.homw.tool.api.kede.KedeElecOpenUtil.ztcx(KedeElecOpenUtil.java:29) back data: null 
+[INFO][2020-03-27 13:22:23] com.homw.tool.application.impl.KedeMeterReadApp.execute(KedeMeterReadApp.java:48) ammeter value is: null 
+[INFO][2020-03-27 13:22:23] org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:964) Closing org.springframework.context.support.ClassPathXmlApplicationContext@1023f599: startup date [Fri Mar 27 13:22:07 CST 2020]; root of context hierarchy 
+[INFO][2020-03-27 13:22:23] com.alibaba.druid.pool.DruidDataSource.close(DruidDataSource.java:1444) {dataSource-1} closed 
+[INFO][2020-03-27 13:22:23] com.homw.tool.application.AbstractApplication.completed(AbstractApplication.java:116) Application KedeMeterReadApp completed. 
+[INFO][2020-03-27 13:35:38] com.homw.tool.application.AbstractApplication.start(AbstractApplication.java:27) Start application KedeMeterReadApp... 
+[INFO][2020-03-27 13:35:39] org.springframework.context.support.AbstractApplicationContext.prepareRefresh(AbstractApplicationContext.java:581) Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@501eb597: startup date [Fri Mar 27 13:35:39 CST 2020]; root of context hierarchy 
+[INFO][2020-03-27 13:35:39] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-context.xml] 
+[INFO][2020-03-27 13:35:39] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-mybatis.xml] 
+[INFO][2020-03-27 13:35:39] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:172) Loading properties file from class path resource [config/jdbc.properties] 
+[INFO][2020-03-27 13:35:39] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:172) Loading properties file from URL [file:D:/ide-workspace/eclipse-photon-workspace/homw/homw-tool/homw.properties] 
+[WARN][2020-03-27 13:35:39] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:181) Could not load properties from URL [file:D:/ide-workspace/eclipse-photon-workspace/homw/homw-tool/homw.properties]: D:\ide-workspace\eclipse-photon-workspace\homw\homw-tool\homw.properties (系统找不到指定的文件。) 
+[INFO][2020-03-27 13:35:41] com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:715) {dataSource-1} inited 
+[INFO][2020-03-27 13:35:42] com.homw.tool.api.kede.KedeElecOpenUtil.ztcx(KedeElecOpenUtil.java:27) send data: 680259781100006803083235B43A34333333E116 
+[INFO][2020-03-27 13:35:54] com.homw.tool.api.kede.KedeElecOpenUtil.ztcx(KedeElecOpenUtil.java:29) back data: null 
+[INFO][2020-03-27 13:35:54] com.homw.tool.application.impl.KedeMeterReadApp.execute(KedeMeterReadApp.java:48) ammeter value is: null 
+[INFO][2020-03-27 13:35:54] org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:964) Closing org.springframework.context.support.ClassPathXmlApplicationContext@501eb597: startup date [Fri Mar 27 13:35:39 CST 2020]; root of context hierarchy 
+[INFO][2020-03-27 13:35:54] com.alibaba.druid.pool.DruidDataSource.close(DruidDataSource.java:1444) {dataSource-1} closed 
+[INFO][2020-03-27 13:35:54] com.homw.tool.application.AbstractApplication.completed(AbstractApplication.java:116) Application KedeMeterReadApp completed. 
+[INFO][2020-03-27 13:39:29] com.homw.tool.application.AbstractApplication.start(AbstractApplication.java:27) Start application KedeMeterReadApp... 
+[INFO][2020-03-27 13:39:30] org.springframework.context.support.AbstractApplicationContext.prepareRefresh(AbstractApplicationContext.java:581) Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@501eb597: startup date [Fri Mar 27 13:39:30 CST 2020]; root of context hierarchy 
+[INFO][2020-03-27 13:39:30] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-context.xml] 
+[INFO][2020-03-27 13:39:30] org.springframework.beans.factory.xml.XmlBeanDefinitionReader.loadBeanDefinitions(XmlBeanDefinitionReader.java:317) Loading XML bean definitions from class path resource [spring-mybatis.xml] 
+[INFO][2020-03-27 13:39:31] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:172) Loading properties file from class path resource [config/jdbc.properties] 
+[INFO][2020-03-27 13:39:31] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:172) Loading properties file from URL [file:D:/ide-workspace/eclipse-photon-workspace/homw/homw-tool/homw.properties] 
+[WARN][2020-03-27 13:39:31] org.springframework.core.io.support.PropertiesLoaderSupport.loadProperties(PropertiesLoaderSupport.java:181) Could not load properties from URL [file:D:/ide-workspace/eclipse-photon-workspace/homw/homw-tool/homw.properties]: D:\ide-workspace\eclipse-photon-workspace\homw\homw-tool\homw.properties (系统找不到指定的文件。) 
+[INFO][2020-03-27 13:39:33] com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:715) {dataSource-1} inited 
+[INFO][2020-03-27 13:39:34] com.homw.tool.api.kede.KedeElecOpenUtil.ztcx(KedeElecOpenUtil.java:27) send data: 680259781100006803083235B43A34333333E116 
+[INFO][2020-03-27 13:39:45] com.homw.tool.api.kede.KedeElecOpenUtil.ztcx(KedeElecOpenUtil.java:29) back data: null 
+[INFO][2020-03-27 13:39:45] com.homw.tool.application.impl.KedeMeterReadApp.execute(KedeMeterReadApp.java:48) ammeter value is: null 
+[INFO][2020-03-27 13:39:45] org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:964) Closing org.springframework.context.support.ClassPathXmlApplicationContext@501eb597: startup date [Fri Mar 27 13:39:30 CST 2020]; root of context hierarchy 
+[INFO][2020-03-27 13:39:45] com.alibaba.druid.pool.DruidDataSource.close(DruidDataSource.java:1444) {dataSource-1} closed 
+[INFO][2020-03-27 13:39:45] com.homw.tool.application.AbstractApplication.completed(AbstractApplication.java:116) Application KedeMeterReadApp completed. 

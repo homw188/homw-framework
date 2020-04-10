@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">  
+        <meta name="viewport" content="width=device-width, initial-scale=1">  
+        <script type="text/javascript" src="static/jquery/jquery-1.9.1.min.js"></script>  
+    </head>
+<body>  
+<br/><br/>
+姓名：<input type="text" id="username" /><br/><br/>
+密码：<input type="password" id="password" /><br/><br/>
+性别：<select id="sex"><option value="男">男</option><option value="女">女</option></select><br/><br/>
+年龄：<input type="text" id="age" /><br/><br/>
+<input type="button" value="推送用户信息" id="pushUser" />
+   
+<script type="text/javascript">
+    $("#pushUser").click(function() {  
+        var data = {  
+	        username : $("#username").val(),
+	        password : $("#password").val(),
+	        sex      : $("#sex").val(),
+	        age      : $("#age").val()
+        };
+        ajaxRequest("/homw-test/push/user", data);
+    });
+      
+	function ajaxRequest(url, data) {  
+	    $.ajax({  
+	        url: url ,  
+	        type: "post",  
+	        dataType: "json",  
+	        data: data,
+	        success: function(result) {
+	           if (result.success) {
+	               var obj = JSON.stringify(result.data);
+	               alert("推送成功：" + obj);  
+	           } else {
+	               alert("推送失败：" + result.data);
+	           }
+	        }  
+	    }); 
+	}     
+</script>  
+</body>  
+</html>

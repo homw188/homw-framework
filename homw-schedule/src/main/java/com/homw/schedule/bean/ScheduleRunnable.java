@@ -1,0 +1,48 @@
+package com.homw.schedule.bean;
+
+import java.lang.reflect.Method;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.util.ReflectionUtils;
+
+import com.homw.common.exception.SystemRuntimeException;
+import com.homw.web.support.util.SpringContextUtil;
+
+/**
+ * @description 执行定时任务
+ * @author Hom
+ * @version 1.0
+ * @since 2020-03-26
+ */
+public class ScheduleRunnable implements Runnable {
+	private Object target;
+	private Method method;
+	private String params;
+
+	public ScheduleRunnable(String beanName, String methodName, String params)
+			throws NoSuchMethodException, SecurityException {
+		this.target = SpringContextUtil.getBean(beanName);
+		this.params = params;
+
+		if (StringUtils.isNotBlank(params)) {
+			this.method = target.getClass().getDeclaredMethod(methodName, String.class);
+		} else {
+			this.method = target.getClass().getDeclaredMethod(methodName);
+		}
+	}
+
+	@Override
+	public void run() {
+		try {
+			ReflectionUtils.makeAccessible(method);
+			if (StringUtils.isNotBlank(params)) {
+				method.invoke(target, params);
+			} else {
+				method.invoke(target);
+			}
+		} catch (Exception e) {
+			throw new SystemRuntimeException("执行定时任务失败", e);
+		}
+	}
+
+}

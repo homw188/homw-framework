@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>管理员列表</title>
+    #parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp">
+    <div class="headerBtn">
+        #if($shiro.hasPermission("sys:user:save"))
+        <a class="btn btn-primary" href="user_add.html">新增</a>
+        #end
+        #if($shiro.hasPermission("sys:user:update"))
+        <!-- <button type="button"  class="btn btn-default" @click="update">修改</button> -->
+        #end
+        #if($shiro.hasPermission("sys:user:delete"))
+        <button type="button" class="btn btn-primary" @click="del">删除</button>
+        #end
+    </div>
+    <div class="grid-btn form-table-header">
+        <div class="form-inline  col-md-3 col-sm-4 col-xs-4">
+            <label class="control-label">用户名：</label>
+            <input type="text" class="form-control" v-model="username" @keyup.enter="query" placeholder="用户名">
+        </div>
+        <div class="form-inline  col-md-3 col-sm-4 col-xs-4">
+            <label class="control-label">手机号：</label>
+            <input type="text" class="form-control" v-model="mobile" @keyup.enter="query" placeholder="手机号">
+        </div>
+        <div class="form-inline  col-md-3 col-sm-4 col-xs-4">
+            <label class="control-label">类型：</label>
+            <select v-model="type" class="form-control">
+                <option value="-1">全部</option>
+                <option v-for="role in roleList" :value="role.roleId">{{role.roleName}}</option>
+            </select>
+        </div>
+
+        <div class="form-inline  col-md-3 col-sm-4 col-xs-4">
+            <label class="control-label">姓&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+            <input type="text" class="form-control" v-model="realname" @keyup.enter="query" placeholder="姓名">
+        </div>
+        <div class="form-inline  col-md-3 col-sm-4 col-xs-4">
+            <label class="control-label">状&nbsp;&nbsp;&nbsp;&nbsp;态：</label>
+            <select class="form-control" v-model="status">
+                <option value="-1">全部</option>
+                <option value="1">启用</option>
+                <option value="0">禁用</option>
+            </select>
+        </div>
+        <div class="form-inline  col-md-3 col-sm-4 col-xs-4">
+            <button type="button" class="btn btn-primary" @click="query">查询</button>
+            <button type="button" class="btn btn-primary" @click="reset">重置</button>
+        </div>
+    </div>
+
+    <table id="jqGrid"></table>
+</div>
+
+<script src="${rc.contextPath}/js/sys/user.js?_${date.systemTime}"></script>
+</body>
+</html>

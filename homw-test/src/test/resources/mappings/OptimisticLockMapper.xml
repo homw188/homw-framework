@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.homw.test.lock.dao.OptimisticLockDao">
+	<select id="list" resultType="com.homw.test.lock.OptimisticLockEntity">
+		SELECT * FROM tb_optimistic_lock
+	</select>
+	
+	<select id="getById" resultType="com.homw.test.lock.OptimisticLockEntity">
+		SELECT * FROM tb_optimistic_lock WHERE lock_id = #{lockId}
+	</select>
+	
+	<update id="updateByVersion">
+		UPDATE tb_optimistic_lock
+		<set>
+			<if test="lockName != null and lockName != ''">
+				lock_name = #{lockName},
+			</if>
+			lock_version = #{lockVersion}
+		</set>
+		WHERE lock_id = #{lockId} and lock_version = #{preVersion}
+	</update>
+	
+	<insert id="insert">
+		INSERT INTO tb_optimistic_lock(lock_name, lock_version) 
+		VALUES(#{lockName}, #{lockVersion})
+	</insert>
+</mapper>

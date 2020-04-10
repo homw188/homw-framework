@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.homw.tool.dao.DeviceInfoDao">
+
+	<select id="queryObject" resultType="com.homw.tool.entity.DeviceInfoEntity">
+		select * from device_info where DEVICE_ID = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.homw.tool.entity.DeviceInfoEntity">
+		select * from device_info 
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from device_info 
+	</select>
+	 
+	<insert id="save" parameterType="com.homw.tool.entity.DeviceInfoEntity" useGeneratedKeys="true" keyProperty="deviceId">
+		insert into device_info
+		(
+			`DEVICE_TYPE`, 
+			`OUTER_NO`, 
+			`DOOR_IP`, 
+			`DOOR_PORT`, 
+			`DOOR_ADDR`, 
+			`DOOR_READNO`, 
+			`DOOR_NAME`, 
+			`ELEC_ADDR`, 
+			`ELEC_STATUS`, 
+			`ELEC_USE_POINT`, 
+			`ELEC_LEFT_POINT`, 
+			`STATUS`, 
+			`VERSION`, 
+			`CREATE_USER_ID`, 
+			`CREATE_TIME`, 
+			`CREATE_USER_TYPE`, 
+			`UPDATE_USER_ID`, 
+			`UPDATE_TIME`, 
+			`UPDATE_USER_TYPE`, 
+			`REFER_ELEC_ID`, 
+			`IS_REFER_NODE`, 
+			`RATE`
+		)
+		values
+		(
+			#{deviceType}, 
+			#{outerNo}, 
+			#{doorIp}, 
+			#{doorPort}, 
+			#{doorAddr}, 
+			#{doorReadno}, 
+			#{doorName}, 
+			#{elecAddr}, 
+			#{elecStatus}, 
+			#{elecUsePoint}, 
+			#{elecLeftPoint}, 
+			#{status}, 
+			#{version}, 
+			#{createUserId}, 
+			#{createTime}, 
+			#{createUserType}, 
+			#{updateUserId}, 
+			#{updateTime}, 
+			#{updateUserType}, 
+			#{referElecId}, 
+			#{isReferNode}, 
+			#{rate}
+		)
+	</insert>
+	
+	<insert id="saveBatch" useGeneratedKeys="true" keyProperty="deviceId">
+		insert into device_info
+		(
+			`DEVICE_TYPE`, 
+			`OUTER_NO`, 
+			`DOOR_IP`, 
+			`DOOR_PORT`, 
+			`DOOR_ADDR`, 
+			`DOOR_READNO`, 
+			`DOOR_NAME`, 
+			`ELEC_ADDR`, 
+			`ELEC_STATUS`, 
+			`ELEC_USE_POINT`, 
+			`ELEC_LEFT_POINT`, 
+			`STATUS`, 
+			`VERSION`, 
+			`CREATE_USER_ID`, 
+			`CREATE_TIME`, 
+			`CREATE_USER_TYPE`, 
+			`UPDATE_USER_ID`, 
+			`UPDATE_TIME`, 
+			`UPDATE_USER_TYPE`, 
+			`REFER_ELEC_ID`, 
+			`IS_REFER_NODE`, 
+			`RATE`
+		)
+		values
+		<foreach collection="list" item="item" separator=",">
+		(
+			#{item.deviceType}, 
+			#{item.outerNo}, 
+			#{item.doorIp}, 
+			#{item.doorPort}, 
+			#{item.doorAddr}, 
+			#{item.doorReadno}, 
+			#{item.doorName}, 
+			#{item.elecAddr}, 
+			#{item.elecStatus}, 
+			#{item.elecUsePoint}, 
+			#{item.elecLeftPoint}, 
+			#{item.status}, 
+			#{item.version}, 
+			#{item.createUserId}, 
+			#{item.createTime}, 
+			#{item.createUserType}, 
+			#{item.updateUserId}, 
+			#{item.updateTime}, 
+			#{item.updateUserType}, 
+			#{item.referElecId}, 
+			#{item.isReferNode}, 
+			#{item.rate}
+		)
+		</foreach>
+	</insert>
+	 
+	<update id="update" parameterType="com.homw.tool.entity.DeviceInfoEntity">
+		update device_info 
+		<set>
+			<if test="deviceType != null">`DEVICE_TYPE` = #{deviceType}, </if>
+			<if test="outerNo != null">`OUTER_NO` = #{outerNo}, </if>
+			<if test="doorIp != null">`DOOR_IP` = #{doorIp}, </if>
+			<if test="doorPort != null">`DOOR_PORT` = #{doorPort}, </if>
+			<if test="doorAddr != null">`DOOR_ADDR` = #{doorAddr}, </if>
+			<if test="doorReadno != null">`DOOR_READNO` = #{doorReadno}, </if>
+			<if test="doorName != null">`DOOR_NAME` = #{doorName}, </if>
+			<if test="elecAddr != null">`ELEC_ADDR` = #{elecAddr}, </if>
+			<if test="elecStatus != null">`ELEC_STATUS` = #{elecStatus}, </if>
+			<if test="elecUsePoint != null">`ELEC_USE_POINT` = #{elecUsePoint}, </if>
+			<if test="elecLeftPoint != null">`ELEC_LEFT_POINT` = #{elecLeftPoint}, </if>
+			<if test="status != null">`STATUS` = #{status}, </if>
+			<if test="version != null">`VERSION` = #{version}, </if>
+			<if test="createUserId != null">`CREATE_USER_ID` = #{createUserId}, </if>
+			<if test="createTime != null">`CREATE_TIME` = #{createTime}, </if>
+			<if test="createUserType != null">`CREATE_USER_TYPE` = #{createUserType}, </if>
+			<if test="updateUserId != null">`UPDATE_USER_ID` = #{updateUserId}, </if>
+			<if test="updateTime != null">`UPDATE_TIME` = #{updateTime}, </if>
+			<if test="updateUserType != null">`UPDATE_USER_TYPE` = #{updateUserType}, </if>
+			<if test="referElecId != null">`REFER_ELEC_ID` = #{referElecId}, </if>
+			<if test="isReferNode != null">`IS_REFER_NODE` = #{isReferNode}, </if>
+			<if test="rate != null">`RATE` = #{rate}</if>
+		</set>
+		where DEVICE_ID = #{deviceId}
+	</update>
+	
+	<delete id="delete">
+		delete from device_info where DEVICE_ID = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from device_info where DEVICE_ID in 
+		<foreach item="deviceId" collection="array" open="(" separator="," close=")">
+			#{deviceId}
+		</foreach>
+	</delete>
+
+</mapper>

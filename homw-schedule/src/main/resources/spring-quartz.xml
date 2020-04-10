@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/task
+        	http://www.springframework.org/schema/task/spring-task-4.2.xsd">
+			
+	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="configLocation" value="classpath:conf/quartz.properties"/>
+		<!--延时启动，应用启动完后 QuartzScheduler再启动 -->
+        <property name="startupDelay" value="60" />
+		<property name="autoStartup" value="true"/>
+		<property name="dataSource" ref="dataSource"/>
+		<!--启动时更新己存在的Job -->
+        <property name="overwriteExistingJobs" value="true"/>
+		<property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+	</bean>
+	
+	<task:scheduler id="homwScheduler" pool-size="10"/>
+    <task:annotation-driven scheduler="homwScheduler"/>
+</beans>
