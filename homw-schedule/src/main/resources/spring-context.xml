@@ -9,7 +9,7 @@
 		http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 	
 	<!-- base-package 如果多个，用“,”分隔 -->
-	<context:component-scan base-package="com.homw.schedule" use-default-filters="true"/>
+	<context:component-scan base-package="com.homw" use-default-filters="true"/>
 	
 	<!-- Kaptcha验证码生成器 -->
 	<bean name="producer" class="com.google.code.kaptcha.impl.DefaultKaptcha">

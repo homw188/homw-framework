@@ -10,7 +10,7 @@
 	
 	<!-- 使用Annotation自动注册Bean -->
 	<!-- base-package 如果多个，用“,”分隔 -->
-	<context:component-scan base-package="com.homw.test" use-default-filters="true"/>
+	<context:component-scan base-package="com.homw" use-default-filters="true"/>
 	
 	<import resource="spring-activemq.xml"/>
 	<!-- <import resource="spring-quartz.xml"/> -->
