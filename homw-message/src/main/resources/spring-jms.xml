@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	
+	<context:property-placeholder location="#{(systemProperties['confpath']?:'classpath:')+'conf/activemq.properties'}"/>
+	
+    <bean id="jmsConnectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">  
+        <property name="brokerURL" value="${jms.broker.url}"/>
+        <property name="useAsyncSend" value="true"/>
+    </bean>
+	
+	<bean id="jmsQueue" class="org.apache.activemq.command.ActiveMQQueue">  
+		<constructor-arg value="${jms.queue.name}"/>
+    </bean>
+    
+    <bean id="jaksonMessageConverter" class="org.springframework.jms.support.converter.MappingJackson2MessageConverter">
+        <property name="typeIdPropertyName" value="className"/>
+    </bean>
+    
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+        <property name="defaultDestination" ref="jmsQueue"/>
+        <property name="pubSubDomain" value="false"/>
+        <property name="messageConverter" ref="jaksonMessageConverter"/>
+        <property name="explicitQosEnabled" value="true"/>
+        <property name="deliveryPersistent" value="true"/>
+        <property name="timeToLive" value="300000"/>
+    </bean>
+    
+    <bean id="jmsConsumer" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+        <constructor-arg>
+            <bean class="com.homw.message.jms.ActivemqMessageListener">
+                <property name="scheduleProxy" ref="scheduleProxy"/>
+            </bean>
+        </constructor-arg>
+        <property name="messageConverter" ref="jaksonMessageConverter"/>
+    </bean>
+    
+    <bean id="jmsListener" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+        <property name="destination" ref="jmsQueue"/>
+        <property name="messageListener" ref="jmsConsumer"/>
+        <property name="concurrentConsumers" value="10" />
+        <property name="maxConcurrentConsumers" value="20" />
+        <property name="receiveTimeout" value="5000"/>
+        <property name="idleTaskExecutionLimit" value="10"/>
+        <property name="idleConsumerLimit" value="5"/>
+    </bean>
+</beans>
