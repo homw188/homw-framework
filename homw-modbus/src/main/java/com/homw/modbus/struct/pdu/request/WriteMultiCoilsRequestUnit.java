@@ -79,7 +79,7 @@ public class WriteMultiCoilsRequestUnit extends ModbusProtoUnitSupport {
 	@Override
 	public String toString() {
 		String spr = super.toString();
-		return spr.substring(0, spr.length() - 1) + ", byteCount=" + CodecUtil.encodeHex(byteCount) + ", outputsValue="
-				+ CodecUtil.encodeHex(outputsValue.toByteArray()) + '}';
+		return spr.substring(0, spr.length() - 1) + ", byteCount=" + CodecUtil.shortToHex(byteCount) + ", outputsValue="
+				+ CodecUtil.bytesToHex(outputsValue.toByteArray()) + '}';
 	}
 }

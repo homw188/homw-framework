@@ -163,7 +163,7 @@ public class ModbusErrorUnit extends ModbusProtoUnit {
 
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + "{funcCode=" + CodecUtil.encodeHex(funcCode) + ", exceptionCode="
-				+ CodecUtil.encodeHex(exceptionCode) + ", exceptionMessage=" + exceptionMessage + '}';
+		return this.getClass().getSimpleName() + "{funcCode=" + CodecUtil.shortToHex(funcCode) + ", exceptionCode="
+				+ CodecUtil.shortToHex(exceptionCode) + ", exceptionMessage=" + exceptionMessage + '}';
 	}
 }

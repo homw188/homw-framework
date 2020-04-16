@@ -33,8 +33,8 @@ public class WriteSingleCoilUnit extends ModbusProtoUnitSupport {
 
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + "{funcCode=" + CodecUtil.encodeHex(funcCode) + ", address="
-				+ CodecUtil.encodeHex(startAddr) + ", value=" + CodecUtil.encodeHex(quantity) + ", state=" + state
+		return this.getClass().getSimpleName() + "{funcCode=" + CodecUtil.shortToHex(funcCode) + ", address="
+				+ CodecUtil.intToHex(startAddr) + ", value=" + CodecUtil.intToHex(quantity) + ", state=" + state
 				+ '}';
 	}
 }

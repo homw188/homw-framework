@@ -71,7 +71,7 @@ public class WriteMultiRegistersRequestUnit extends ModbusProtoUnitSupport {
 
 		byte[] bytes = new byte[byteCount];
 		for (int i = 0; i < registers.length; i++) {
-			byte[] arr = CodecUtil.unsignedShort2Bytes(registers[i]);
+			byte[] arr = CodecUtil.unsignedShortToBytes(registers[i]);
 			System.arraycopy(arr, 0, bytes, i * 2, arr.length);
 		}
 		System.arraycopy(bytes, 0, data, super.calcLength() + 1, byteCount);
@@ -86,14 +86,14 @@ public class WriteMultiRegistersRequestUnit extends ModbusProtoUnitSupport {
 			registersStr.append("register_");
 			registersStr.append(i);
 			registersStr.append("=");
-			registersStr.append(CodecUtil.encodeHex(registers[i]));
+			registersStr.append(CodecUtil.intToHex(registers[i]));
 			registersStr.append(", ");
 		}
 		registersStr.delete(registersStr.length() - 2, registersStr.length());
 		registersStr.append("}");
 
 		String spr = super.toString();
-		return spr.substring(0, spr.length() - 1) + ", byteCount=" + CodecUtil.encodeHex(byteCount) + ", registers="
+		return spr.substring(0, spr.length() - 1) + ", byteCount=" + CodecUtil.shortToHex(byteCount) + ", registers="
 				+ registersStr + '}';
 	}
 }

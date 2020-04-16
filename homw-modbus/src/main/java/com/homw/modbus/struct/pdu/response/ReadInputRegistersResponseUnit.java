@@ -70,7 +70,7 @@ public class ReadInputRegistersResponseUnit extends ModbusProtoUnit {
 
 		byte[] bytes = new byte[byteCount];
 		for (int i = 0; i < inputRegisters.length; i++) {
-			byte[] arr = CodecUtil.unsignedShort2Bytes(inputRegisters[i]);
+			byte[] arr = CodecUtil.unsignedShortToBytes(inputRegisters[i]);
 			System.arraycopy(arr, 0, bytes, i * 2, arr.length);
 		}
 		System.arraycopy(bytes, 0, data, 2, byteCount);
@@ -85,13 +85,13 @@ public class ReadInputRegistersResponseUnit extends ModbusProtoUnit {
 			registers.append("register_");
 			registers.append(i);
 			registers.append("=");
-			registers.append(CodecUtil.encodeHex(inputRegisters[i]));
+			registers.append(CodecUtil.intToHex(inputRegisters[i]));
 			registers.append(", ");
 		}
 		registers.delete(registers.length() - 2, registers.length());
 		registers.append("}");
 
-		return this.getClass().getSimpleName() + "{funcCode=" + CodecUtil.encodeHex(funcCode) + ", byteCount="
-				+ CodecUtil.encodeHex(byteCount) + ", inputRegisters=" + registers + '}';
+		return this.getClass().getSimpleName() + "{funcCode=" + CodecUtil.shortToHex(funcCode) + ", byteCount="
+				+ CodecUtil.shortToHex(byteCount) + ", inputRegisters=" + registers + '}';
 	}
 }

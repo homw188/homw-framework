@@ -127,7 +127,7 @@ public class ModbusRTUFrame implements ModbusFrame {
 
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + "{" + "devAddr=" + CodecUtil.encodeHex(devAddr) + ", unit=" + unit
-				+ ", CRC=" + CodecUtil.encodeHex(crcCode) + "}";
+		return this.getClass().getSimpleName() + "{" + "devAddr=" + CodecUtil.shortToHex(devAddr) + ", unit=" + unit
+				+ ", CRC=" + CodecUtil.intToHex(crcCode) + "}";
 	}
 }

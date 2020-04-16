@@ -53,8 +53,8 @@ public abstract class ModbusProtoUnitSupport extends ModbusProtoUnit {
 	public byte[] getUnitBytes() {
 		byte[] data = new byte[calcLength()];
 		data[0] = (byte) funcCode;
-		System.arraycopy(CodecUtil.unsignedShort2Bytes(startAddr), 0, data, 1, 2);
-		System.arraycopy(CodecUtil.unsignedShort2Bytes(quantity), 0, data, 3, 2);
+		System.arraycopy(CodecUtil.unsignedShortToBytes(startAddr), 0, data, 1, 2);
+		System.arraycopy(CodecUtil.unsignedShortToBytes(quantity), 0, data, 3, 2);
 		return data;
 	}
 
@@ -68,7 +68,7 @@ public abstract class ModbusProtoUnitSupport extends ModbusProtoUnit {
 
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + "{funcCode=" + CodecUtil.encodeHex(funcCode) + ", startAddr="
-				+ CodecUtil.encodeHex(startAddr) + ", quantity=" + CodecUtil.encodeHex(quantity) + '}';
+		return this.getClass().getSimpleName() + "{funcCode=" + CodecUtil.shortToHex(funcCode) + ", startAddr="
+				+ CodecUtil.intToHex(startAddr) + ", quantity=" + CodecUtil.intToHex(quantity) + '}';
 	}
 }

@@ -114,7 +114,7 @@ public class MsgPacket {
 		sb.append(" & body=");
 		sb.append(body);
 		sb.append(" & end=");
-		sb.append(CodecUtil.encodeHex(end));
+		sb.append(CodecUtil.bytesToHex(end));
 		return sb.toString();
 	}
 

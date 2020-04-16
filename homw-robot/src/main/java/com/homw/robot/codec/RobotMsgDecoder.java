@@ -65,7 +65,7 @@ public class RobotMsgDecoder extends LengthFieldBasedFrameDecoder {
 			}
 			msg.setEnd(frameEnd);
 			if (!Arrays.equals(ProtocolConstant.DATA_FRAME_END, frameEnd)) {
-				logger.warn("非法数据帧尾: " + CodecUtil.encodeHex(frameEnd));
+				logger.warn("非法数据帧尾: " + CodecUtil.bytesToHex(frameEnd));
 			}
 		} finally {
 			if (littleBuf.refCnt() > 0) {
@@ -109,7 +109,7 @@ public class RobotMsgDecoder extends LengthFieldBasedFrameDecoder {
 		}
 		head.setHead(frameHead);
 		if (!Arrays.equals(ProtocolConstant.DATA_FRAME_HEAD, frameHead)) {
-			logger.warn("非法数据帧头: " + CodecUtil.encodeHex(frameHead));
+			logger.warn("非法数据帧头: " + CodecUtil.bytesToHex(frameHead));
 		}
 
 		head.setLen(frame.readShort());

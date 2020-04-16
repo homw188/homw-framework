@@ -91,7 +91,7 @@ public class MsgHead {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("(head=");
-		sb.append(CodecUtil.encodeHex(head));
+		sb.append(CodecUtil.bytesToHex(head));
 		sb.append(",len=");
 		sb.append(len);
 		sb.append(",robot_id=");

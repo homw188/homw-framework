@@ -77,8 +77,8 @@ public class ReadDiscreteInputsResponseUnit extends ModbusProtoUnit {
 
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + "{funcCode=" + CodecUtil.encodeHex(funcCode) + ", byteCount="
-				+ CodecUtil.encodeHex(byteCount) + ", coilStatus=" + CodecUtil.encodeHex(inputStatus.toByteArray())
+		return this.getClass().getSimpleName() + "{funcCode=" + CodecUtil.shortToHex(funcCode) + ", byteCount="
+				+ CodecUtil.shortToHex(byteCount) + ", coilStatus=" + CodecUtil.bytesToHex(inputStatus.toByteArray())
 				+ '}';
 	}
 }

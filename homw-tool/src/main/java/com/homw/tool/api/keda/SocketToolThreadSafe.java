@@ -94,7 +94,7 @@ public class SocketToolThreadSafe {
 			System.arraycopy(heads, 0, packet, 0, heads.length);
 			System.arraycopy(content, 0, packet, heads.length, content.length);
 			try {
-				logger.info("send packet: " + CodecUtil.encodeHex(packet));
+				logger.info("send packet: " + CodecUtil.bytesToHex(packet));
 				socket.getOutputStream().write(packet);
 			} catch (IOException e) {
 				e.printStackTrace();
