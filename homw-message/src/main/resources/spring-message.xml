@@ -11,14 +11,8 @@
 	<!-- base-package 如果多个，用“,”分隔 -->
 	<context:component-scan base-package="com.homw.message" use-default-filters="true"/>
 	
-    <context:property-placeholder location="#{(systemProperties['confpath']?:'classpath:')+'conf/message_proxy.properties'}"/>
-
-    <bean id="jpushClient" class="cn.jpush.api.JPushClient">
-        <constructor-arg index="0" value="${jpush.masterSecret}"/>
-        <constructor-arg index="1" value="${jpush.appKey}"/>
-        <constructor-arg index="2" value="${jpush.maxRetry}"/>
-    </bean>
-    
+	<context:property-placeholder location="#{(systemProperties['confpath']?:'classpath:')+'conf/cloopen.properties'}"/>
+	
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basename" value="classpath:messages"/>
         <property name="defaultEncoding" value="UTF-8"/>

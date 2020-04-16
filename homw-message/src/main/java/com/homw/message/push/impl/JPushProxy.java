@@ -30,7 +30,7 @@ import cn.jpush.api.push.model.notification.Notification;
 @Component
 public class JPushProxy implements INotificationProxy, IDeviceProxy {
 
-	@Autowired
+	@Autowired(required = false)
 	private JPushClient jpushClient;
 
 	@Override
