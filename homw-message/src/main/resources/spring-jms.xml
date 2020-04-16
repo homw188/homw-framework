@@ -32,9 +32,7 @@
     
     <bean id="jmsConsumer" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
         <constructor-arg>
-            <bean class="com.homw.message.jms.ActivemqMessageListener">
-                <property name="scheduleProxy" ref="scheduleProxy"/>
-            </bean>
+            <bean class="com.homw.message.jms.ActivemqMessageListener"/>
         </constructor-arg>
         <property name="messageConverter" ref="jaksonMessageConverter"/>
     </bean>
