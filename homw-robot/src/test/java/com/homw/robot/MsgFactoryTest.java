@@ -1,30 +1,17 @@
 package com.homw.robot;
 
-import java.util.Arrays;
-
-import org.junit.After;
-import org.junit.Test;
-
 import com.homw.robot.struct.MsgFactory;
 import com.homw.robot.struct.MsgPacket;
 import com.homw.robot.struct.MsgType;
-import com.homw.robot.struct.base.Pose;
-import com.homw.robot.struct.base.Pose2D;
-import com.homw.robot.struct.base.Quaternion;
-import com.homw.robot.struct.base.State;
-import com.homw.robot.struct.base.Vector3f;
-import com.homw.robot.struct.packet.BatteryData;
-import com.homw.robot.struct.packet.Cmd;
-import com.homw.robot.struct.packet.MotorData;
-import com.homw.robot.struct.packet.PathData;
-import com.homw.robot.struct.packet.PoseData;
-import com.homw.robot.struct.packet.Response;
-import com.homw.robot.struct.packet.Set;
-import com.homw.robot.struct.packet.SpeedData;
-import com.homw.robot.struct.packet.StateData;
+import com.homw.robot.struct.base.*;
+import com.homw.robot.struct.packet.*;
+import org.junit.After;
+import org.junit.Test;
+
+import java.util.Arrays;
 
 /**
- * 机器人通信端，数据包工厂测试
+ * 数据包工厂测试
  * 
  * @author Hom
  * @version 1.0
