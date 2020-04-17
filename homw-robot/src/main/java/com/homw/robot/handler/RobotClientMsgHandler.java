@@ -8,7 +8,6 @@ import com.homw.robot.struct.MsgPacket;
 import com.homw.robot.struct.MsgType;
 import com.homw.robot.util.ProtocolConstant;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ConnectTimeoutException;
@@ -23,11 +22,9 @@ import io.netty.handler.timeout.WriteTimeoutException;
  */
 public class RobotClientMsgHandler extends ChannelInboundHandlerAdapter {
 	private static final Logger logger = LoggerFactory.getLogger(RobotClientMsgHandler.class);
-	private Channel channel;
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		this.channel = ctx.channel();
 		super.channelActive(ctx);
 	}
 
@@ -64,22 +61,6 @@ public class RobotClientMsgHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		super.channelInactive(ctx);
-	}
-
-	/**
-	 * send command to server.
-	 * 
-	 * @param cmd
-	 * @return
-	 */
-	public boolean sendCmd(MsgPacket cmd) {
-		if (channel != null && cmd != null) {
-			if (channel.isActive()) {
-				channel.writeAndFlush(cmd);
-				return true;
-			}
-		}
-		return false;
 	}
 
 }
