@@ -14,9 +14,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.homw.common.util.CodecUtil;
-import com.homw.common.util.HttpClientUtil;
 import com.homw.common.util.Platform;
 import com.homw.message.note.INoteProxy;
+import com.homw.transport.http.HttpClientUtil;
 
 /**
  * @description 短信发送

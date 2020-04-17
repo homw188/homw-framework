@@ -1,4 +1,4 @@
-package com.homw.common.util;
+package com.homw.transport.http;
 
 import java.io.IOException;
 import java.util.ArrayList;
