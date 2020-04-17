@@ -17,6 +17,7 @@
     <module>homw-message</module>
     <module>homw-web-support</module>
     <module>homw-dao-support</module>
+    <module>homw-transport</module>
   </modules>
 
   <properties>
@@ -79,6 +80,7 @@
 	
 	<jpush-version>3.2.3</jpush-version>
 	<guava-version>18.0</guava-version>
+	<ssh2-version>build210</ssh2-version>
 	
     <junit-version>4.12</junit-version>
   </properties>
@@ -498,6 +500,11 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>${guava-version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>ch.ethz.ganymed</groupId>
+		    <artifactId>ganymed-ssh2</artifactId>
+		    <version>${ssh2-version}</version>
 		</dependency>
 		
 		<dependency>

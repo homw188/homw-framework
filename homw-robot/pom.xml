@@ -14,7 +14,7 @@
   <dependencies>
   	<dependency>
 		<groupId>com.homw.framework</groupId>
-		<artifactId>homw-common</artifactId>
+		<artifactId>homw-transport</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		
 		<exclusions>
@@ -45,11 +45,6 @@
 		</exclusions>
 	</dependency>
   	
-    <dependency>
-        <groupId>io.netty</groupId>
-        <artifactId>netty-all</artifactId>
-    </dependency>
-	
 	<dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
