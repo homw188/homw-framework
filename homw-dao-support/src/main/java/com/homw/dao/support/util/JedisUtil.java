@@ -789,6 +789,29 @@ public class JedisUtil {
 		}
 		return result;
 	}
+	
+	/**
+	 * 执行lua脚本
+	 * 
+	 * @param script
+	 * @param keys
+	 * @param args
+	 * @return
+	 */
+	public static Object eval(String script, List<String> keys, List<String> args) {
+		Object result = null;
+		Jedis jedis = null;
+		try {
+			jedis = JedisUtil.getResource();
+			result = jedis.eval(script, keys, args);
+			logger.debug("eval {}", script);
+		} catch (Exception e) {
+			logger.warn("eval {}", script, e);
+		} finally {
+			JedisUtil.returnResource(jedis);
+		}
+		return result;
+	}
 
 	/**
 	 * 获取资源
