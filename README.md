@@ -7,11 +7,15 @@ Abstract and extract the application of common content.
 
 ## homw-dao-support
 Data access layer abstraction. 
-Integration [MyBatis framework](https://blog.mybatis.org/) and provide basic configurations.
+Integration [MyBatis framework](https://blog.mybatis.org/) & [Redis cache](https://redis.io) and provide basic configurations.
 
 ## homw-web-support
 Web layer abstraction. 
 Integration [Springmvc framework](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html) and provide custom web components & spring context util.
+
+## homw-transport
+Net transport layer abstraction.
+Integration [Netty framework](https://netty.io/) & [Apache HttpClient](http://hc.apache.org) and provide custom net components.
 
 ## homw-message
 Message service module. 
@@ -28,7 +32,7 @@ Useage:
 3. connect mysql server & create database homw_schedule & source ${homw-schedule}/src/main/resources/homw_schedule.sql
 4. cd ${tomcat-home} && ./bin/startup.sh
 5. open web browser & input http://{hostname}:{port}/homw-schedule
-6. sign in (default account is: username=admin, password=admin123)
+6. sign in (default account is: username=admin, password=admin)
 ```
 
 ## homw-modbus
