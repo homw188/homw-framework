@@ -10,14 +10,14 @@ import com.homw.tool.api.dashi.DashiDoorApi;
 import com.homw.tool.application.AbstractApplication;
 
 /**
- * @description 达石门禁控制应用
+ * @description 达石门禁应用
  * @author Hom
  * @version 1.0
  * @since 2020-3-10
  */
 @Controller
 @Application("dashiDoorApp")
-public class DashiDoorCtrlApp extends AbstractApplication {
+public class DashiDoorApp extends AbstractApplication {
 	@Override
 	protected Map<String, Object> parseArgs(String[] args) {
 		if (args == null || args.length != 5) {

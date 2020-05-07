@@ -13,17 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.homw.common.util.DateUtil;
-import com.homw.tool.dao.PayRecordGenerateDao;
+import com.homw.tool.dao.PayRecordGenDao;
 import com.homw.tool.entity.AgreementEntity;
 import com.homw.tool.entity.PayRecordEntity;
-import com.homw.tool.service.IPayRecordGenerateService;
+import com.homw.tool.service.IPayRecordGenService;
 
 @Service
-public class PayRecordGenerateService implements IPayRecordGenerateService {
+public class PayRecordGenService implements IPayRecordGenService {
 	@Autowired
-	private PayRecordGenerateDao payRecordGenerateDao;
+	private PayRecordGenDao payRecordGenerateDao;
 
-	private static Logger logger = LoggerFactory.getLogger(PayRecordGenerateService.class);
+	private static Logger logger = LoggerFactory.getLogger(PayRecordGenService.class);
 
 	@Override
 	public void generate(Long spaceId) throws Exception {

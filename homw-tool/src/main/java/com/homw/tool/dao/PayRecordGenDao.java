@@ -13,7 +13,7 @@ import com.homw.tool.entity.PayRecordEntity;
  * @email 
  * @since 2019-09-23
  */
-public interface PayRecordGenerateDao extends BaseDao<AgreementEntity> {
+public interface PayRecordGenDao extends BaseDao<AgreementEntity> {
 	List<AgreementEntity> queryListMissingPayRecord(Long spaceId);
 	
 	int saveBatchRecord(List<PayRecordEntity> recordList);

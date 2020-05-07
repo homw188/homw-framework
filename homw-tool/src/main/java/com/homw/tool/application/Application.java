@@ -1,7 +1,5 @@
 package com.homw.tool.application;
 
-import com.homw.tool.exception.ApplicationException;
-
 /**
  * @description 应用接口
  * @author Hom
@@ -13,7 +11,6 @@ public interface Application {
 	 * 启动
 	 * 
 	 * @param args 输入参数
-	 * @throws Exception
 	 */
-	void start(String[] args) throws ApplicationException;
+	void start(String[] args);
 }

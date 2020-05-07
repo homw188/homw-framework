@@ -1,4 +1,4 @@
-package com.homw.tool.service;
+package com.homw.tool.dao;
 
 import java.util.List;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.Map;
  * @version 1.0
  * @since 2019-05-20
  */
-public interface ICodeGenerateService {
+public interface CodeGenDao {
 	List<Map<String, Object>> queryList(Map<String, Object> map);
 
 	int queryTotal(Map<String, Object> map);
@@ -17,6 +17,4 @@ public interface ICodeGenerateService {
 	Map<String, String> queryTable(String tableName);
 
 	List<Map<String, String>> queryColumns(String tableName);
-
-	byte[] generatorCode(String[] tableNames);
 }

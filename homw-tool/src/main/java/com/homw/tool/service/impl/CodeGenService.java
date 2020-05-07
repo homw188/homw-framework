@@ -9,14 +9,14 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.homw.tool.dao.CodeGeneratorDao;
-import com.homw.tool.service.ICodeGenerateService;
-import com.homw.tool.util.GenUtil;
+import com.homw.tool.dao.CodeGenDao;
+import com.homw.tool.service.ICodeGenService;
+import com.homw.tool.util.GenCodeUtil;
 
 @Service
-public class CodeGenerateService implements ICodeGenerateService {
+public class CodeGenService implements ICodeGenService {
 	@Autowired
-	private CodeGeneratorDao sysGeneratorDao;
+	private CodeGenDao sysGeneratorDao;
 
 	@Override
 	public List<Map<String, Object>> queryList(Map<String, Object> map) {
@@ -49,7 +49,7 @@ public class CodeGenerateService implements ICodeGenerateService {
 			// 查询列信息
 			List<Map<String, String>> columns = queryColumns(tableName);
 			// 生成代码
-			GenUtil.generatorCode(table, columns, zip);
+			GenCodeUtil.generatorCode(table, columns, zip);
 		}
 		IOUtils.closeQuietly(zip);
 		return outputStream.toByteArray();

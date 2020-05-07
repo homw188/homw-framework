@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 
 import com.homw.tool.annotation.Application;
 import com.homw.tool.application.AbstractApplication;
-import com.homw.tool.service.IPayRecordGenerateService;
+import com.homw.tool.service.IPayRecordGenService;
 import com.homw.tool.util.SpringContextUtil;
 
 /**
@@ -18,7 +18,7 @@ import com.homw.tool.util.SpringContextUtil;
  */
 @Controller
 @Application("payRecordGenApp")
-public class PayRecordGenerateApp extends AbstractApplication {
+public class PayRecordGenApp extends AbstractApplication {
 	@Override
 	protected Map<String, Object> parseArgs(String[] args) {
 		if (args == null || args.length != 2) {
@@ -40,7 +40,7 @@ public class PayRecordGenerateApp extends AbstractApplication {
 
 	@Override
 	protected void execute(Map<String, Object> params) throws Exception {
-		IPayRecordGenerateService updateService = (IPayRecordGenerateService) SpringContextUtil
+		IPayRecordGenService updateService = (IPayRecordGenService) SpringContextUtil
 				.getBean("payRecordGenerateService");
 		updateService.generate((Long) params.get("spaceId"));
 	}

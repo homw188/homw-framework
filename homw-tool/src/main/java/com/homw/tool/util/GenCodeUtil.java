@@ -32,7 +32,7 @@ import com.homw.tool.entity.TableEntity;
  * @version 1.0
  * @since 2019-05-20
  */
-public class GenUtil {
+public class GenCodeUtil {
 	public static List<String> getTemplates() {
 		List<String> templates = new ArrayList<String>();
 		templates.add("template/Entity.java.vm");
@@ -159,7 +159,7 @@ public class GenUtil {
 	 */
 	public static Configuration getConfig() {
 		try {
-			return new PropertiesConfiguration("generator.properties");
+			return new PropertiesConfiguration("gen-code.properties");
 		} catch (ConfigurationException e) {
 			throw new RuntimeException("获取配置文件失败，", e);
 		}

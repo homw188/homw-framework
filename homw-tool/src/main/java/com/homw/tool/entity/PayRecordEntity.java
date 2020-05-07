@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 /**
  * @description 支付记录实体
- * @author James
+ * @author Hom
  * @version 1.0
  * @date 2019-09-23
  */

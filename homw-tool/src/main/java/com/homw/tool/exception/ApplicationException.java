@@ -6,7 +6,7 @@ package com.homw.tool.exception;
  * @version 1.0
  * @since 2019-07-18
  */
-public class ApplicationException extends Exception {
+public class ApplicationException extends RuntimeException {
 	private static final long serialVersionUID = -7686999180024846055L;
 
 	public ApplicationException() {
