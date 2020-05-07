@@ -22,7 +22,7 @@ public abstract class AbstractApplication implements Application {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
-	public final void start(String[] args) throws ApplicationException {
+	public final void start(String[] args) {
 		logger.info("Start application " + this.getClass().getSimpleName() + "...");
 
 		Map<String, Object> params = null;
@@ -39,13 +39,13 @@ public abstract class AbstractApplication implements Application {
 		try {
 			execute(params);
 		} catch (Exception e) {
-			executeException(e);
+			wrapException(e);
 		} finally {
 			if (ctx != null) {
 				try {
 					ctx.close();
 				} catch (IOException e) {
-					executeException(e);
+					wrapException(e);
 				}
 			}
 			completed();
@@ -93,9 +93,8 @@ public abstract class AbstractApplication implements Application {
 	 * 执行异常
 	 * 
 	 * @param cause
-	 * @throws ApplicationException
 	 */
-	protected void executeException(Exception cause) throws ApplicationException {
+	protected void wrapException(Exception cause) {
 		throw new ApplicationException(cause);
 	}
 

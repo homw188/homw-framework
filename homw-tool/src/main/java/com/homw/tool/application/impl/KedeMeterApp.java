@@ -10,17 +10,17 @@ import com.homw.tool.api.kede.KedeElecOpenUtil;
 import com.homw.tool.application.AbstractApplication;
 
 /**
- * @description 科德抄表应用
+ * @description 科德电表应用
  * @author Hom
  * @version 1.0
  * @since 2019-11-13
  */
 @Controller
-@Application("kedeMeterReadApp")
-public class KedeMeterReadApp extends AbstractApplication {
+@Application("kedeMeterApp")
+public class KedeMeterApp extends AbstractApplication {
 	@Override
 	protected Map<String, Object> parseArgs(String[] args) {
-		if (args == null || args.length != 5) {
+		if (args == null || args.length < 5) {
 			throw new IllegalArgumentException("args must four items.");
 		}
 		Map<String, Object> params = new HashMap<>();
@@ -28,6 +28,9 @@ public class KedeMeterReadApp extends AbstractApplication {
 		params.put("port", args[2]);
 		params.put("addr", args[3]);
 		params.put("timeout", args[4]);
+		if (args.length > 5) {
+			params.put("action", args[5]);
+		}
 		return params;
 	}
 
@@ -42,9 +45,15 @@ public class KedeMeterReadApp extends AbstractApplication {
 		String port = params.get("port").toString();
 		String addr = params.get("addr").toString();
 		String timeout = params.get("timeout").toString();
+		Object action = params.get("action");
 
-		String msg = KedeElecOpenUtil.ztcx(ip, Integer.parseInt(port), addr, Integer.parseInt(timeout));
-		logger.info("ammeter value is: " + msg);
+		String backData = null;
+		if (action == null) {
+			backData = KedeElecOpenUtil.ztcx(ip, Integer.parseInt(port), addr, Integer.parseInt(timeout));
+		} else {
+			backData = KedeElecOpenUtil.eleAction(ip, Integer.parseInt(port), addr, Integer.parseInt(action.toString()), Integer.parseInt(timeout));
+		}
+		logger.info("backData is: " + backData);
 	}
 
 }

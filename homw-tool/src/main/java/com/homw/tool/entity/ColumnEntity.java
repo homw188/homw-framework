@@ -2,7 +2,7 @@ package com.homw.tool.entity;
 
 /**
  * @description 列的属性
- * @author James
+ * @author Hom
  * @version 1.0
  * @date 2019-05-20
  */

@@ -5,11 +5,6 @@ import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-/**
- * @author psiot
- * @email psiot@psiot.com.cn
- * @date 2019-04-16 10:44:07
- */
 public class LightlampsEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

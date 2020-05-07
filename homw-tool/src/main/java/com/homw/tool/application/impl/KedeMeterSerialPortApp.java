@@ -11,7 +11,7 @@ import com.homw.tool.application.AbstractApplication;
 import com.homw.tool.util.SpringContextUtil;
 
 /**
- * @description 科德串口应用
+ * @description 科德串口表应用
  * @author Hom
  * @version 1.0
  * @since 2020-03-13

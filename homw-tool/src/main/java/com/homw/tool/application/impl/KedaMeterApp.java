@@ -10,14 +10,14 @@ import com.homw.tool.api.keda.KDZTService;
 import com.homw.tool.application.AbstractApplication;
 
 /**
- * @description 科大抄表应用
+ * @description 科大水电表应用
  * @author Hom
  * @version 1.0
  * @since 2020-02-25
  */
 @Controller
-@Application("kedaMeterReadApp")
-public class KedaMeterReadApp extends AbstractApplication {
+@Application("kedaMeterApp")
+public class KedaMeterApp extends AbstractApplication {
 	@Override
 	protected Map<String, Object> parseArgs(String[] args) {
 		if (args == null || args.length < 4) {

@@ -10,18 +10,18 @@ import org.springframework.stereotype.Controller;
 
 import com.homw.tool.annotation.Application;
 import com.homw.tool.application.AbstractApplication;
-import com.homw.tool.service.ICodeGenerateService;
+import com.homw.tool.service.ICodeGenService;
 import com.homw.tool.util.SpringContextUtil;
 
 /**
- * @description 代码生成器
+ * @description 代码生成器应用
  * @author Hom
  * @version 1.0
  * @since 2019-05-20
  */
 @Controller
 @Application("codeGenApp")
-public class CodeGenerateApp extends AbstractApplication {
+public class CodeGenApp extends AbstractApplication {
 	@Override
 	protected Map<String, Object> parseArgs(String[] args) {
 		if (args == null || args.length < 3) {
@@ -56,7 +56,7 @@ public class CodeGenerateApp extends AbstractApplication {
 		String fileName = params.get("fileName").toString();
 
 		// 生成代码
-		ICodeGenerateService codeGenerateService = (ICodeGenerateService) SpringContextUtil
+		ICodeGenService codeGenerateService = (ICodeGenService) SpringContextUtil
 				.getBean("codeGenerateService");
 		byte[] data = codeGenerateService.generatorCode(tableNames);
 
