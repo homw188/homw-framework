@@ -1,5 +1,11 @@
 package com.homw.common.util;
 
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
+
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @description 系统运行时工具类
  * @author Hom
@@ -12,21 +18,68 @@ public class Platform {
 	public static final String PROD_ENV = "prod";
 	
 	public static boolean isWindow() {
-		String osName = System.getProperty("os.name");
+		String osName = getSystemProperty("os.name");
 		return osName != null && osName.startsWith("Windows");
 	}
 
 	public static boolean is32BitJvm() {
-		String jvm = System.getProperty("java.vm.name");
+		String jvm = getSystemProperty("java.vm.name");
 		return jvm == null || !jvm.contains("64");
 	}
 
 	public static String getJavaVersion() {
-		return System.getProperty("java.version");
+		return getSystemProperty("java.version");
 	}
 
 	public static String getUserHome() {
-		return System.getProperty("user.home");
+		return getSystemProperty("user.home");
+	}
+	
+	public static String getOSName() {
+		return getSystemProperty("os.name");
+	}
+	
+	public static String getOSVersion() {
+		return getSystemProperty("os.version");
+	}
+	
+	public static String getOSArch() {
+		return getSystemProperty("os.arch", "");
+	}
+	
+	public static String getJVMName() {
+		return getSystemProperty("java.vm.name");
+	}
+	
+	public static String getJVMRuntimeVersion() {
+		return getSystemProperty("java.runtime.version");
+	}
+	
+	public static long getTotalMemory() {
+		return Runtime.getRuntime().totalMemory();
+	}
+	
+	public static long getMaxMemory() {
+		return Runtime.getRuntime().maxMemory();
+	}
+	
+	public static int getCPUCores() {
+		return Runtime.getRuntime().availableProcessors();
+	}
+	
+	public static String getNetworkInterface() {
+		try {
+			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+			if (interfaces != null && interfaces.hasMoreElements()) {
+				NetworkInterface ni = interfaces.nextElement();
+				if (ni != null) {
+					return ni.getDisplayName();
+				}
+			}
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static boolean isIDEMode() {
@@ -38,4 +91,17 @@ public class Platform {
 		String runtimeEnv = System.getProperty(RUNTIME_ENV);
 		return runtimeEnv != null && runtimeEnv.equals(PROD_ENV);
 	}
+	
+	public static String getSystemProperty(String key) {
+		return getSystemProperty(key, null);
+	}
+	
+	public static String getSystemProperty(String key, String defaultValue) {
+		String value = System.getProperty(key);
+		if (StringUtils.isEmpty(value)) {
+			return defaultValue;
+		}
+		return value.trim();
+	}
+	
 }
