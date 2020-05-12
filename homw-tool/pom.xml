@@ -14,13 +14,11 @@
   	<dependency>
 		<groupId>com.homw.framework</groupId>
 		<artifactId>homw-common</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 		<groupId>com.homw.framework</groupId>
 		<artifactId>homw-dao-support</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
 	</dependency>
 	
     <dependency>
@@ -51,31 +49,15 @@
   
   <build>
      <plugins>
-     	 <plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-source-plugin</artifactId>
-			<configuration>
-				<attach>true</attach>
-				<encoding>${project.build.sourceEncoding}</encoding>
-			</configuration>
-			<executions>
-				<execution>
-					<phase>compile</phase>
-					<goals>
-						<goal>jar</goal>
-					</goals>
-				</execution>
-			</executions>
-		 </plugin>
-         <plugin>  
-		    <groupId>org.apache.maven.plugins</groupId>  
-		    <artifactId>maven-shade-plugin</artifactId>  
-		    <version>1.4</version>  
-		    <executions>  
-		        <execution>  
-		            <phase>package</phase>  
+         <plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-shade-plugin</artifactId>
+		    <version>1.4</version>
+		    <executions>
+		        <execution>
+		            <phase>package</phase>
 		            <goals>
-		                <goal>shade</goal>  
+		                <goal>shade</goal>
 		            </goals>
 		            <configuration>
 		                <transformers>

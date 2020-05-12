@@ -14,19 +14,16 @@
 	<dependency>
 		<groupId>com.homw.framework</groupId>
 		<artifactId>homw-dao-support</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 		<groupId>com.homw.framework</groupId>
 		<artifactId>homw-web-support</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
 	</dependency>
 	
 	<dependency>
 		<groupId>com.homw.framework</groupId>
 		<artifactId>homw-message</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
 	</dependency>
   	
 	<dependency>

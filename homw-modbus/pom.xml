@@ -14,7 +14,6 @@
 	<dependency>
 		<groupId>com.homw.framework</groupId>
 		<artifactId>homw-transport</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
 		
 		<exclusions>
 			<exclusion>
