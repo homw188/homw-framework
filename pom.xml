@@ -480,16 +480,16 @@
 			<artifactId>jul-to-slf4j</artifactId>
 			<version>${slf4j-version}</version>
 		</dependency>
-		<dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j-version}</version>
-        </dependency>
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j-version}</version>
-        </dependency>
+		    <groupId>log4j</groupId>
+		    <artifactId>log4j</artifactId>
+		    <version>${log4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j-version}</version>
+		</dependency>
 		<dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -500,6 +500,11 @@
             <artifactId>logback-core</artifactId>
             <version>${logback-version}</version>
         </dependency>
+        <dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-access</artifactId>
+		    <version>${logback-version}</version>
+		</dependency>
 		
 		<dependency>
         	<groupId>com.fasterxml.jackson.core</groupId>
@@ -758,6 +763,41 @@
 		  	<mybatis-version>3.4.6</mybatis-version>
 			<mybatis-spring-version>2.0.0</mybatis-spring-version>
   		</properties>
+  	</profile>
+  	
+  	<profile>
+  		<id>logback</id>
+  		<activation>
+  			<activeByDefault>true</activeByDefault>
+  		</activation>
+  		<dependencies>
+  			<dependency>
+		        <groupId>ch.qos.logback</groupId>
+		        <artifactId>logback-classic</artifactId>
+		    </dependency>
+		    <dependency>
+		        <groupId>ch.qos.logback</groupId>
+		        <artifactId>logback-core</artifactId>
+		    </dependency>
+		    <dependency>
+			    <groupId>ch.qos.logback</groupId>
+			    <artifactId>logback-access</artifactId>
+			</dependency>
+  		</dependencies>
+  	</profile>
+  	
+  	<profile>
+  		<id>log4j</id>
+  		<dependencies>
+  			<dependency>
+			    <groupId>log4j</groupId>
+			    <artifactId>log4j</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+			</dependency>
+  		</dependencies>
   	</profile>
   </profiles>
 </project>
