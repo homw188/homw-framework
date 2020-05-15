@@ -44,6 +44,7 @@ public class KedeNettyClient {
 			if (future.cause() != null) {
 				throw future.cause();
 			}
+			channel = future.channel();
 		} catch (Throwable e) {
 			e.printStackTrace();
 		} 
