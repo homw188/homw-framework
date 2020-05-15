@@ -2,7 +2,7 @@
 <!-- scanPeriod 单位: milliseconds, seconds, minutes or hours -->
 <configuration scan="false" scanPeriod="1 minutes" debug="false">
 	<!-- 日志文件根目录 -->
-	<property name="log.root" value="${user.home}/logs"/>
+	<property name="log.root" value="logs"/>
 	
 	<!-- debug日志文件路径 -->
 	<property name="log.file.debug" value="${log.root}/debug.log"/>
@@ -37,19 +37,12 @@
 	
 	<!-- 控制台输出配置 -->
 	<appender name="info-std-out" class="ch.qos.logback.core.ConsoleAppender">
-		<!-- 不输出error级别日志，格式冗余 -->
-		<filter class="ch.qos.logback.classic.filter.LevelFilter">
-			<level>ERROR</level>
-			<onMatch>DENY</onMatch>
-			<onMismatch>NEUTRAL</onMismatch>
-		</filter>
-		
 		<!-- 输出流，默认System.out -->
 		<target>System.out</target>
 		
-		<encoder class="ch.qos.logback.classic.PatternLayout">
-			<charset>${log.encoding.utf8}</charset>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<pattern>${log.pattern.debug}</pattern>
+			<charset>${log.encoding.utf8}</charset>
 		</encoder>
 	</appender>
 	
@@ -89,9 +82,9 @@
 			<maxFileSize>${log.file.size}</maxFileSize>
 		</rollingPolicy>
 		
-		<encoder class="ch.qos.logback.classic.PatternLayout">
-			<charset>${log.encoding.gbk}</charset>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<pattern>${log.pattern.debug}</pattern>
+			<charset>${log.encoding.utf8}</charset>
 		</encoder>
 	</appender>
 	
@@ -128,17 +121,22 @@
 			<maxFileSize>${log.file.size}</maxFileSize>
 		</rollingPolicy>
 		
-		<encoder class="ch.qos.logback.classic.PatternLayout">
-			<charset>${log.encoding.gbk}</charset>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<pattern>${log.pattern.debug}</pattern>
+			<charset>${log.encoding.utf8}</charset>
 		</encoder>
 	</appender>
 	
+	<!-- <loger>：可包含零个或多个<appender-ref>标签，表示这个appender将会添加到该loger -->
+	<!-- name：指定受此loger约束的某一个包或者具体类。-->
+    <!-- level：打印级别，大小写无关。INHERITED/NULL：强制执行上级的level。若未设置，则继承上级的level -->
+	<!-- addtivity：是否向上级loger传递打印信息，默认：true -->
 	<!-- spring-framework日志输出级别设置 -->
 	<logger name="org.springframework" level="ERROR" additivity="true"/>
+	<logger name="com.alibaba.druid.filter.stat.StatFilter" level="ERROR" additivity="true"/>
 
-	<!-- root logger, level: TRACE, DEBUG, INFO, WARN, ERROR, ALL, OFF, INHERITED/NULL-->
-	<root level="DEBUG">
+	<!-- root logger, level: TRACE, DEBUG, INFO, WARN, ERROR, ALL, OFF, INHERITED/NULL -->
+	<root level="INFO">
 		<!-- 项目发布，建议去除控制台输出info-std-out -->
 		<appender-ref ref="info-std-out"/>
 		<appender-ref ref="debug-file-out"/>
