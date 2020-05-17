@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import cn.hutool.core.io.IoUtil;
+
 /**
  * @description 序列化工具类
  * @author Hom
@@ -29,6 +31,9 @@ public class SerializationUtil {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			IoUtil.close(oos);
+			IoUtil.close(baos);
 		}
 		return null;
 	}
@@ -40,14 +45,18 @@ public class SerializationUtil {
 	 */
 	public static Object unserialize(byte[] bytes) {
 		ByteArrayInputStream bais = null;
+		ObjectInputStream ois = null;
 		try {
 			if (bytes != null && bytes.length > 0){
 				bais = new ByteArrayInputStream(bytes);
-				ObjectInputStream ois = new ObjectInputStream(bais);
+				ois = new ObjectInputStream(bais);
 				return ois.readObject();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			IoUtil.close(bais);
+			IoUtil.close(ois);
 		}
 		return null;
 	}
