@@ -1,14 +1,16 @@
 package com.homw.robot;
 
+import java.io.IOException;
+import java.util.Arrays;
+
+import org.junit.Test;
+
 import com.homw.robot.handler.RobotChannelInitialer;
 import com.homw.robot.struct.MsgFactory;
 import com.homw.robot.struct.MsgPacket;
 import com.homw.robot.struct.packet.Cmd;
-import com.homw.transport.netty.NettyClient;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.util.Arrays;
+import com.homw.transport.netty.TcpClient;
+import com.homw.transport.netty.session.Session;
 
 /**
  * 机器人客户端测试
@@ -20,11 +22,12 @@ public class RobotClientTest {
 
 	@Test
 	public void testClient() {
-		NettyClient client = null;
+		TcpClient client = null;
 		try {
-			client = new NettyClient("localhost", 8888, new RobotChannelInitialer());
+			Session session = null;
+			client = TcpClient.builder().host("localhost").port(8888).handler(new RobotChannelInitialer()).build();
 			try {
-				client.connect();// 建立TCP连接
+				session = client.openSession(); // 建立TCP连接
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -32,7 +35,7 @@ public class RobotClientTest {
 			// 组装数据包
 			MsgPacket cmd = MsgFactory.getCmdPacket(3, Arrays.copyOf("执行某任务".getBytes(), Cmd.size));
 			// 发送数据包
-			client.sendMessage(cmd);
+			session.send(cmd);
 			System.out.println("client send:" + cmd);
 
 			System.in.read();// wait

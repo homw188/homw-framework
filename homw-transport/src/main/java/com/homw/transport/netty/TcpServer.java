@@ -1,6 +1,7 @@
 package com.homw.transport.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  * @since 2020-04-17
  */
-public class NettyServer {
+public class TcpServer {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -32,7 +33,7 @@ public class NettyServer {
      * @param port
      * @param channelInitializer handler初始化器，不能为空
      */
-    public NettyServer(int port, ChannelInitializer<SocketChannel> channelInitializer) {
+    private TcpServer(int port, ChannelInitializer<SocketChannel> channelInitializer) {
         this.port = port;
 
         Validate.notNull(channelInitializer, "channelInitializer must not null");
@@ -51,6 +52,8 @@ public class NettyServer {
         bootstrap.group(parentGroup, childGroup);
         bootstrap.channel(NioServerSocketChannel.class);
         bootstrap.option(ChannelOption.SO_BACKLOG, SO_BACKLOG);
+        bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+        
         bootstrap.childHandler(channelInitializer);
         bootstrap.bind(port).sync();
     }
@@ -67,4 +70,27 @@ public class NettyServer {
             childGroup.shutdownGracefully();
         }
     }
+    
+    public static class Builder {
+		int port;
+		ChannelInitializer<SocketChannel> initializer;
+		
+		public TcpServer build() {
+			return new TcpServer(port, initializer);
+		}
+		
+		public Builder port(int port) {
+			this.port = port;
+			return this;
+		}
+		
+		public Builder handler(ChannelInitializer<SocketChannel> initializer) {
+			this.initializer = initializer;
+			return this;
+		}
+	}
+	
+	public static Builder builder() {
+		return new Builder();
+	}
 }
