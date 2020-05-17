@@ -4,6 +4,8 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.homw.transport.netty.session.Session;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -20,17 +22,15 @@ import io.netty.util.concurrent.GenericFutureListener;
  * @version 1.0
  * @since 2020-04-17
  */
-public class NettyClient {
+public class TcpClient {
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected String host;
 	protected int port;
 	protected Channel channel;
-	protected ChannelInitializer<SocketChannel> channelIntialezer;
+	protected ChannelInitializer<SocketChannel> channelInitializer;
 
-	public static final int SEND_BUFFER = 1024 * 1024;
-	public static final int RECEIVE_BUFFER = 1024 * 1024;
 	public static final int CONNECT_TIME_OUT = 1000 * 30;
 
 	/**
@@ -38,14 +38,14 @@ public class NettyClient {
 	 * 
 	 * @param host
 	 * @param port
-	 * @param channelIntialezer handler初始化器，不能为空
+	 * @param channelInitializer handler初始化器，不能为空
 	 */
-	public NettyClient(String host, int port, ChannelInitializer<SocketChannel> channelIntialezer) {
+	private TcpClient(String host, int port, ChannelInitializer<SocketChannel> channelInitializer) {
 		this.host = host;
 		this.port = port;
 
-		Validate.notNull(channelIntialezer, "channelIntialezer must not null");
-		this.channelIntialezer = channelIntialezer;
+		Validate.notNull(channelInitializer, "channelIntialezer must not null");
+		this.channelInitializer = channelInitializer;
 	}
 
 	/**
@@ -53,17 +53,15 @@ public class NettyClient {
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void connect() throws InterruptedException {
+	protected void connect() throws InterruptedException {
 		final NioEventLoopGroup eventLoop = new NioEventLoopGroup();
 		Bootstrap bootstrap = new Bootstrap();
 		bootstrap.group(eventLoop);
 		bootstrap.channel(NioSocketChannel.class);
 		bootstrap.option(ChannelOption.TCP_NODELAY, true);
 		bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
-		bootstrap.option(ChannelOption.SO_SNDBUF, SEND_BUFFER);
-		bootstrap.option(ChannelOption.SO_RCVBUF, RECEIVE_BUFFER);
 		bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, CONNECT_TIME_OUT);
-		bootstrap.handler(channelIntialezer);
+		bootstrap.handler(channelInitializer);
 
 		ChannelFuture future = bootstrap.connect(host, port).sync();
 		channel = future.channel();
@@ -73,6 +71,17 @@ public class NettyClient {
 				eventLoop.shutdownGracefully();
 			}
 		});
+	}
+
+	/**
+	 * 创建会话
+	 * 
+	 * @return
+	 * @throws InterruptedException
+	 */
+	public Session openSession() throws InterruptedException {
+		connect();
+		return new Session(null, channel);
 	}
 
 	/**
@@ -101,5 +110,34 @@ public class NettyClient {
 			channel.close();
 			channel = null;
 		}
+	}
+
+	public static class Builder {
+		String host;
+		int port;
+		ChannelInitializer<SocketChannel> initializer;
+
+		public TcpClient build() {
+			return new TcpClient(host, port, initializer);
+		}
+
+		public Builder host(String host) {
+			this.host = host;
+			return this;
+		}
+
+		public Builder port(int port) {
+			this.port = port;
+			return this;
+		}
+
+		public Builder handler(ChannelInitializer<SocketChannel> initializer) {
+			this.initializer = initializer;
+			return this;
+		}
+	}
+
+	public static Builder builder() {
+		return new Builder();
 	}
 }
