@@ -2,8 +2,9 @@ package com.homw.transport.netty;
 
 import org.junit.Test;
 
+import com.homw.transport.netty.handler.ResultFutureHandler;
+import com.homw.transport.netty.handler.ServerSessionHandler;
 import com.homw.transport.netty.message.Message;
-import com.homw.transport.netty.session.ServerSessionHandler;
 import com.homw.transport.netty.session.Session;
 import com.homw.transport.netty.session.SessionManager;
 
@@ -27,6 +28,7 @@ public class TcpServerTest {
 	public void test() throws Exception {
 		TcpServer server = TcpServer.builder().port(8888).handler(new ChannelInitializer<SocketChannel>() {
 			ObjectEncoder sharedEncoder = new ObjectEncoder();
+			ResultFutureHandler futureHandler = new ResultFutureHandler();
 			ServerSessionHandler sessionHandler = new ServerSessionHandler();
 			
 			@Override
@@ -34,13 +36,24 @@ public class TcpServerTest {
 				ch.pipeline().addLast("encoder", sharedEncoder);
 				ch.pipeline().addLast("decoder", new ObjectDecoder(ClassResolvers.cacheDisabled(null)));
 				ch.pipeline().addLast("sessionHandler", sessionHandler);
+				ch.pipeline().addLast("futureHandler", futureHandler);
 				ch.pipeline().addLast("serverHandler", new SimpleChannelInboundHandler<Message>() {
 					@Override
 					protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
+						System.out.println("Server recv messsage: " + msg);
+						msg.setPayload(msg.getPayload() + " <-- back from server");
+						
+						// echo
 						Session session = SessionManager.getInstance().getSession(Session.genSessionId(ctx));
-						msg.setSessionId(session.getSessionId());
-						msg.setPayload(msg.getPayload() + "--> back from server");
-						session.send(msg);
+						if (session != null) {
+							session.send(msg);
+						} else {
+							// not found session
+							ctx.channel().writeAndFlush(msg);
+						}
+						
+						// broadcast
+						//SessionManager.getInstance().broadcast(msg);
 					}
 				});
 			}

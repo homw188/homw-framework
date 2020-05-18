@@ -1,4 +1,4 @@
-package com.homw.transport.netty;
+package com.homw.transport.netty.session;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
