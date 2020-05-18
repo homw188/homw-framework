@@ -1,11 +1,8 @@
 package com.homw.robot.handler;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.homw.robot.util.ProtocolConstant;
+import com.homw.transport.netty.handler.ExceptionHandler;
 
-import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ConnectTimeoutException;
 import io.netty.handler.timeout.ReadTimeoutException;
@@ -17,8 +14,7 @@ import io.netty.handler.timeout.WriteTimeoutException;
  * @author Hom
  * @version 1.0
  */
-public class RobotExceptionHandler extends ChannelDuplexHandler {
-	private static final Logger logger = LoggerFactory.getLogger(RobotExceptionHandler.class);
+public class RobotExceptionHandler extends ExceptionHandler {
 	
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {

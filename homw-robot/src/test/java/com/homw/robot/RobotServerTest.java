@@ -2,6 +2,7 @@ package com.homw.robot;
 
 import com.homw.robot.codec.RobotMsgDecoder;
 import com.homw.robot.codec.RobotMsgEncoder;
+import com.homw.robot.handler.RobotExceptionHandler;
 import com.homw.robot.handler.RobotServerMsgHandler;
 import com.homw.robot.util.ProtocolConstant;
 import com.homw.transport.netty.TcpServer;
@@ -29,6 +30,7 @@ public class RobotServerTest {
 					ch.pipeline().addLast("messageDecoder",
 							new RobotMsgDecoder(ProtocolConstant.MAX_FRAME_LENGTH, 2, 2));
 					ch.pipeline().addLast("messageEncoder", new RobotMsgEncoder());
+					ch.pipeline().addLast("exceptionHandler", new RobotExceptionHandler());
 					ch.pipeline().addLast("msgPacketHandler", new RobotServerMsgHandler());
 				}
 			}).build();

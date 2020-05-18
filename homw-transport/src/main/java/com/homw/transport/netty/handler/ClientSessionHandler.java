@@ -20,7 +20,7 @@ public class ClientSessionHandler extends SimpleChannelInboundHandler<Message> {
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
-		Session session = ctx.channel().attr(Session.SESSION_KEY).get();
+		Session session = Session.getSession(ctx);
 		// first time setting
 		if (session != null && session.getSessionId() == null) {
 			String sessionId = msg.getSessionId();

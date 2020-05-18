@@ -33,32 +33,65 @@ public class Session {
 		if (data instanceof Message) {
 			return send((Message) data);
 		}
-		Message message = new Message();
-		message.setPayload(data);
-		message.setMessageType(MessageType.NORMAL);
-		return send(message);
+		return send(wrapMessage(data));
 	}
 
 	public ResultFuture<Message> send(Message message) {
 		if (message == null) {
 			return null;
 		}
-		if (StringUtils.isEmpty(message.getSessionId())) {
-			message.setSessionId(sessionId);
-		}
-		if (StringUtils.isEmpty(message.getMessageId())) {
-			message.setMessageId(Message.genMessageId());
-		}
-		channel.writeAndFlush(message);
+		fillMissField(message);
+		sendOriginal(message);
 
 		// bind future to channel
+		return bindResultFuture(message);
+	}
+
+	protected ResultFuture<Message> bindResultFuture(Message message) {
 		ResultFuture<Message> future = new ResultFuture<>();
-		Attribute<ResultFuture<Message>> messageAttr = channel.attr(Message.getMessageKey(message.getMessageId()));
+		AttributeKey<ResultFuture<Message>> messageKey = Message.getMessageKey(message.getMessageId());
+		Attribute<ResultFuture<Message>> messageAttr = channel.attr(messageKey);
 		messageAttr.set(future);
 		return future;
 	}
 
-	public String getSessionId() {
+	public void sendOriginal(Object data) {
+		channel.writeAndFlush(data);
+	}
+	
+	public void sendIgnoreResult(Object data) {
+		if (data instanceof Message) {
+			sendIgnoreResult((Message) data);
+		}
+		sendIgnoreResult(wrapMessage(data));
+	}
+
+	public void sendIgnoreResult(Message message) {
+		if (message == null) {
+			return;
+		}
+		fillMissField(message);
+		sendOriginal(message);
+	}
+	
+	protected Message wrapMessage(Object data) {
+		Message message = new Message();
+		message.setPayload(data);
+		message.setMessageType(MessageType.NORMAL);
+		return message;
+	}
+	
+	protected void fillMissField(Message message) {
+		if (StringUtils.isEmpty(message.getSessionId())) {
+			message.setSessionId(sessionId);
+		}
+		
+		if (StringUtils.isEmpty(message.getMessageId())) {
+			message.setMessageId(Message.genMessageId());
+		}
+	}
+	
+	public final String getSessionId() {
 		return sessionId;
 	}
 
@@ -66,7 +99,7 @@ public class Session {
 		this.sessionId = sessionId;
 	}
 
-	public Channel getChannel() {
+	public final Channel getChannel() {
 		return channel;
 	}
 
@@ -75,7 +108,17 @@ public class Session {
 	}
 
 	public static String genSessionId(ChannelHandlerContext ctx) {
+		if (ctx == null) {
+			return null;
+		}
 		return SecureUtil.md5(ctx.channel().id().asLongText() + sessionIdSalt);
+	}
+	
+	public static Session getSession(ChannelHandlerContext ctx) {
+		if (ctx == null) {
+			return null;
+		}
+		return ctx.channel().attr(Session.SESSION_KEY).get();
 	}
 
 }

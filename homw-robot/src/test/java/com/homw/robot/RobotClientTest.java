@@ -35,7 +35,7 @@ public class RobotClientTest {
 			// 组装数据包
 			MsgPacket cmd = MsgFactory.getCmdPacket(3, Arrays.copyOf("执行某任务".getBytes(), Cmd.size));
 			// 发送数据包
-			session.send(cmd);
+			session.sendOriginal(cmd);
 			System.out.println("client send:" + cmd);
 
 			System.in.read();// wait
