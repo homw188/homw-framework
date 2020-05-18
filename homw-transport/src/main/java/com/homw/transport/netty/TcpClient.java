@@ -81,7 +81,10 @@ public class TcpClient {
 	 */
 	public Session openSession() throws InterruptedException {
 		connect();
-		return new Session(null, channel);
+		Session session = new Session(null, channel);
+		// bind session
+		channel.attr(Session.SESSION_KEY).set(session);
+		return session;
 	}
 
 	/**

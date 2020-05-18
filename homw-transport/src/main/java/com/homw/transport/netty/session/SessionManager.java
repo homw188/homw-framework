@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.homw.transport.netty.ResultFuture;
 import com.homw.transport.netty.message.Message;
 
 /**

@@ -1,6 +1,8 @@
-package com.homw.transport.netty.session;
+package com.homw.transport.netty.handler;
 
 import com.homw.transport.netty.message.Message;
+import com.homw.transport.netty.session.Session;
+import com.homw.transport.netty.session.SessionManager;
 
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -24,7 +26,9 @@ public class ServerSessionHandler extends SimpleChannelInboundHandler<Message> {
 		if (session == null) {
 			String sessionId = Session.genSessionId(ctx);
 			session = new Session(sessionId, ctx.channel());
+			// bind session
 			attr.set(session);
+			// cache session
 			SessionManager.getInstance().addSession(session);
 		}
 		

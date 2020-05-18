@@ -2,9 +2,9 @@ package com.homw.transport.netty.message;
 
 import java.io.Serializable;
 
-import com.homw.transport.netty.ResultFuture;
+import com.homw.transport.netty.session.ResultFuture;
 
-import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.IdUtil;
 import io.netty.util.AttributeKey;
 
 /**
@@ -57,7 +57,7 @@ public class Message implements Serializable {
 	}
 	
 	public static String genMessageId() {
-		return UUID.randomUUID().toString();
+		return IdUtil.fastSimpleUUID();
 	}
 	
 	public static AttributeKey<ResultFuture<Message>> getMessageKey(String messageId) {
