@@ -6,7 +6,6 @@ import com.homw.transport.netty.message.Message;
 import com.homw.transport.netty.message.MessageType;
 import com.homw.transport.netty.session.Session;
 
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -18,7 +17,6 @@ import io.netty.handler.timeout.IdleStateHandler;
  * @version 1.0
  * @since 2020-05-18
  */
-@ChannelHandler.Sharable
 public class HeartbeatHandler extends IdleStateHandler {
 
 	public HeartbeatHandler(long idleTime, TimeUnit unit) {
@@ -31,21 +29,25 @@ public class HeartbeatHandler extends IdleStateHandler {
 			ctx.executor().execute(new Runnable() {
 				@Override
 				public void run() {
-					Message message = new Message();
-					message.setMessageId(Message.genMessageId());
-					message.setMessageType(MessageType.HEARTBEAT);
-					
-					Session session = ctx.channel().attr(Session.SESSION_KEY).get();
-					if (session != null) {
-						session.send(message);
-					} else {
-						// not found session
-						ctx.channel().writeAndFlush(message);
-					}
+					sendHeartbeatMessage(ctx);
 				}
 			});
 		} else {
 			super.channelIdle(ctx, evt);
+		}
+	}
+	
+	protected void sendHeartbeatMessage(ChannelHandlerContext ctx) {
+		Message message = new Message();
+		message.setMessageId(Message.genMessageId());
+		message.setMessageType(MessageType.HEARTBEAT);
+		
+		Session session = Session.getSession(ctx);
+		if (session != null) {
+			session.send(message);
+		} else {
+			// not found session
+			ctx.channel().writeAndFlush(message);
 		}
 	}
 

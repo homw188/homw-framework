@@ -1,5 +1,7 @@
 package com.homw.transport.netty.handler;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.homw.transport.netty.message.Message;
 import com.homw.transport.netty.session.ResultFuture;
 
@@ -20,10 +22,12 @@ public class ResultFutureHandler extends SimpleChannelInboundHandler<Message> {
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
-		AttributeKey<ResultFuture<Message>> messageKey = Message.getMessageKey(msg.getMessageId());
-		ResultFuture<Message> future = ctx.channel().attr(messageKey).get();
-		if (future != null) {
-			future.set(msg);
+		if (msg != null && StringUtils.isNotEmpty(msg.getMessageId())) {
+			AttributeKey<ResultFuture<Message>> messageKey = Message.getMessageKey(msg.getMessageId());
+			ResultFuture<Message> future = ctx.channel().attr(messageKey).get();
+			if (future != null) {
+				future.set(msg);
+			}
 		}
 		
 		// fire next handler

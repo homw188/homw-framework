@@ -18,6 +18,7 @@ import io.netty.handler.timeout.WriteTimeoutHandler;
  * @version 1.0
  */
 public class RobotChannelInitialer extends ChannelInitializer<SocketChannel> {
+	
 	@Override
 	protected void initChannel(SocketChannel ch) throws Exception {
 		ch.pipeline().addLast("messageDecoder", new RobotMsgDecoder(ProtocolConstant.MAX_FRAME_LENGTH, 2, 2));
@@ -27,8 +28,9 @@ public class RobotChannelInitialer extends ChannelInitializer<SocketChannel> {
 				new ReadTimeoutHandler(ProtocolConstant.READ_TIME_OUT, TimeUnit.MILLISECONDS));
 		ch.pipeline().addLast("writeTimeoutHandler",
 				new WriteTimeoutHandler(ProtocolConstant.WRITE_TIME_OUT, TimeUnit.MILLISECONDS));
-
+		
+		ch.pipeline().addLast("exceptionHandler", new RobotExceptionHandler());
+		ch.pipeline().addLast("heartBeatHandler", new RobotHeartHandler(60, TimeUnit.SECONDS));
 		ch.pipeline().addLast("msgPacketHandler", new RobotClientMsgHandler());
-		ch.pipeline().addLast("heartBeatHandler", new RobotHeartHandler());
 	}
 }

@@ -33,7 +33,6 @@ public class TcpClientTest {
 					ObjectEncoder sharedEncoder = new ObjectEncoder();
 					ClientSessionHandler sessionHandler = new ClientSessionHandler();
 					ResultFutureHandler futureHandler = new ResultFutureHandler();
-					HeartbeatHandler heartbeatHandler = new HeartbeatHandler(3, TimeUnit.SECONDS);
 
 					@Override
 					protected void initChannel(SocketChannel ch) throws Exception {
@@ -41,7 +40,7 @@ public class TcpClientTest {
 						ch.pipeline().addLast("decoder", new ObjectDecoder(ClassResolvers.cacheDisabled(null)));
 						ch.pipeline().addLast("sessionHandler", sessionHandler);
 						ch.pipeline().addLast("futureHandler", futureHandler);
-						ch.pipeline().addLast("heartbeatHandler", heartbeatHandler);
+						ch.pipeline().addLast("heartbeatHandler", new HeartbeatHandler(5, TimeUnit.SECONDS));
 					}
 				}).build();
 		Session session = client.openSession();
