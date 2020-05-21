@@ -88,7 +88,7 @@
 	
 	<swagger-version>1.5.19</swagger-version>
 	
-	<tomcat-version>8.5.31</tomcat-version>
+	<tomcat-version>8.5.55</tomcat-version>
 	
 	<cxf-version>3.1.15</cxf-version>
 	<zookeeper-version>3.4.13</zookeeper-version>
