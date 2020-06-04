@@ -4,14 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Sets;
-import com.homw.message.bean.PushNotification;
 import com.homw.message.bean.PushMessage;
+import com.homw.message.bean.PushNotification;
 import com.homw.message.constant.PushTargetType;
 import com.homw.message.push.IDeviceProxy;
 import com.homw.message.push.INotificationProxy;
 
 import cn.jpush.api.JPushClient;
-import cn.jpush.api.push.PushResult;
 import cn.jpush.api.push.model.Message;
 import cn.jpush.api.push.model.Options;
 import cn.jpush.api.push.model.Platform;
@@ -60,8 +59,7 @@ public class JPushProxy implements INotificationProxy, IDeviceProxy {
 
 		try {
 			payloadBuilder.setOptions(options);
-			PushResult pushResult = jpushClient.sendPush(payloadBuilder.build());
-			System.out.println(pushResult);
+			jpushClient.sendPush(payloadBuilder.build());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

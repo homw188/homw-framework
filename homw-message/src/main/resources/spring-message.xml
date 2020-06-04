@@ -11,7 +11,7 @@
 	<!-- base-package 如果多个，用“,”分隔 -->
 	<context:component-scan base-package="com.homw.message" use-default-filters="true"/>
 	
-	<context:property-placeholder location="#{(systemProperties['confpath']?:'classpath:')+'conf/cloopen.properties'}"/>
+	<context:property-placeholder location="#{(systemProperties['confpath']?:'classpath:')+'conf/*.properties'}"/>
 	
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basename" value="classpath:messages"/>
