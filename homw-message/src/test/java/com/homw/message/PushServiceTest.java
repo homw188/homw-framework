@@ -24,36 +24,28 @@ public class PushServiceTest {
 
 	@Autowired
 	private IPushMessageService pushMessageService;
+	
+	private String tag = "Test-Tag";
+	private String regId = "161a3797c894f2d7fe5";
 
 	@Test
 	public void sendNotification() {
-		try {
-			Map<String, String> extraMap = new HashMap<String, String>();
-			extraMap.put("key", "附带内容");
-			System.setProperty(Platform.RUNTIME_ENV, Platform.PROD_ENV);
-			pushMessageService.pushNotification("161a3797c894f2d7fe5", "JPush测试", extraMap);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Map<String, String> extraMap = new HashMap<String, String>();
+		extraMap.put("extra_key", "附加值");
+		System.setProperty(Platform.RUNTIME_ENV, Platform.PROD_ENV);
+		pushMessageService.pushNotification(regId, "JPush Reg.ID测试", extraMap);
 	}
 
 	@Test
 	public void addTag() {
-		try {
-			pushMessageService.addTag("161a3797c894f2d7fe5", new String[] { "member" });
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		pushMessageService.addTag(regId, new String[] { tag });
 	}
 
 	@Test
 	public void sendNotificationWithTag() {
-		try {
-			Map<String, String> extraMap = new HashMap<String, String>();
-			extraMap.put("key", "123");
-			pushMessageService.sendNotificationWithTag("member", "标签组测试", extraMap);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Map<String, String> extraMap = new HashMap<String, String>();
+		extraMap.put("extra_key", "附加值");
+		System.setProperty(Platform.RUNTIME_ENV, Platform.PROD_ENV);
+		pushMessageService.sendNotificationWithTag(tag, "Jpush Tag测试", extraMap);
 	}
 }
