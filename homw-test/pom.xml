@@ -5,7 +5,7 @@
   <parent>
 	<groupId>com.homw.framework</groupId>
 	<artifactId>homw-framework</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.0</version>
   </parent>
   <artifactId>homw-test</artifactId>
   <packaging>war</packaging>
