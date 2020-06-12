@@ -16,8 +16,7 @@ public class MutexFilter extends AbstractFilter {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public void action(Context context) throws Exception {
+	public void action(Context<?> context) throws Exception {
 		try {
 			lock.lock();
 			System.out.println(Thread.currentThread().getName() + "#before:" + context.get());

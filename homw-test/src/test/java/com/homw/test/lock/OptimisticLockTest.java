@@ -8,7 +8,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.homw.test.bean.Constants;
 import com.homw.test.lock.dao.OptimisticLockDao;
-import com.homw.test.pattern.command.Command;
 import com.homw.test.redis.RedisOperationCommand;
 import com.homw.test.redis.RedisOperatorTest;
 import com.homw.web.support.util.SpringContextUtil;

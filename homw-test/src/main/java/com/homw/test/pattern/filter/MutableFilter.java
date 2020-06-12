@@ -12,8 +12,7 @@ public class MutableFilter extends AbstractFilter {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public void action(Context context) throws Exception {
+	public void action(Context<?> context) throws Exception {
 		Object obj = context.get();
 		if (obj instanceof Message) {
 			Message msg = (Message) obj;

@@ -1,14 +1,15 @@
 package com.homw.tool.api.keda;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 public class KedaApiTest {
 	@Test
 	public void testFormat() {
 		String txadd = String.format("%014d", Long.parseLong("1709002216")); // 14位
-		System.out.println(txadd);
-
-		System.out.println(Integer.parseInt(txadd.substring(12), 16));
+		assertEquals("00001709002216", txadd);
+		assertEquals(Integer.parseInt(txadd.substring(12), 16), 22);
 	}
 
 	@Test
