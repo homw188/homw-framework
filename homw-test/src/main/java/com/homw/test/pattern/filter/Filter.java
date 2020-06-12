@@ -7,5 +7,5 @@ package com.homw.test.pattern.filter;
  * @since 2020-03-18
  */
 public interface Filter {
-	void action(@SuppressWarnings("rawtypes") Context context) throws Exception;
+	void action(Context<?> context) throws Exception;
 }

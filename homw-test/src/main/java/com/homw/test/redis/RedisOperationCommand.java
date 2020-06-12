@@ -8,7 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 import com.homw.test.bean.Constants;
-import com.homw.test.pattern.command.Command;
+import com.homw.test.lock.Command;
 
 /**
  * redis操作命令实现

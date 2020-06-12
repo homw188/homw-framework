@@ -14,8 +14,7 @@ public abstract class AbstractFilter implements Filter {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public void action(Context context) throws Exception {
+	public void action(Context<?> context) throws Exception {
 		if (next != null) {
 			next.action(context);
 		}

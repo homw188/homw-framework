@@ -3,8 +3,6 @@ package com.homw.test.lock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.homw.test.pattern.command.Command;
-
 /**
  * 乐观锁命令实现
  * @author Hom
