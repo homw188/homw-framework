@@ -1,8 +1,8 @@
 package com.homw.tool.application.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.springframework.stereotype.Controller;
 
 import com.alibaba.fastjson.JSON;
@@ -23,23 +23,17 @@ import cn.hutool.http.HttpUtil;
 @Controller
 @Application("zkDoorApp")
 public class ZkDoorApp extends AbstractApplication {
+	
 	@Override
-	protected Map<String, Object> parseArgs(String[] args) {
-		if (args == null || args.length != 4) {
-			throw new IllegalArgumentException("args must four items.");
-		}
-		Map<String, Object> params = new HashMap<>();
-		params.put("ip", args[1]);
-		params.put("port", args[2]);
-		params.put("addr", args[3]);
-		return params;
+	protected void configArgs(Options options) {
+		options.addOption(Option.builder("h").longOpt("host").hasArg().required().desc("door hostname").build());
+		options.addOption(Option.builder("p").longOpt("port").hasArg().required().desc("door port").build());
+		options.addOption(Option.builder("d").longOpt("addr").hasArg().required().desc("door mac addr").build());
 	}
-
+	
 	@Override
-	protected void printHint(String[] args) {
-		logger.error("Usage:\t" + args[0] + " ip port addr");
-	}
-
+	protected void validateArgs(CommandLine params) {}
+	
 	private String apiToken = "59C15FEC07AD1B282ED09137976FA596DF63AF2B09F6265213C53EC421B7A4AC";// hash("test")
 	private int holdInterval = 5;// 开门时长，单位：秒
 	
@@ -47,14 +41,14 @@ public class ZkDoorApp extends AbstractApplication {
 	// zkDoorApp 192.168.83.30 8098 4028d39e71a0b7510171a0c0ff390144（32位）
 
 	@Override
-	protected void execute(Map<String, Object> params) throws Exception {
-		String ip = params.get("ip").toString();
-		String port = params.get("port").toString();
-		String addr = params.get("addr").toString();
+	protected void execute(CommandLine params) throws Exception {
+		String host = params.getOptionValue("h");
+		String port = params.getOptionValue("p");
+		String addr = params.getOptionValue("d");
 
-		String url = "http://" + ip + ":" + port + "/api/door/remoteOpenById?doorId=" + addr + "&interval="
+		String url = "http://" + host + ":" + port + "/api/door/remoteOpenById?doorId=" + addr + "&interval="
 				+ holdInterval + "&access_token=" + apiToken;
-		/*String url = "http://" + ip + ":" + port + "/api/door/remoteOpenByName?doorName=" + addr + "&interval="
+		/*String url = "http://" + host + ":" + port + "/api/door/remoteOpenByName?doorName=" + addr + "&interval="
 				+ holdInterval + "&access_token=" + apiToken;*/
 		logger.info("url:{}", url);
 

@@ -1,7 +1,7 @@
 package com.homw.tool.application.impl;
 
-import java.util.Map;
-
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Options;
 import org.springframework.stereotype.Controller;
 
 import com.homw.tool.annotation.Application;
@@ -18,18 +18,15 @@ import com.homw.tool.util.SpringContextUtil;
 @Controller
 @Application("lampsKeyUpdateApp")
 public class LampsKeyUpdateApp extends AbstractApplication {
+	
 	@Override
-	protected Map<String, Object> parseArgs(String[] args) {
-		return null;
-	}
+	protected void configArgs(Options options) {}
+	
+	@Override
+	protected void validateArgs(CommandLine params) {}
 
 	@Override
-	protected void printHint(String[] args) {
-		logger.error("Usage:\t" + args[0]);
-	}
-
-	@Override
-	protected void execute(Map<String, Object> params) throws Exception {
+	protected void execute(CommandLine params) throws Exception {
 		ILampsKeyUpdateService updateService = (ILampsKeyUpdateService) SpringContextUtil
 				.getBean("lampsKeyUpdateService");
 		updateService.updateBatch();

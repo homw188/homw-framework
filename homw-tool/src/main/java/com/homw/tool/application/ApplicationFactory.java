@@ -2,6 +2,7 @@ package com.homw.tool.application;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,8 +19,7 @@ public class ApplicationFactory {
 	
 	private static Map<String, String> appMap = new HashMap<>();
 	
-	private ApplicationFactory() {
-	}
+	private ApplicationFactory() {}
 
 	/**
 	 * 创建应用
@@ -99,5 +99,9 @@ public class ApplicationFactory {
 				}
 			}
 		}
+	}
+
+	public static Map<String, String> getAppMap() {
+		return Collections.unmodifiableMap(appMap);
 	}
 }
