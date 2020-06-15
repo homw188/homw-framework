@@ -14,7 +14,7 @@ import com.homw.tool.service.ITableUpdateService;
 
 @Service
 public class TableUpdateService implements ITableUpdateService {
-	@Autowired
+	@Autowired(required = false)
 	private TableUpdateDao tableUpdateDao;
 
 	@Override

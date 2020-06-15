@@ -17,7 +17,7 @@ import com.homw.tool.util.SpringContextUtil;
  * @since 2020-03-13
  */
 @Controller
-@Application("kedeMeterSerialPortApp")
+@Application(value = "kedeMeterSerialPortApp", scanSerialPort = true)
 public class KedeMeterSerialPortApp extends AbstractApplication {
 	
 	@Override

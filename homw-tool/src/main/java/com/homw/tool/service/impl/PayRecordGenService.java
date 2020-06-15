@@ -20,7 +20,7 @@ import com.homw.tool.service.IPayRecordGenService;
 
 @Service
 public class PayRecordGenService implements IPayRecordGenService {
-	@Autowired
+	@Autowired(required = false)
 	private PayRecordGenDao payRecordGenerateDao;
 
 	private static Logger logger = LoggerFactory.getLogger(PayRecordGenService.class);

@@ -14,8 +14,9 @@ import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.homw.tool.config.SpringContextConfig;
 import com.homw.tool.exception.ApplicationException;
 import com.homw.tool.util.SpringContextUtil;
 
@@ -61,7 +62,7 @@ public abstract class AbstractApplication implements Application {
 			completed();
 		}
 	}
-	
+
 	/**
 	 * 打印应用列表
 	 */
@@ -116,7 +117,7 @@ public abstract class AbstractApplication implements Application {
 	 * 启动spring容器
 	 */
 	protected Closeable startContiner() {
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:spring-context.xml");
+		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(SpringContextConfig.class);
 		ctx.start();
 		initContext(ctx);
 		return ctx;

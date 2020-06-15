@@ -23,7 +23,7 @@ import com.homw.tool.util.SpringContextUtil;
  */
 @Controller
 @Deprecated
-@Application("spmsNoImportApp")
+@Application(value = "spmsNoImportApp", importDataSource = true)
 public class SpmsNoImportApp extends AbstractApplication {
 	
 	@Override

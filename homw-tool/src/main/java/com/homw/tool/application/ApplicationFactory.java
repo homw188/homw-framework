@@ -19,6 +19,8 @@ public class ApplicationFactory {
 	
 	private static Map<String, String> appMap = new HashMap<>();
 	
+	private static Application active;
+	
 	private ApplicationFactory() {}
 
 	/**
@@ -37,7 +39,8 @@ public class ApplicationFactory {
 		try {
 			Class<?> clazz = Class.forName(className);
 			if (Application.class.isAssignableFrom(clazz)) {
-				return (Application) clazz.newInstance();
+				active = (Application) clazz.newInstance();
+				return active;
 			} else {
 				throw new IllegalArgumentException("application [" + appKey + "] not supported.");
 			}
@@ -103,5 +106,9 @@ public class ApplicationFactory {
 
 	public static Map<String, String> getAppMap() {
 		return Collections.unmodifiableMap(appMap);
+	}
+
+	public static Application getActive() {
+		return active;
 	}
 }
