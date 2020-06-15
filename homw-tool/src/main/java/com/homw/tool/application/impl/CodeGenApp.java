@@ -21,7 +21,7 @@ import com.homw.tool.util.SpringContextUtil;
  * @since 2019-05-20
  */
 @Controller
-@Application("codeGenApp")
+@Application(value = "codeGenApp", importDataSource = true)
 public class CodeGenApp extends AbstractApplication {
 
 	@Override
@@ -49,7 +49,7 @@ public class CodeGenApp extends AbstractApplication {
 		fileName += ".zip";// 默认zip格式压缩
 
 		// 生成代码
-		ICodeGenService codeGenerateService = (ICodeGenService) SpringContextUtil.getBean("codeGenerateService");
+		ICodeGenService codeGenerateService = (ICodeGenService) SpringContextUtil.getBean("codeGenService");
 		byte[] data = codeGenerateService.generatorCode(tableNames);
 
 		// 存储代码压缩包

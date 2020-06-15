@@ -11,15 +11,19 @@ import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.stereotype.Service;
 
 import com.homw.common.util.DateUtil;
+import com.homw.tool.annotation.CommPortCondition;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 
-//@Service
+@Service
+@Conditional(CommPortCondition.class)
 public class CommPortService implements ICommPortService {
 
 	private static Logger logger = LoggerFactory.getLogger(CommPortService.class);
@@ -233,6 +237,7 @@ public class CommPortService implements ICommPortService {
 
 	@PostConstruct
 	public void checkComm() {
+		logger.info("scan serial port task start...");
 		init();
 		/*new Thread(new CheckThread()).start();
 		new Thread(new TimeThread()).start();*/

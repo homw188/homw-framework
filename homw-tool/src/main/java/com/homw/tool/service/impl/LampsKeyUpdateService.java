@@ -17,7 +17,7 @@ import com.homw.tool.service.ILampsKeyUpdateService;
 
 @Service
 public class LampsKeyUpdateService implements ILampsKeyUpdateService {
-	@Autowired
+	@Autowired(required = false)
 	private LampsKeyUpdateDao lampsKeyUpdateDao;
 
 	@Override

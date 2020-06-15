@@ -14,7 +14,7 @@ import com.homw.tool.service.ISpmsNoService;
 
 @Service
 public class SpmsNoService implements ISpmsNoService {
-	@Autowired
+	@Autowired(required = false)
 	private SpmsNoDao spmsNoDao;
 
 	@Override

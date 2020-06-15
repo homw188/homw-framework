@@ -21,4 +21,16 @@ public @interface Application {
 	 * @return
 	 */
 	String value() default "defaultApp";
+	
+	/**
+	 * 是否开启串口扫描
+	 * @return
+	 */
+	boolean scanSerialPort() default false;
+	
+	/**
+	 * 是否导入数据源配置
+	 * @return
+	 */
+	boolean importDataSource() default false;
 }

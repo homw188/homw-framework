@@ -17,7 +17,7 @@ import com.homw.tool.util.SpringContextUtil;
  * @since 2019-09-23
  */
 @Controller
-@Application("payRecordGenApp")
+@Application(value = "payRecordGenApp", importDataSource = true)
 public class PayRecordGenApp extends AbstractApplication {
 	
 	@Override
@@ -31,7 +31,7 @@ public class PayRecordGenApp extends AbstractApplication {
 	@Override
 	protected void execute(CommandLine params) throws Exception {
 		IPayRecordGenService updateService = (IPayRecordGenService) SpringContextUtil
-				.getBean("payRecordGenerateService");
+				.getBean("payRecordGenService");
 		updateService.generate(Long.valueOf(params.getOptionValue("s")));
 	}
 }

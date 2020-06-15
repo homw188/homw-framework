@@ -15,7 +15,7 @@ import com.homw.tool.service.IDeviceInfoService;
 
 @Service
 public class DeviceInfoService implements IDeviceInfoService {
-	@Autowired
+	@Autowired(required = false)
 	private DeviceInfoDao deviceInfoDao;
 
 	@Override

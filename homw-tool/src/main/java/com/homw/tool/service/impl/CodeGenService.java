@@ -15,7 +15,7 @@ import com.homw.tool.util.GenCodeUtil;
 
 @Service
 public class CodeGenService implements ICodeGenService {
-	@Autowired
+	@Autowired(required = false)
 	private CodeGenDao sysGeneratorDao;
 
 	@Override

@@ -20,7 +20,7 @@ import com.homw.tool.util.SpringContextUtil;
  * @since 2019-07-18
  */
 @Controller
-@Application("tableUpdateApp")
+@Application(value = "tableUpdateApp", importDataSource = true)
 public class TableUpdateApp extends AbstractApplication {
 	
 	@Override

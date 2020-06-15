@@ -20,7 +20,7 @@ import com.homw.tool.util.SpringContextUtil;
  * @since 2019-05-20
  */
 @Controller
-@Application("deviceImportApp")
+@Application(value = "deviceImportApp", importDataSource = true)
 public class DeviceImportApp extends AbstractApplication {
 
 	@Override

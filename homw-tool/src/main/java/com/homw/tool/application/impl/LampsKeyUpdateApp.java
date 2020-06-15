@@ -16,7 +16,7 @@ import com.homw.tool.util.SpringContextUtil;
  * @since 2019-07-18
  */
 @Controller
-@Application("lampsKeyUpdateApp")
+@Application(value = "lampsKeyUpdateApp", importDataSource = true)
 public class LampsKeyUpdateApp extends AbstractApplication {
 	
 	@Override
