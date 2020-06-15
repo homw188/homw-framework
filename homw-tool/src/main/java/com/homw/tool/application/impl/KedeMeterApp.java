@@ -1,8 +1,8 @@
 package com.homw.tool.application.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.springframework.stereotype.Controller;
 
 import com.homw.tool.annotation.Application;
@@ -18,42 +18,34 @@ import com.homw.tool.application.AbstractApplication;
 @Controller
 @Application("kedeMeterApp")
 public class KedeMeterApp extends AbstractApplication {
+	
 	@Override
-	protected Map<String, Object> parseArgs(String[] args) {
-		if (args == null || args.length < 5) {
-			throw new IllegalArgumentException("args must four items.");
-		}
-		Map<String, Object> params = new HashMap<>();
-		params.put("ip", args[1]);
-		params.put("port", args[2]);
-		params.put("addr", args[3]);
-		params.put("timeout", args[4]);
-		if (args.length > 5) {
-			params.put("action", args[5]);
-		}
-		return params;
+	protected void configArgs(Options options) {
+		options.addOption(Option.builder("h").longOpt("host").hasArg().required().desc("meter hostname").build());
+		options.addOption(Option.builder("p").longOpt("port").hasArg().required().desc("meter port").build());
+		options.addOption(Option.builder("d").longOpt("addr").hasArg().required().desc("meter mac addr").build());
+		options.addOption(Option.builder("t").longOpt("timeout").hasArg().required().desc("read meter timeout").build());
+		// 电表拉合闸参数（合闸=0 拉闸=1）
+		options.addOption(Option.builder("f").longOpt("flag").hasArg().desc("action flag, open: 0, close: 1").build());
 	}
-
+	
 	@Override
-	protected void printHint(String[] args) {
-		logger.error("Usage:\t" + args[0] + " ip port addr timeout");
-	}
-
+	protected void validateArgs(CommandLine params) {}
+	
 	@Override
-	protected void execute(Map<String, Object> params) throws Exception {
-		String ip = params.get("ip").toString();
-		String port = params.get("port").toString();
-		String addr = params.get("addr").toString();
-		String timeout = params.get("timeout").toString();
-		Object action = params.get("action");
+	protected void execute(CommandLine params) throws Exception {
+		String host = params.getOptionValue("h");
+		String port = params.getOptionValue("p");
+		String addr = params.getOptionValue("d");
+		String timeout = params.getOptionValue("t");
+		String action = params.getOptionValue("f");
 
 		String backData = null;
 		if (action == null) {
-			backData = KedeElecOpenUtil.ztcx(ip, Integer.parseInt(port), addr, Integer.parseInt(timeout));
+			backData = KedeElecOpenUtil.ztcx(host, Integer.parseInt(port), addr, Integer.parseInt(timeout));
 		} else {
-			backData = KedeElecOpenUtil.eleAction(ip, Integer.parseInt(port), addr, Integer.parseInt(action.toString()), Integer.parseInt(timeout));
+			backData = KedeElecOpenUtil.eleAction(host, Integer.parseInt(port), addr, Integer.parseInt(action.toString()), Integer.parseInt(timeout));
 		}
-		logger.info("backData is: " + backData);
+		logger.info("backData is: {}", backData);
 	}
-
 }

@@ -1,8 +1,12 @@
 package com.homw.tool;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Options;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.homw.tool.application.AbstractApplication;
 import com.homw.tool.application.ApplicationFactory;
 
 /**
@@ -15,13 +19,25 @@ public class Main {
 	private static Logger logger = LoggerFactory.getLogger(Main.class);
 
 	public static void main(String[] args) throws Exception {
-		if (args == null || args.length == 0) {
-			logger.error("Arguments exception, please check your inputs. "
-					+ "prompt: args must not null, and at least one item.");
-			logger.error("Usage:\tappKey");
+		ApplicationFactory.init("com.homw.tool.application.impl");
+		
+		Options options = AbstractApplication.buildCliOptions();
+		CommandLine params = null;
+		try {
+			params = AbstractApplication.parseArgs(args, options, true);
+		} catch (Exception e) {
+			logger.error("Arguments exception, please check your inputs.", e);
+			AbstractApplication.printHint(options);
 			System.exit(1);
 		}
-		ApplicationFactory.init("com.homw.tool.application.impl");
-		ApplicationFactory.create(args[0]).start(args);
+		
+		String appName = params.getOptionValue("a");
+		if (StringUtils.isNotEmpty(appName)) {
+			ApplicationFactory.create(appName).start(args, options);
+		} else if (params.hasOption("ls")) {
+			AbstractApplication.printAppList();
+		} else {
+			AbstractApplication.printHint(options);
+		}
 	}
 }

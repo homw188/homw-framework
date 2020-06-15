@@ -2,8 +2,15 @@ package com.homw.tool.application;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -22,19 +29,22 @@ public abstract class AbstractApplication implements Application {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
-	public final void start(String[] args) {
-		logger.info("Start application " + this.getClass().getSimpleName() + "...");
+	public final void start(String[] args, Options options) {
+		logger.info("Start application {}...", this.getClass().getSimpleName());
 
-		Map<String, Object> params = null;
+		configArgs(options);
+
+		CommandLine params = null;
 		try {
-			params = parseArgs(args);
+			params = parseArgs(args, options, false);
+			validateArgs(params);
 		} catch (Exception e) {
 			logger.error("Arguments exception, please check your inputs.", e);
-			printHint(args);
+			printHint(options);
 			System.exit(1);
 		}
 
-		Closeable ctx = preStart();
+		Closeable ctx = startContiner();
 
 		try {
 			execute(params);
@@ -51,28 +61,61 @@ public abstract class AbstractApplication implements Application {
 			completed();
 		}
 	}
+	
+	/**
+	 * 打印应用列表
+	 */
+	public static void printAppList() {
+		Map<String, String> appMap = ApplicationFactory.getAppMap();
+		String[] appArr = new String[appMap.size()];
+		appMap.keySet().toArray(appArr);
+		Arrays.sort(appArr);
+		System.out.println("available app list: ");
+		for (String app : appArr) {
+			System.out.println(" -a " + app);
+		}
+	}
+
+	/**
+	 * 创建命令行Options
+	 * 
+	 * @return
+	 */
+	public static Options buildCliOptions() {
+		Options options = new Options();
+		options.addOption(Option.builder("ls").longOpt("list").desc("list available application").build());
+		options.addOption(Option.builder("a").longOpt("app").hasArg().desc("application name").build());
+		return options;
+	}
 
 	/**
 	 * 输入参数解析
 	 * 
 	 * @param args
+	 * @param options
+	 * @param stopAtNonOption
 	 * @return
+	 * @throws ParseException
 	 */
-	protected abstract Map<String, Object> parseArgs(String[] args);
+	public static CommandLine parseArgs(String[] args, Options options, boolean stopAtNonOption) throws ParseException {
+		return new DefaultParser().parse(options, args, stopAtNonOption);
+	}
+
+	private static HelpFormatter formatter = new HelpFormatter();
 
 	/**
 	 * 输出提示信息
 	 * 
-	 * @param args
+	 * @param options
 	 */
-	protected void printHint(String[] args) {
-		// TODO
+	public static void printHint(Options options) {
+		formatter.printHelp("-ls | -a [appName] [options]", options);
 	}
 
 	/**
-	 * 预启动，默认启动spring容器
+	 * 启动spring容器
 	 */
-	protected Closeable preStart() {
+	protected Closeable startContiner() {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:spring-context.xml");
 		ctx.start();
 		initContext(ctx);
@@ -85,8 +128,15 @@ public abstract class AbstractApplication implements Application {
 	 * @param ctx
 	 */
 	protected void initContext(ApplicationContext ctx) {
-		SpringContextUtil springContextUtils = (SpringContextUtil) ctx.getBean("springContextUtil");
-		springContextUtils.setApplicationContext(ctx);
+		SpringContextUtil springContextUtil = (SpringContextUtil) ctx.getBean("springContextUtil");
+		springContextUtil.setApplicationContext(ctx);
+	}
+
+	/**
+	 * 执行完成
+	 */
+	protected void completed() {
+		logger.info("Application {} completed.", this.getClass().getSimpleName());
 	}
 
 	/**
@@ -94,22 +144,29 @@ public abstract class AbstractApplication implements Application {
 	 * 
 	 * @param cause
 	 */
-	protected void wrapException(Exception cause) {
+	protected void wrapException(Throwable cause) {
 		throw new ApplicationException(cause);
 	}
 
 	/**
-	 * 执行
+	 * 配置参数
 	 * 
-	 * @param params 输入参数解析映射
-	 * @throws Exception
+	 * @param options
 	 */
-	protected abstract void execute(Map<String, Object> params) throws Exception;
+	protected abstract void configArgs(Options options);
 
 	/**
-	 * 执行完成
+	 * 校验参数
+	 * 
+	 * @param params
 	 */
-	protected void completed() {
-		logger.info("Application " + this.getClass().getSimpleName() + " completed.");
-	}
+	protected abstract void validateArgs(CommandLine params);
+
+	/**
+	 * 执行
+	 * 
+	 * @param params
+	 * @throws Exception
+	 */
+	protected abstract void execute(CommandLine params) throws Exception;
 }

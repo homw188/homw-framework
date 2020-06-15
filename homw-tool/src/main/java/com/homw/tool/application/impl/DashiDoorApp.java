@@ -1,8 +1,8 @@
 package com.homw.tool.application.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.springframework.stereotype.Controller;
 
 import com.homw.tool.annotation.Application;
@@ -18,30 +18,24 @@ import com.homw.tool.application.AbstractApplication;
 @Controller
 @Application("dashiDoorApp")
 public class DashiDoorApp extends AbstractApplication {
+
 	@Override
-	protected Map<String, Object> parseArgs(String[] args) {
-		if (args == null || args.length != 5) {
-			throw new IllegalArgumentException("args must four items.");
-		}
-		Map<String, Object> params = new HashMap<>();
-		params.put("ip", args[1]);
-		params.put("port", args[2]);
-		params.put("addr", args[3]);
-		params.put("readno", args[4]);
-		return params;
+	protected void configArgs(Options options) {
+		options.addOption(Option.builder("h").longOpt("host").hasArg().required().desc("door hostname").build());
+		options.addOption(Option.builder("p").longOpt("port").hasArg().required().desc("door port").build());
+		options.addOption(Option.builder("d").longOpt("addr").hasArg().required().desc("door mac addr").build());
+		options.addOption(Option.builder("n").longOpt("line").hasArg().required().desc("door line number").build());
 	}
 
 	@Override
-	protected void printHint(String[] args) {
-		logger.error("Usage:\t" + args[0] + " ip port addr readno");
-	}
+	protected void validateArgs(CommandLine params) {}
 
 	@Override
-	protected void execute(Map<String, Object> params) throws Exception {
-		String ip = params.get("ip").toString();
-		String port = params.get("port").toString();
-		String addr = params.get("addr").toString();
-		String readno = params.get("readno").toString();
+	protected void execute(CommandLine params) throws Exception {
+		String host = params.getOptionValue("h");
+		String port = params.getOptionValue("p");
+		String addr = params.getOptionValue("d");
+		String readno = params.getOptionValue("n");
 
 		Integer readNo = Integer.valueOf(readno);
 		readNo = (int) Math.pow(2, readNo);
@@ -57,7 +51,7 @@ public class DashiDoorApp extends AbstractApplication {
 		byte[] data = DashiDoorApi.hexStr2Bytes(strBuf.toString());
 		logger.info("send packet: {}", DashiDoorApi.bytesToHexStr(data));
 
-		DashiDoorApi.send(ip, Integer.valueOf(port), data);
+		DashiDoorApi.send(host, Integer.valueOf(port), data);
 		logger.info("open door success.");
 	}
 }

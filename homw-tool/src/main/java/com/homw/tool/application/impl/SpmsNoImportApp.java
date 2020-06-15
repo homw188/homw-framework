@@ -1,9 +1,10 @@
 package com.homw.tool.application.impl;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.springframework.stereotype.Controller;
 
 import com.homw.common.util.FileUtil;
@@ -24,16 +25,17 @@ import com.homw.tool.util.SpringContextUtil;
 @Deprecated
 @Application("spmsNoImportApp")
 public class SpmsNoImportApp extends AbstractApplication {
+	
 	@Override
-	protected Map<String, Object> parseArgs(String[] args) {
-		if (args == null || args.length != 4) {
-			throw new IllegalArgumentException("args must four items.");
-		}
-		Map<String, Object> params = new HashMap<>();
-		params.put("tableName", args[1]);
-		params.put("idColumn", args[2]);
-
-		String fileName = args[3];
+	protected void configArgs(Options options) {
+		options.addOption(Option.builder("t").longOpt("table").hasArg().required().desc("data table name").build());
+		options.addOption(Option.builder("k").longOpt("key-column").hasArg().required().desc("primary key column").build());
+		options.addOption(Option.builder("f").longOpt("file").hasArg().required().desc("import file path").build());
+	}
+	
+	@Override
+	protected void validateArgs(CommandLine params) {
+		String fileName = params.getOptionValue("f");
 		File file = new File(fileName);
 		// 检查文件是否存在
 		if (!file.exists()) {
@@ -44,20 +46,13 @@ public class SpmsNoImportApp extends AbstractApplication {
 		if (!FileUtil.checkExtension(fileName, "xls", "xlsx")) {
 			throw new IllegalArgumentException("import file [" + fileName + "] illegal excel format, not supported.");
 		}
-		params.put("fileName", fileName);
-		return params;
 	}
-
+	
 	@Override
-	protected void printHint(String[] args) {
-		logger.error("Usage:\t" + args[0] + " tableName idColumn importFile");
-	}
-
-	@Override
-	protected void execute(Map<String, Object> params) throws Exception {
-		String tableName = params.get("tableName").toString();
-		String fileName = params.get("fileName").toString();
-		String idColumn = params.get("idColumn").toString();
+	protected void execute(CommandLine params) throws Exception {
+		String tableName = params.getOptionValue("t");
+		String fileName = params.getOptionValue("f");
+		String idColumn = params.getOptionValue("k");
 
 		ISpmsNoService spmsNoService = (ISpmsNoService) SpringContextUtil.getBean("spmsNoService");
 		spmsNoService.import2Database(tableName, idColumn, fileName);

@@ -1,8 +1,8 @@
 package com.homw.tool.application.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.springframework.stereotype.Controller;
 
 import com.homw.tool.annotation.Application;
@@ -19,29 +19,19 @@ import com.homw.tool.util.SpringContextUtil;
 @Controller
 @Application("payRecordGenApp")
 public class PayRecordGenApp extends AbstractApplication {
+	
 	@Override
-	protected Map<String, Object> parseArgs(String[] args) {
-		if (args == null || args.length != 2) {
-			throw new IllegalArgumentException("args must four items.");
-		}
-		Map<String, Object> params = new HashMap<>();
-		try {
-			params.put("spaceId", Long.valueOf(args[1]));
-		} catch (NumberFormatException e) {
-			throw new IllegalArgumentException("space id must be number.", e);
-		}
-		return params;
+	protected void configArgs(Options options) {
+		options.addOption(Option.builder("s").longOpt("space").hasArg().required().desc("space id").build());
 	}
-
+	
 	@Override
-	protected void printHint(String[] args) {
-		logger.error("Usage:\t" + args[0] + " spaceId");
-	}
-
+	protected void validateArgs(CommandLine params) {}
+	
 	@Override
-	protected void execute(Map<String, Object> params) throws Exception {
+	protected void execute(CommandLine params) throws Exception {
 		IPayRecordGenService updateService = (IPayRecordGenService) SpringContextUtil
 				.getBean("payRecordGenerateService");
-		updateService.generate((Long) params.get("spaceId"));
+		updateService.generate(Long.valueOf(params.getOptionValue("s")));
 	}
 }
