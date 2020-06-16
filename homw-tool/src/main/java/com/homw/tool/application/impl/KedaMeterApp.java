@@ -33,9 +33,9 @@ public class KedaMeterApp extends AbstractApplication {
 
 	@Override
 	protected void execute(CommandLine params) throws Exception {
-		String host = params.getOptionValue("h").toString();
-		String port = params.getOptionValue("p").toString();
-		String addr = params.getOptionValue("d").toString();
+		String host = params.getOptionValue("h");
+		String port = params.getOptionValue("p");
+		String addr = params.getOptionValue("d");
 
 		String msg = null;
 		Object readno = params.getOptionValue("n");
