@@ -1,9 +1,10 @@
 package com.homw.modbus;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.homw.modbus.exception.ModbusException;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 
 /**
  * Modbus启动类
@@ -14,35 +15,29 @@ import com.homw.modbus.exception.ModbusException;
  *
  */
 public class Main {
-	private static Logger log = LoggerFactory.getLogger(Main.class);
 
-	public static void main(String[] args) throws ModbusException {
-		if (args == null || args.length < 1) {
-			log.error("至少需要一个参数，参数格式：server|client [config]");
-			System.exit(1);
-		}
-		String mode = args[0];
-
-		String cfg = null;
-		if (args.length == 2) {
-			cfg = args[1];
-		}
-
-		if ("server".equals(mode)) {
+	public static void main(String[] args) throws Exception {
+		Options options = new Options();
+		options.addOption(Option.builder("s").longOpt("server").desc("server mode").build());
+		options.addOption(Option.builder("c").longOpt("client").desc("client mode").build());
+		options.addOption(Option.builder("f").longOpt("file").hasArg().desc("config properties file path").build());
+		CommandLine params = new DefaultParser().parse(options, args, true);
+		
+		String cfg = params.getOptionValue("f");
+		if (params.hasOption("s")) {
 			if (cfg == null) {
 				ModbusServerFactory.create();
 			} else {
 				ModbusServerFactory.create(cfg);
 			}
-		} else if ("client".equals(mode)) {
+		} else if (params.hasOption("c")) {
 			if (cfg == null) {
 				ModbusClientFactory.create();
 			} else {
 				ModbusClientFactory.create(cfg);
 			}
 		} else {
-			log.error("第一个参数（运行模式）：" + mode + " 格式不对，'server'或'client'");
-			System.exit(1);
+			new HelpFormatter().printHelp("-s | -c [-f]", options);
 		}
 	}
 }
