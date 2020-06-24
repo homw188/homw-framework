@@ -12,16 +12,14 @@
 ```
 1. package: mvn clean package -Dmaven.test.skip=true
 2. deploy: cp ${project}/target/homw-schedule.war ${tomcat}/webapps/
-3. prepare data: create database homw_schedule
-4.               import ${project}/src/main/resources/homw_schedule.sql
-5. start server: bash ${tomcat}/bin/startup.sh
-6. broswer access: http://{hostname}:{port}/homw-schedule
-7. login: username=admin, password=admin
+3. prepare: create database homw_schedule with ${project}/src/main/resources/homw_schedule.sql
+4. start: bash ${tomcat}/bin/startup.sh
+5. access: http://{hostname}:{port}/homw-schedule
+6. login: username=admin, password=admin
 ```
 
 ## homw-modbus
 ```
 1. package: mvn clean package -Dmaven.test.skip=true
-2. start server: java -jar ${project}/target/homw-modbus.jar server
-3. start client: java -jar ${project}/target/homw-modbus.jar client
+2. exec: java -jar ${project}/target/homw-modbus.jar
 ```
