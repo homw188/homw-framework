@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import com.homw.common.util.Platform;
+
 /**
  * @description 应用工厂
  * @author Hom
@@ -77,7 +79,11 @@ public class ApplicationFactory {
 				}
 			} else if ("jar".equals(protocol)) {
 				String jarpath = resource.getPath();
-				jarpath = jarpath.replace("file:/", "");
+				if (Platform.isWindow()) {
+					jarpath = jarpath.replace("file:/", "");
+				} else {
+					jarpath = jarpath.replace("file:", "");
+				}
 				jarpath = jarpath.substring(0, jarpath.indexOf("!"));
 				
 				JarFile jarFile = new JarFile(jarpath);
