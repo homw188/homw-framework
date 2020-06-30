@@ -40,7 +40,7 @@ export JAVA_HOME
 export JAVA="$JAVA_HOME/bin/java"
 export BASE_DIR=`cd $(dirname $0)/..; pwd`
 
-JAVA_OPT="-Xms128m -Xmx128m -Xmn64m"
+JAVA_OPT="-Xms128m -Xmx128m -Xmn64m -Dlogpath=$BASE_DIR/logs"
 JAVA_OPT="$JAVA_OPT -jar $BASE_DIR/target/${JAR_FILE}-${VERSION}.jar"
 
 $JAVA $JAVA_OPT $*
