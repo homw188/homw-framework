@@ -46,7 +46,7 @@
    	<redis-spring-version>1.8.3.RELEASE</redis-spring-version>
    	<spring-rabbit-version>1.7.1.RELEASE</spring-rabbit-version>
     
-    <quartz-version>2.2.3</quartz-version>
+    <quartz-version>2.3.2</quartz-version>
     <poi-version>3.9</poi-version>
     <rabbitmq-version>3.4.2</rabbitmq-version>
     <activemq-version>5.10.0</activemq-version>
