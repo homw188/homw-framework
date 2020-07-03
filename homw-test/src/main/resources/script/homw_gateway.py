@@ -8,10 +8,7 @@ import json
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as publish
 
-'''
-版本:python2.7
-'''
-# linux 后台运行 nohup python homw_gateway.py > my.log &
+# linux 后台运行 nohup python homw_gateway.py > gateway.log &
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -129,9 +126,7 @@ def get_gatewayinfo():
         return data['object']
     return None
 
-'''
-hmac_md5 加密
-'''
+#hmac_md5 加密 
 def hmac_md5(ekey,to_enc):
     enc_res = hmac.new(ekey, to_enc, hashlib.md5).hexdigest()
     return enc_res.upper()
@@ -160,8 +155,8 @@ def getDevicesByCategory(deviceDict,url):
                     d['level'] = d['w']
                     d['levelW'] = d['w']
                 deviceDict[json_str['mac']].detail = json.dumps(d)
-            except TypeError,e:
-                print 'json type error'
+            except TypeError as e:
+                print('json type error')
 
 
 #搜索网关下所有设备
@@ -173,10 +168,10 @@ def get_all_deviceList():
            try:
              device = json.loads(json.dumps(json_str), object_hook=json2HomwBaseDevice)
              deviceDict[json_str['mac']]  = device
-           except AttributeError,e:
-               print 'json attribute error'
-           except TypeError,e:
-               print 'json type error'
+           except AttributeError as e:
+               print('json attribute error')
+           except TypeError as e:
+               print('json type error')
     # 映射转换
     getDevicesByCategory(deviceDict,url_wy_get_dev_list)
     getDevicesByCategory(deviceDict,url_wrgb_get_dev_list)
@@ -228,11 +223,9 @@ def upload_deviceList(token):
     updata['services'] = json.dumps(devices)
     reqUrl = HWCLOUD_URL + get_pubApi(PRODUCT_KEY,DEVICE_NO)
     resp = requests.post(reqUrl, headers=headers, json=updata, verify=False)
-    print resp.text
+    print(resp.text)
 
-'''
-调用平台接口进行授权认证
-'''
+#调用平台接口进行授权认证
 def auth():
     gateway = get_gatewayinfo()
     to_enc = 'clientId' + HOMW_MAC + 'deviceName' + DEVICE_NO + 'productKey' + PRODUCT_KEY + 'timestamp' + \
@@ -254,22 +247,22 @@ def auth():
 def on_connect(client,userdata,flags,rc):
     log("消息连接信息:homw gateway.............Connected with result code" + str(rc))
     topic = get_topic(PRODUCT_KEY,DEVICE_NO)
-    print topic
+    print(topic)
     client.subscribe('/'+PRODUCT_KEY+'/'+DEVICE_NO,qos=1)
 
 #消息到达
 def on_message(client,userdata,msg):
     try:
         receiveMsg = str(msg.payload.decode("utf-8-sig"))
-        print receiveMsg
+        print(receiveMsg)
         jsonMsg = json.loads(receiveMsg)
         # print(type(jsonMsg))
         msgType = jsonMsg['msgType']
-        print msgType
+        print(msgType)
         if msgType == 'set':
             # print jsonMsg['services']
             set_command(json.loads(jsonMsg['services']))
-    except ValueError,e:
+    except ValueError as e:
         print('msg error')
 
 #获取topic
@@ -322,15 +315,15 @@ def set_command(serviceMsg):
 
     if dtype == 'light_w': # 单色灯
        dimUrl = HWGD_URL+light_w_set_dim_level+'?'+'dev='+addr+'&'+'level='+str(command[0]['ptValue'])
-       print dimUrl
+       print(dimUrl)
        resp = requests.post(dimUrl, verify=False)
        #此处可添加睡眠1秒 再次请求网关，将设备状态传给平台
-       print resp.text
+       print(resp.text)
     if dtype == 'light_wy':
         dimUrl = HWGD_URL + light_wy_set_dim_level + '?' + 'dev=' + addr + '&' + 'levelW=' + str(command[0]['ptValue'])+'&'+'levelY='+str(command[1]['ptValue'])
-        print dimUrl
+        print(dimUrl)
         resp = requests.post(dimUrl, verify=False)
-        print resp.text
+        print(resp.text)
 
     if dtype == 'light_wrgb':
         pass
