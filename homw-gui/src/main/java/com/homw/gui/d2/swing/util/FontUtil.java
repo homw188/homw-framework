@@ -13,6 +13,7 @@ import java.io.InputStream;
  * @version 1.0
  * @since 2020-07-05
  */
+@SuppressWarnings("restriction")
 public class FontUtil {
 
     /**
