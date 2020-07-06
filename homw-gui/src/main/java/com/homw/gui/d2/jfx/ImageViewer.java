@@ -106,8 +106,6 @@ public class ImageViewer extends Application {
 	/**
 	 * Zooming to monitor processing.
 	 * 
-	 * @author James
-	 * @version 1.0
 	 */
 	private class ScaleEventHanlder implements EventHandler<ScrollEvent> {
 		private float factor = 0.01f;
