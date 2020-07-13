@@ -14,57 +14,42 @@ import com.homw.common.annotation.ExcelField;
 public class DeviceInfoEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	//
 	private Long deviceId;
-	//
+	@ExcelField(title = "设备类型", sort = 3)
 	private String deviceType;
-	//外部编号
+	// 外部编号
 	@ExcelField(title = "设备号", sort = 1)
 	private String outerNo;
-	//
-	@ExcelField(title = "IP", sort = 3)
+	@ExcelField(title = "IP", sort = 4)
 	private String doorIp;
-	//
+	@ExcelField(title = "端口", sort = 5)
 	private Integer doorPort;
-	//门禁表设备
-	@ExcelField(title = "电表地址", sort = 2)
+	// 门禁表设备
+	@ExcelField(title = "设备地址", sort = 2)
 	private String doorAddr;
-	//门禁所属控制器的编号 
-	@ExcelField(title = "回路号", sort = 5)
+	// 门禁所属控制器的编号 
+	@ExcelField(title = "回路号", sort = 7)
 	private Integer doorReadno;
-	//
-	@ExcelField(title = "设备名称", sort = 4)
+	@ExcelField(title = "设备名称", sort = 6)
 	private String doorName;
-	//
 	private String elecAddr;
-	//0100 关灯 0000开灯
+	// 0100 关灯 0000开灯
 	private String elecStatus;
-	//
 	private Integer elecUsePoint;
-	//
 	private Integer elecLeftPoint;
-	//
 	private Integer status;
-	//
 	private Integer version;
-	//
 	private Long createUserId;
-	//
 	private Long createTime;
-	//
 	private String createUserType;
-	//
 	private Long updateUserId;
-	//
 	private Long updateTime;
-	//
 	private String updateUserType;
-	//
 	private Long referElecId;
-	//是否关联扣费设备
+	// 是否关联扣费设备
 	private Integer isReferNode;
-	//电表倍率
-	@ExcelField(title = "倍率", sort = 6)
+	// 倍率
+	@ExcelField(title = "倍率", sort = 8)
 	private Integer rate;
 
 	/**
