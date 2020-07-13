@@ -4,22 +4,22 @@
 # Useage
 ## homw-tool
 ```
-1. package: mvn clean package -Dmaven.test.skip=true
-2. exec: java -jar ${project}/target/homw-tool.jar
+mvn package -Dmaven.test.skip=true
+bash {project}/bin/run.sh
 ```
 
 ## homw-schedule
 ```
-1. package: mvn clean package -Dmaven.test.skip=true
-2. deploy: cp ${project}/target/homw-schedule.war ${tomcat}/webapps/
-3. prepare: create database homw_schedule with ${project}/src/main/resources/homw_schedule.sql
-4. start: bash ${tomcat}/bin/startup.sh
-5. access: http://{hostname}:{port}/homw-schedule
-6. login: username=admin, password=admin
+mvn package -Dmaven.test.skip=true
+cp ${project}/target/${project}-${version}.war ${tomcat}/webapps/
+source ${project}/src/main/resources/homw_schedule.sql
+bash ${tomcat}/bin/startup.sh
+http://{hostname}:{port}/${project}-${version}
+username=admin, password=admin
 ```
 
 ## homw-modbus
 ```
-1. package: mvn clean package -Dmaven.test.skip=true
-2. exec: java -jar ${project}/target/homw-modbus.jar
+mvn package -Dmaven.test.skip=true
+java -jar ${project}/target/${project}-${version}.jar
 ```
