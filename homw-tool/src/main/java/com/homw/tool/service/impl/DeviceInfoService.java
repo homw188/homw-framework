@@ -56,7 +56,7 @@ public class DeviceInfoService implements IDeviceInfoService {
 	@Override
 	public void import2Database(String tableName, String fileName) throws Exception {
 		// Excel解析
-		ImportExcel parser = new ImportExcel(fileName, 1);
+		ImportExcel parser = new ImportExcel(fileName, 0);
 		List<DeviceInfoEntity> dataList = parser.getDataList(DeviceInfoEntity.class, null, null);
 
 		// 参数封装
