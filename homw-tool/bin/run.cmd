@@ -11,7 +11,7 @@ rem added double quotation marks to avoid the issue caused by the folder names c
 rem removed the last 5 chars(which means \bin\) to get the base dir.
 set BASE_DIR="%BASE_DIR:~0,-5%"
 
-set "JAVA_OPT=-Xms128m -Xmx128m -Xmn64m -Dlogpath=%BASE_DIR%/logs"
+set "JAVA_OPT=-Xms128m -Xmx128m -Xmn64m -Dlogpath=%BASE_DIR%/logs -Dconfpath=file:%BASE_DIR%/"
 set "JAVA_OPT=%JAVA_OPT% -jar %BASE_DIR%\target\%JAR_FILE%-%VERSION%.jar"
 
 call "%JAVA%" %JAVA_OPT% %*

@@ -1,0 +1,13 @@
+# jdbc driver config
+# v5: useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
+# v8: useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&useSSL=false
+jdbc.url=jdbc:mysql://localhost:3306/hugedevice?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai&useSSL=false
+jdbc.username=root
+jdbc.password=123456
+
+# db connection pool config
+jdbc.initialSize=5
+jdbc.maxActive=30
+jdbc.minPoolSize=2
+jdbc.maxIdleTime=30000
+jdbc.idleConnectionTestPeriod=100
