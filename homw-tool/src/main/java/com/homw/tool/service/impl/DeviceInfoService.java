@@ -71,7 +71,7 @@ public class DeviceInfoService implements IDeviceInfoService {
 			}
 
 			// 设置默认参数
-			device.setDoorPort(0);
+			//device.setDoorPort(0);
 			device.setElecStatus("0100");
 			device.setElecUsePoint(0);
 			device.setElecLeftPoint(0);
@@ -80,8 +80,8 @@ public class DeviceInfoService implements IDeviceInfoService {
 			device.setIsReferNode(0);
 
 			// 设置转换参数
-			device.setDeviceType("ELECTRIC");
-			device.setDoorPort(10001);
+			//device.setDeviceType("ELECTRIC");
+			//device.setDoorPort(10001);
 			int readNo = device.getDoorReadno();
 			device.setElecAddr(device.getDoorAddr() + (readNo < 10 ? "0" + readNo : readNo));
 		}
