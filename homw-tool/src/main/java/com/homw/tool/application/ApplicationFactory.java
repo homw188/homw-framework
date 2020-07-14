@@ -2,6 +2,7 @@ package com.homw.tool.application;
 
 import java.io.File;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -85,6 +86,10 @@ public class ApplicationFactory {
 					jarpath = jarpath.replace("file:", "");
 				}
 				jarpath = jarpath.substring(0, jarpath.indexOf("!"));
+				
+				// fix FileNotFoundException
+				// example: jarPath contains '%e4%91%e8', encode from Chinese or space
+				jarpath = URLDecoder.decode(jarpath, "UTF-8");
 				
 				JarFile jarFile = new JarFile(jarpath);
 				try {
