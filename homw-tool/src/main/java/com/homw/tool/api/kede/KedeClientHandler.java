@@ -10,7 +10,7 @@ public class KedeClientHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		try {
-			String request = KedeDataProtocolUtil.bytesToHexString((byte[]) msg);
+			String request = KedeProtocolUtil.bytesToHexStr((byte[]) msg);
 			setData(request);
 			ctx.close();
 		} finally {

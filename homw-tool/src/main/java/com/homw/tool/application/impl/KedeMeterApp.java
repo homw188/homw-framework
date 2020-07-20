@@ -7,11 +7,11 @@ import org.springframework.stereotype.Controller;
 
 import com.homw.tool.annotation.Application;
 import com.homw.tool.api.kede.KDSocketDll;
-import com.homw.tool.api.kede.KedeElecOpenUtil;
+import com.homw.tool.api.kede.KedeMeterUtil;
 import com.homw.tool.application.AbstractApplication;
 
 /**
- * @description 科德电表应用
+ * @description 科德水电表应用
  * @author Hom
  * @version 1.0
  * @since 2019-11-13
@@ -55,29 +55,39 @@ public class KedeMeterApp extends AbstractApplication {
 		if (action == null) {
 			// 水表
 			if (params.hasOption("w")) {
-				backData = KDSocketDll.INSTANCE.WaterReadZTCX(commStyle, Integer.parseInt(timeout) * 1000, host,
-						Integer.parseInt(port), addr, kj, iotCardId);
-			} else {
 				// 动态库接口
+				if (params.hasOption("dll")) {
+					backData = KDSocketDll.INSTANCE.WaterReadZTCX(commStyle, Integer.parseInt(timeout) * 1000, host,
+							Integer.parseInt(port), addr, kj, iotCardId);
+				} else {
+					backData = KedeMeterUtil.readWaterData(host, Integer.parseInt(port), addr,
+							Integer.parseInt(timeout));
+				}
+			} else {
 				if (params.hasOption("dll")) {
 					backData = KDSocketDll.INSTANCE.ReadAllELE(commStyle, Integer.parseInt(timeout) * 1000, host,
 							Integer.parseInt(port), addr, kj, iotCardId);
 				} else {
-					backData = KedeElecOpenUtil.ztcx(host, Integer.parseInt(port), addr, Integer.parseInt(timeout));
+					backData = KedeMeterUtil.readElecData(host, Integer.parseInt(port), addr,
+							Integer.parseInt(timeout));
 				}
 			}
 		} else {
 			// 水表
 			if (params.hasOption("w")) {
-				backData = KDSocketDll.INSTANCE.WaterAction(commStyle, Integer.parseInt(timeout) * 1000, host,
-						Integer.parseInt(port), addr, Integer.parseInt(action.toString()), iotCardId) + "";
+				if (params.hasOption("dll")) {
+					backData = KDSocketDll.INSTANCE.WaterAction(commStyle, Integer.parseInt(timeout) * 1000, host,
+							Integer.parseInt(port), addr, Integer.parseInt(action.toString()), iotCardId) + "";
+				} else {
+					backData = KedeMeterUtil.pullWaterSwitch(host, Integer.parseInt(port), addr,
+							Integer.parseInt(action.toString()), Integer.parseInt(timeout));
+				}
 			} else {
-				// 动态库接口
 				if (params.hasOption("dll")) {
 					backData = KDSocketDll.INSTANCE.SoloEleAction(commStyle, Integer.parseInt(timeout) * 1000, host,
 							Integer.parseInt(port), addr, Integer.parseInt(action.toString()), iotCardId) + "";
 				} else {
-					backData = KedeElecOpenUtil.eleAction(host, Integer.parseInt(port), addr,
+					backData = KedeMeterUtil.pullElecSwitch(host, Integer.parseInt(port), addr,
 							Integer.parseInt(action.toString()), Integer.parseInt(timeout));
 				}
 			}

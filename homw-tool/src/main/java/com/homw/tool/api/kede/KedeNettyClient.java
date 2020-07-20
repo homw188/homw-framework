@@ -61,7 +61,7 @@ public class KedeNettyClient {
 			e.printStackTrace();
 		}
 		
-		byte[] bytes = KedeDataProtocolUtil.hexStringToByte(data);
+		byte[] bytes = KedeProtocolUtil.hexStrToBytes(data);
 		ByteBuf buffer = Unpooled.copiedBuffer(bytes);
 		channel.writeAndFlush(buffer);
 
