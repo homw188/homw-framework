@@ -74,7 +74,7 @@ public class CommPortService implements ICommPortService {
 			try {
 				String commd = "68" + KedeProtocolUtil.revertEndian(elecAddr)
 						+ "681C10CB333333343333334E3387873C5C3449"; // 开电源指令
-				String msg = commd + KedeProtocolUtil.checknum(commd) + "16";
+				String msg = commd + KedeProtocolUtil.checksum(commd) + "16";
 				logger.info("send data: " + msg);
 				
 				outStream.write(KedeProtocolUtil.hexStrToBytes(msg));
@@ -96,7 +96,7 @@ public class CommPortService implements ICommPortService {
 			try {
 				String commd = "68" + KedeProtocolUtil.revertEndian(elecAddr)
 						+ "681C10CB333333343333334D3389873C5C3449";
-				String msg = commd + KedeProtocolUtil.checknum(commd) + 16;
+				String msg = commd + KedeProtocolUtil.checksum(commd) + 16;
 				logger.info("send data: " + msg);
 
 				outStream.write(KedeProtocolUtil.hexStrToBytes(msg));
@@ -117,7 +117,7 @@ public class CommPortService implements ICommPortService {
 		if (lock.tryLock(3000, TimeUnit.MILLISECONDS)) {
 			try {
 				String commd = "68" + KedeProtocolUtil.revertEndian(elecAddr) + "6803083235B43A34333333";
-				String msg = commd + KedeProtocolUtil.checknum(commd) + 16;
+				String msg = commd + KedeProtocolUtil.checksum(commd) + 16;
 				logger.info("send data: " + msg);
 
 				outStream.write(KedeProtocolUtil.hexStrToBytes(msg));

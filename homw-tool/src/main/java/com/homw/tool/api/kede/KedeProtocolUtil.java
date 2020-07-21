@@ -78,22 +78,22 @@ public class KedeProtocolUtil {
 
 	/**
 	 * 计算校验码<br>
-	 * 算法：按字节求和，溢出256，则丢弃
+	 * 算法：按字节求和，模256(0x100)
 	 * 
-	 * @param frame 数据帧
+	 * @param frame 数据帧，16进制
 	 * @return 16进制单字节
 	 */
-	public static String checknum(String frame) {
-		int ret = 0;
+	public static String checksum(String frame) {
+		int sum = 0;
 		for (int i = 0; i < frame.length() - 1; i = i + 2) {
 			String bs = frame.substring(i, i + 2);
-			ret = ret + Integer.parseInt(bs, 16);
+			sum = sum + Integer.parseInt(bs, 16);
 		}
-		String s2 = "0000" + Integer.toHexString(ret & 0xFF);
-		String csh = s2.substring(s2.length() - 2);
+		String hex = "00" + Integer.toHexString(sum % 0x100);
+		String csh = hex.substring(hex.length() - 2);
 		return csh.toUpperCase();
 	}
-
+	
 	/**
 	 * 封装数据帧
 	 * 
@@ -110,7 +110,7 @@ public class KedeProtocolUtil {
 		frame = frame + ctrl; // 控制域
 		frame = frame + String.format("%02x", len);// 数据域长度
 		frame = frame + data; // 数据域
-		frame = frame + checknum(frame);// 校验和
+		frame = frame + checksum(frame);// 校验和
 		frame = frame + "16"; // 结束符
 		return frame;
 	}
@@ -156,13 +156,11 @@ public class KedeProtocolUtil {
 				Map<String, Object> dataMap = new HashMap<String, Object>();
 				dataMap.put("err", "NO83");
 				ret = getResult("-2", dataMap);
-				;
 			}
 		} else {
 			Map<String, Object> dataMap = new HashMap<String, Object>();
 			dataMap.put("err", "NO6816");
 			ret = getResult("-1", dataMap);
-			;
 		}
 		return ret;
 	}
@@ -394,8 +392,8 @@ public class KedeProtocolUtil {
 			return null;
 		}
 		byte[] ret = new byte[hex.length() / 2];
-		for (int i = 0; i < hex.length(); i += 2) {
-			ret[i] = (byte) (Integer.parseInt(hex.substring(i, i + 2), 16) & 0xFF);
+		for (int i = 0; i < hex.length() - 1; i += 2) {
+			ret[i / 2] = (byte) (Integer.parseInt(hex.substring(i, i + 2), 16) & 0xFF);
 		}
 		return ret;
 	}
@@ -449,30 +447,30 @@ public class KedeProtocolUtil {
 			return null;
 		}
 		switch (code) {
-			case 0:
-				return "合闸";
-			case 1:
-				return "跳闸";
-			case 2:
-				return "零电量断电";
-			case 3:
-				return "超功率断电";
-			case 4:
-				return "报警断电";
-			case 5:
-				return "超最大无功断电";
-			case 6:
-				return "定时断电";
-			case 7:
-				return "超特许负载断电";
-			case 8:
-				return "超无功步进值";
-			case 9:
-				return "超夜间小功率断电";
-			case 10:
-				return "纯阻性负载且超过步进功率跳闸";
-			case 11:
-				return "禁用负载跳闸";
+		case 0:
+			return "合闸";
+		case 1:
+			return "跳闸";
+		case 2:
+			return "零电量断电";
+		case 3:
+			return "超功率断电";
+		case 4:
+			return "报警断电";
+		case 5:
+			return "超最大无功断电";
+		case 6:
+			return "定时断电";
+		case 7:
+			return "超特许负载断电";
+		case 8:
+			return "超无功步进值";
+		case 9:
+			return "超夜间小功率断电";
+		case 10:
+			return "纯阻性负载且超过步进功率跳闸";
+		case 11:
+			return "禁用负载跳闸";
 		}
 		return null;
 	}
