@@ -41,7 +41,7 @@
     <aspectj-version>1.8.6</aspectj-version>
     <cglib-version>3.2.0</cglib-version>
     <druid-version>1.0.26</druid-version>
-    <c3p0-version>0.9.5.2</c3p0-version>
+    <c3p0-version>0.9.5.4</c3p0-version>
    	<redis-version>2.9.0</redis-version>
    	<redis-spring-version>1.8.3.RELEASE</redis-spring-version>
    	<spring-rabbit-version>1.7.1.RELEASE</spring-rabbit-version>
