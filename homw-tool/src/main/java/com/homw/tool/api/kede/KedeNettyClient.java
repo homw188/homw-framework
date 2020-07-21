@@ -1,10 +1,10 @@
 package com.homw.tool.api.kede;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.concurrent.TimeUnit;
+
+import com.homw.transport.netty.session.ResultFuture;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -14,17 +14,24 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
+import io.netty.util.Attribute;
+import io.netty.util.AttributeKey;
 
+/**
+ * @description 科德通信客户端
+ * @author Hom
+ * @version 1.0
+ * @since 2020-07-21
+ */
 public class KedeNettyClient {
 	
-	Channel channel;
-	EventLoopGroup worker;
-	KedeClientHandler clientHandler;
+	private Channel channel;
+	private EventLoopGroup worker;
+	public static final AttributeKey<ResultFuture<String>> DATA_KEY = AttributeKey.valueOf("data_key");
 
 	public void connect(String ip, int port) {
 		Bootstrap bootstap = new Bootstrap();
 		worker = new NioEventLoopGroup();
-		clientHandler = new KedeClientHandler();
 		try {
 			bootstap.group(worker)
 					// 连接超时
@@ -35,7 +42,7 @@ public class KedeNettyClient {
 						protected void initChannel(Channel ch) throws Exception {
 							ch.pipeline().addLast("decoder", new ByteArrayDecoder());
 							ch.pipeline().addLast("encoder", new ByteArrayEncoder());
-							ch.pipeline().addLast("clientHandler", clientHandler);
+							ch.pipeline().addLast("clientHandler", new KedeClientHandler());
 						}
 					});
 
@@ -51,9 +58,6 @@ public class KedeNettyClient {
 	}
 	
 	public String send(String data, int timeout) {
-		String result = "";
-		boolean wait = true;
-		
 		// 发送最小间隔，避免线路阻塞
 		try {
 			Thread.sleep(1000);
@@ -61,26 +65,17 @@ public class KedeNettyClient {
 			e.printStackTrace();
 		}
 		
-		byte[] bytes = KedeProtocolUtil.hexStrToBytes(data);
-		ByteBuf buffer = Unpooled.copiedBuffer(bytes);
-		channel.writeAndFlush(buffer);
-
-		// 等待返回数据
-		int poll = 0;
-		while (wait) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			poll++;
-			
-			result = clientHandler.getData();
-			if (StringUtils.isNotEmpty(result) || (poll == timeout * 10)) {
-				wait = false;
-			}
+		channel.writeAndFlush(KedeProtocolUtil.hexStrToBytes(data));
+		
+		Attribute<ResultFuture<String>> attr = channel.attr(DATA_KEY);
+		ResultFuture<String> future = new ResultFuture<String>();
+		attr.set(future);
+		try {
+			return future.get(timeout, TimeUnit.SECONDS);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return result;
+		return null;
 	}
 	
 	public void close() {
