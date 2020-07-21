@@ -56,7 +56,6 @@ public class JacksonConverter {
 	 * @param baseClass
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
 	private static JavaType getJavaType(NestClass baseClass) {
 		if (baseClass.getKeyClass() == null) {
 			return mapper.getTypeFactory().constructType(baseClass.getRootClass());
