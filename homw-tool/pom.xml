@@ -21,6 +21,11 @@
 		<artifactId>homw-dao-support</artifactId>
 	</dependency>
 	
+	<dependency>
+        <groupId>com.homw.framework</groupId>
+        <artifactId>homw-transport</artifactId>
+    </dependency>
+	
     <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>

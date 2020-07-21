@@ -17,8 +17,8 @@ import com.homw.tool.util.SpringContextUtil;
  * @since 2020-03-13
  */
 @Controller
-@Application(value = "kedeMeterSerialPortApp", scanSerialPort = true)
-public class KedeMeterSerialPortApp extends AbstractApplication {
+@Application(value = "kedeMeterCommApp", scanSerialPort = true)
+public class KedeMeterCommApp extends AbstractApplication {
 	
 	@Override
 	protected void configArgs(Options options) {
@@ -36,9 +36,9 @@ public class KedeMeterSerialPortApp extends AbstractApplication {
 
 		ICommPortService commPortService = (ICommPortService) SpringContextUtil.getBean("commPortService");
 		if (opt == null || "0".equals(opt.toString())) {
-			commPortService.sendOpenElecMsg(addr);
+			commPortService.openElec(addr);
 		} else {
-			commPortService.sendCloseElecMsg(addr);
+			commPortService.closeElec(addr);
 		}
 	}
 }

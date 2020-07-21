@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -14,123 +16,159 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
 
-import com.homw.common.util.DateUtil;
 import com.homw.tool.annotation.CommPortCondition;
+import com.homw.tool.api.kede.KedeProtocolUtil;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 
+/**
+ * @description 科德电表串口服务
+ * @author Hom
+ * @version 1.0
+ * @since 2020-07-21
+ */
 @Service
 @Conditional(CommPortCondition.class)
 public class CommPortService implements ICommPortService {
 
 	private static Logger logger = LoggerFactory.getLogger(CommPortService.class);
-	
-	private static final int BAUD = 2400;
-	private static ReentrantLock lock = new ReentrantLock();
 
-	private static SerialPort serialPort;
-	private static InputStream inputStream;
-	private static OutputStream outputStream;
+	private SerialPort commPort;
+	private InputStream inStream;
+	private OutputStream outStream;
+	private ReentrantLock lock = new ReentrantLock();
+	
+	private static final int BAUD = 2400;// 波特率
+
+	@PostConstruct
+	public void init() {
+		scanCommPort();
+
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (inStream == null && outStream == null) {
+					scanCommPort();
+				}
+			}
+		}, 5000, 5000);
+
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				try {
+					closeCommPort();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}, 3600000, 3600000);
+	}
+
+	@Override
+	public void openElec(String elecAddr) throws Exception {
+		if (lock.tryLock(3000, TimeUnit.MILLISECONDS)) {
+			try {
+				String commd = "68" + KedeProtocolUtil.revertEndian(elecAddr)
+						+ "681C10CB333333343333334E3387873C5C3449"; // 开电源指令
+				String msg = commd + KedeProtocolUtil.checknum(commd) + "16";
+				logger.info("send data: " + msg);
+				
+				outStream.write(KedeProtocolUtil.hexStrToBytes(msg));
+				outStream.flush();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				Thread.sleep(500);
+				lock.unlock();
+			}
+		} else {
+			throw new Exception("get lock failed");
+		}
+	}
+
+	@Override
+	public void closeElec(String elecAddr) throws Exception {
+		if (lock.tryLock(3000, TimeUnit.MILLISECONDS)) {
+			try {
+				String commd = "68" + KedeProtocolUtil.revertEndian(elecAddr)
+						+ "681C10CB333333343333334D3389873C5C3449";
+				String msg = commd + KedeProtocolUtil.checknum(commd) + 16;
+				logger.info("send data: " + msg);
+
+				outStream.write(KedeProtocolUtil.hexStrToBytes(msg));
+				outStream.flush();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				Thread.sleep(500);
+				lock.unlock();
+			}
+		} else {
+			throw new Exception("get lock failed");
+		}
+	}
+
+	@Override
+	public void searchElec(String elecAddr) throws Exception {
+		if (lock.tryLock(3000, TimeUnit.MILLISECONDS)) {
+			try {
+				String commd = "68" + KedeProtocolUtil.revertEndian(elecAddr) + "6803083235B43A34333333";
+				String msg = commd + KedeProtocolUtil.checknum(commd) + 16;
+				logger.info("send data: " + msg);
+
+				outStream.write(KedeProtocolUtil.hexStrToBytes(msg));
+				outStream.flush();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				Thread.sleep(500);
+				lock.unlock();
+			}
+		} else {
+			throw new Exception("get lock failed");
+		}
+	}
 
 	@SuppressWarnings("rawtypes")
-	public void init() {
+	public void scanCommPort() {
 		Enumeration portList = CommPortIdentifier.getPortIdentifiers();
 		while (portList.hasMoreElements()) {
 			CommPortIdentifier portId = (CommPortIdentifier) portList.nextElement();
 			if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
 				try {
-					serialPort = (SerialPort) portId.open("DEVICE", 3000);
+					// open application
+					commPort = (SerialPort) portId.open("DEVICE", 3000);
 
-					outputStream = serialPort.getOutputStream();
-					inputStream = serialPort.getInputStream();
+					outStream = commPort.getOutputStream();
+					inStream = commPort.getInputStream();
 
-					serialPort.notifyOnDataAvailable(true);
-					serialPort.addEventListener(new SerialEventListener());
-					serialPort.setSerialPortParams(BAUD, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
+					commPort.notifyOnDataAvailable(true);
+					commPort.addEventListener(new SerialEventListener());
+					commPort.setSerialPortParams(BAUD, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
 							SerialPort.PARITY_EVEN);
 				} catch (Exception e) {
-					logger.error("error:", e);
-				} 
+					logger.error("open comm port error: ", e);
+				}
 			}
 		}
 	}
 
-	@Override
-	public void sendOpenElecMsg(String elecAddr) throws Exception {
-		if (lock.tryLock(3000, TimeUnit.MILLISECONDS)) {
-			try {
-				String commd = "68" + DeviceUtils.lowToTop(elecAddr) + "681C10CB333333343333334E3387873C5C3449"; // 开电源固定的一个字符串指令
-				String msg = commd + DeviceUtils.checkData(commd) + 16;
-				logger.info("send data: " + msg);
-				byte[] bymsg = DeviceUtils.hexStringToBytes(msg);
-
-				outputStream.write(bymsg);
-				outputStream.flush();
-
-				logger.info("open success, update restored status.");
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (lock != null && lock.isLocked()) {
-					Thread.sleep(500);
-					lock.unlock();
-				}
-			}
-		} else {
-			throw new Exception("sendOpenElecMsg is not lockFail");
+	public void closeCommPort() throws Exception {
+		if (inStream != null) {
+			inStream.close();
+			inStream = null;
 		}
-	}
-
-	@Override
-	public void sendCloseElecMsg(String elecAddr) throws Exception {
-		if (lock.tryLock(3000, TimeUnit.MILLISECONDS)) {
-			try {
-				String commd = "68" + DeviceUtils.lowToTop(elecAddr) + "681C10CB333333343333334D3389873C5C3449";
-				String msg = commd + DeviceUtils.checkData(commd) + 16;
-				logger.info("send data: " + msg);
-				byte[] bymsg = DeviceUtils.hexStringToBytes(msg);
-
-				outputStream.write(bymsg); // 函数是没有返回值的。
-				outputStream.flush();
-
-				logger.info("close success, update restored status.");
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (lock != null && lock.isLocked()) {
-					Thread.sleep(500);
-					lock.unlock();
-				}
-			}
-		} else {
-			throw new Exception("sendCloseElecMsg is not lockFail");
+		if (outStream != null) {
+			outStream.close();
+			outStream = null;
 		}
-	}
-
-	@Override
-	public void sendSearchElecMsg(String elecAddr) throws Exception {
-		if (lock.tryLock(3000, TimeUnit.MILLISECONDS)) {
-			try {
-				String commd = "68" + DeviceUtils.lowToTop(elecAddr) + "6803083235B43A34333333";// 最后的一串数字代码操作的动作(抄表、开、关)
-				String msg = commd + DeviceUtils.checkData(commd) + 16;// 校验和
-				logger.info("send data: " + msg);
-				byte[] bymsg = DeviceUtils.hexStringToBytes(msg);
-
-				outputStream.write(bymsg);
-				outputStream.flush();
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (lock != null && lock.isLocked()) {
-					Thread.sleep(500);
-					lock.unlock();
-				}
-			}
-		} else {
-			throw new Exception("sendSearchElecMsg is not lockFail");
+		if (commPort != null) {
+			commPort.notifyOnDataAvailable(false);
+			commPort.close();
 		}
 	}
 
@@ -162,129 +200,67 @@ public class CommPortService implements ICommPortService {
 					if (lock != null && lock.isLocked()) {
 						lock.unlock();
 					}
-					
+
 					int len = -1;
-					byte[] readBuf = new byte[1024]; // 声明一个存储接收数据的缓冲区 用来接收缓冲区收到的数据
+					// 接收缓冲区
+					byte[] readBuf = new byte[1024];
 					byte[] totalBuf = new byte[] {};
-					while ((len = inputStream.read(readBuf)) > 0) {
-						totalBuf = DeviceUtils.byteMerge(totalBuf, readBuf, len);
+					while ((len = inStream.read(readBuf)) > 0) {
+						totalBuf = KedeProtocolUtil.mergeBytes(totalBuf, readBuf, len);
 						readBuf = new byte[1024];
 					}
-					
-					String data = DeviceUtils.bytesToHexString(totalBuf);
-					logger.info("data:{}", data);
+
+					String data = KedeProtocolUtil.bytesToHexStr(totalBuf);
+					logger.info("recv data:{}", data);
 					if (data.length() > 24) {
-						// 数据长度大于24为抄表的数据
+						// 抄表的数据
 						String status = data.substring(20, 28);// 返回的是开和关的状态
 						String statusparam = "3235b43a";// 用来判断此结果是否是抄表返回的数据
 						if (status.equals(statusparam)) {
 							String addr = data.substring(2, 14);// 返回数据里取的电表地址
-
-							logger.info("addr:{}", addr);
-							addr = DeviceUtils.lowToTop(addr);// 所有返回的地址都是反序的，这里进行正序操作
+							addr = KedeProtocolUtil.revertEndian(addr);// 所有返回的地址都是反序的，这里进行正序操作
 							logger.info("addr:{}", addr);
 
-							String elecStatus = DeviceUtils.sub33(data.substring(62, 66));
+							String elecStatus = KedeProtocolUtil.sub33H(data.substring(62, 66));
 							logger.info("elecStatus:{}", elecStatus);
 
-							Integer elecUsePoint = Integer
-									.parseInt(DeviceUtils.lowToTop(DeviceUtils.sub33(data.substring(38, 46))));
+							Integer elecUsePoint = Integer.parseInt(KedeProtocolUtil.sub33H(data.substring(38, 46)));
 							logger.info("elecUsePoint:{}", elecUsePoint);
 
-							logger.info("解析：当前剩余正负号: " + DeviceUtils.sub33(data.substring(28, 30))); // [29,30]
-							logger.info("解析：剩余电量: " + DeviceUtils.lowToTop(DeviceUtils.sub33(data.substring(30, 38))));
-							logger.info("解析：累计电量: " + DeviceUtils.lowToTop(DeviceUtils.sub33(data.substring(38, 46))));
-							logger.info("解析：够电次数: " + DeviceUtils.lowToTop(DeviceUtils.sub33(data.substring(46, 50))));
-							logger.info("解析：用户户号: " + DeviceUtils.lowToTop(DeviceUtils.sub33(data.substring(50, 54))));
-							logger.info("解析：A相: " + DeviceUtils.sub33(data.substring(54, 56)));
-							logger.info("解析：当前功率: " + DeviceUtils.lowToTop(DeviceUtils.sub33(data.substring(56, 62))));
-							logger.info("x解析：继电器状态: " + DeviceUtils.sub33(data.substring(62, 66)) + " , "
-									+ DeviceUtils.chooseState(DeviceUtils.sub33(data.substring(62, 66))));
-							logger.info("解析：当前电压: " + DeviceUtils.lowToTop(DeviceUtils.sub33(data.substring(66, 70))));
-							logger.info("解析：当前电流: " + DeviceUtils.lowToTop(DeviceUtils.sub33(data.substring(70, 74))));
-							logger.info("解析：功率因素: " + DeviceUtils.lowToTop(DeviceUtils.sub33(data.substring(74, 78))));
+							logger.info("解析：当前剩余正负号: " + KedeProtocolUtil.sub33H(data.substring(28, 30))); // [29,30]
+							logger.info("解析：剩余电量: " + KedeProtocolUtil.sub33H(data.substring(30, 38)));
+							logger.info("解析：累计电量: " + KedeProtocolUtil.sub33H(data.substring(38, 46)));
+							logger.info("解析：够电次数: " + KedeProtocolUtil.sub33H(data.substring(46, 50)));
+							logger.info("解析：用户户号: " + KedeProtocolUtil.sub33H(data.substring(50, 54)));
+							logger.info("解析：A相: " + KedeProtocolUtil.sub33H(data.substring(54, 56)));
+							logger.info("解析：当前功率: " + KedeProtocolUtil.sub33H(data.substring(56, 62)));
+							logger.info("x解析：继电器状态: " + KedeProtocolUtil.sub33H(data.substring(62, 66)) + " , "
+									+ KedeProtocolUtil.tripState(KedeProtocolUtil.sub33H(data.substring(62, 66))));
+							logger.info("解析：当前电压: " + KedeProtocolUtil.sub33H(data.substring(66, 70)));
+							logger.info("解析：当前电流: " + KedeProtocolUtil.sub33H(data.substring(70, 74)));
+							logger.info("解析：功率因素: " + KedeProtocolUtil.sub33H(data.substring(74, 78)));
 						}
 					} else {
-						// 不大于24就是开 关的返回数据
+						// 开关指令的返回数据
 						String addr = data.substring(2, 14);
-						addr = DeviceUtils.lowToTop(addr);
+						addr = KedeProtocolUtil.revertEndian(addr);
 						try {
-							sendSearchElecMsg(addr);
+							searchElec(addr);
 						} catch (Exception e) {
 							e.printStackTrace();
-							logger.info("error addr:{}", addr);
+							logger.info("search error addr:{}", addr);
 						}
 						logger.info("success");
 					}
-					logger.info("recv data:{}", data);
 				} catch (IOException e) {
 					e.printStackTrace();
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								close();
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-					}).start();
-				}
-				break;
-			}
-		}
-	}
-
-	@PostConstruct
-	public void checkComm() {
-		logger.info("scan serial port task start...");
-		init();
-		/*new Thread(new CheckThread()).start();
-		new Thread(new TimeThread()).start();*/
-	}
-
-	class CheckThread implements Runnable {
-		@Override
-		public void run() {
-			try {
-				while (true) {
-					if (inputStream == null && outputStream == null) {
-						init();
+					try {
+						closeCommPort();
+					} catch (Exception e1) {
+						e1.printStackTrace();
 					}
-					Thread.sleep(5000);
 				}
-			} catch (Exception e) {
 			}
-		}
-	}
-
-	class TimeThread implements Runnable {
-		@Override
-		public void run() {
-			try {
-				while (true) {
-					logger.info("run..........." + DateUtil.formatDateTime(System.currentTimeMillis()));
-					close();
-					Thread.sleep(3600000);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public void close() throws Exception {
-		if (inputStream != null) {
-			inputStream.close();
-			inputStream = null;
-		}
-		if (outputStream != null) {
-			outputStream.close();
-			outputStream = null;
-		}
-		if (serialPort != null) {
-			serialPort.notifyOnDataAvailable(false);
-			serialPort.close();
 		}
 	}
 

@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSON;
  * @since 2020-07-20
  */
 public class KedeProtocolUtil {
+
 	/**
 	 * 按字节分别减0x33，字节序倒转
 	 * 
@@ -34,7 +35,7 @@ public class KedeProtocolUtil {
 		}
 		return ret.toUpperCase();
 	}
-	
+
 	/**
 	 * 按字节分别加0x33，字节序倒转
 	 * 
@@ -61,12 +62,18 @@ public class KedeProtocolUtil {
 	 * @return little endian
 	 */
 	public static String revertEndian(String be) {
-		String le = "";
-		for (int i = be.length(); i > 0; i = i - 2) {
-			le = le + be.substring(i - 2, i);
+		if (be == null || be.isEmpty()) {
+			return be;
 		}
-		le = le.toUpperCase();
-		return le;
+		StringBuilder le = new StringBuilder();
+		for (int i = be.length(); i > 0; i = i - 2) {
+			if (i == 0 && be.length() % 2 != 0) {
+				le.append(be.substring(i - 1, i));
+			} else {
+				le.append(be.substring(i - 2, i));
+			}
+		}
+		return le.toString().toUpperCase();
 	}
 
 	/**
@@ -113,7 +120,7 @@ public class KedeProtocolUtil {
 	 * 
 	 * @param data
 	 * @return lj(累计)，sy(剩余)，cs(次数) <br>
-	 * eg.{"data":{"lj":"000053.96","sy":"-000000.00","cs":"0000"},"flag":"0"}
+	 *         eg.{"data":{"lj":"000053.96","sy":"-000000.00","cs":"0000"},"flag":"0"}
 	 */
 	public static String parseElecData(String data) {
 		String ret;
@@ -135,47 +142,37 @@ public class KedeProtocolUtil {
 					}
 					lj = sub33H(dataField.substring(12, 18)) + "." + sub33H(dataField.substring(10, 12));
 					cs = sub33H(dataField.substring(18, 22));
-					Map<String, Object> map = new HashMap<String, Object>();
-					map.put("flag", "0");
 					Map<String, Object> dataMap = new HashMap<String, Object>();
 					dataMap.put("lj", lj);
 					dataMap.put("sy", sy);
 					dataMap.put("cs", cs);
-					map.put("data", dataMap);
-					ret = JSON.toJSON(map).toString();
+					ret = getResult("0", dataMap);
 				} else {
-					Map<String, Object> map = new HashMap<String, Object>();
-					map.put("flag", "-3");
 					Map<String, Object> dataMap = new HashMap<String, Object>();
 					dataMap.put("err", "NO078102FF");
-					map.put("data", dataMap);
-					ret = JSON.toJSON(map).toString();
+					ret = getResult("-3", dataMap);
 				}
 			} else {
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("flag", "-2");
 				Map<String, Object> dataMap = new HashMap<String, Object>();
 				dataMap.put("err", "NO83");
-				map.put("data", dataMap);
-				ret = JSON.toJSON(map).toString();
+				ret = getResult("-2", dataMap);
+				;
 			}
 		} else {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("flag", "-1");
 			Map<String, Object> dataMap = new HashMap<String, Object>();
 			dataMap.put("err", "NO6816");
-			map.put("data", dataMap);
-			ret = JSON.toJSON(map).toString();
+			ret = getResult("-1", dataMap);
+			;
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * 解析水表读数
 	 * 
 	 * @param data
 	 * @return lj(累计)，sy(剩余)，tz(透支)，cs(次数)，zt1(状态1)，zt2(状态2)，sj(时间) <br>
-	 * eg.{"data":{"tz":"0000000.0","lj":"0000019.7","zt2":"00","zt1":"00","sy":"0000000.0","sj":"200720150800","cs":"0000"},"flag":"0"}
+	 *         eg.{"data":{"tz":"0000000.0","lj":"0000019.7","zt2":"00","zt1":"00","sy":"0000000.0","sj":"200720150800","cs":"0000"},"flag":"0"}
 	 */
 	public static String parseWaterData(String data) {
 		String ret;
@@ -190,7 +187,7 @@ public class KedeProtocolUtil {
 				if (bs.equals("20000100")) {
 					// 累计，剩余，透支，次数，状态1，状态2，时间
 					String lj, sy, tz, cs, zt1, zt2, sj;
-					
+
 					// 仅1位小数处理
 					String decimal = sub33H(dataField.substring(0, 2));
 					lj = sub33H(dataField.substring(2, 8)) + decimal.substring(0, 1) + "." + decimal.substring(1);
@@ -198,13 +195,11 @@ public class KedeProtocolUtil {
 					sy = sub33H(dataField.substring(10, 16)) + decimal.substring(0, 1) + "." + decimal.substring(1);
 					decimal = sub33H(dataField.substring(16, 18));
 					tz = sub33H(dataField.substring(18, 24)) + decimal.substring(0, 1) + "." + decimal.substring(1);
-					
+
 					cs = sub33H(dataField.substring(24, 28));
 					zt1 = sub33H(dataField.substring(28, 30));
 					zt2 = sub33H(dataField.substring(30, 32));
 					sj = sub33H(dataField.substring(32, 44));
-					Map<String, Object> map = new HashMap<String, Object>();
-					map.put("flag", "0");
 					Map<String, Object> dataMap = new HashMap<String, Object>();
 					dataMap.put("lj", lj);
 					dataMap.put("sy", sy);
@@ -213,35 +208,25 @@ public class KedeProtocolUtil {
 					dataMap.put("zt1", zt1);
 					dataMap.put("zt2", zt2);
 					dataMap.put("sj", sj);
-					map.put("data", dataMap);
-					ret = JSON.toJSON(map).toString();
+					ret = getResult("0", dataMap);
 				} else {
-					Map<String, Object> map = new HashMap<String, Object>();
-					map.put("flag", "-3");
 					Map<String, Object> dataMap = new HashMap<String, Object>();
 					dataMap.put("err", "NO20000100");
-					map.put("data", dataMap);
-					ret = JSON.toJSON(map).toString();
+					ret = getResult("-3", dataMap);
 				}
 			} else {
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("flag", "-2");
 				Map<String, Object> dataMap = new HashMap<String, Object>();
 				dataMap.put("err", "NO91");
-				map.put("data", dataMap);
-				ret = JSON.toJSON(map).toString();
+				ret = getResult("-2", dataMap);
 			}
 		} else {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("flag", "-1");
 			Map<String, Object> dataMap = new HashMap<String, Object>();
 			dataMap.put("err", "NO6816");
-			map.put("data", dataMap);
-			ret = JSON.toJSON(map).toString();
+			ret = getResult("-1", dataMap);
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * 解析电表充值数据
 	 * 
@@ -253,27 +238,18 @@ public class KedeProtocolUtil {
 		String strr = str.toUpperCase();
 		if (strr.substring(0, 2).equals("68") && strr.substring(strr.length() - 2).equals("16")) {
 			if (strr.substring(14, 16).equals("68") && strr.substring(16, 18).equals("83")) {
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("flag", "0");
 				Map<String, Object> dataMap = new HashMap<String, Object>();
 				dataMap.put("err", "Yes");
-				map.put("data", dataMap);
-				ret = JSON.toJSON(map).toString();
+				ret = getResult("0", dataMap);
 			} else {
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("flag", "-2");
 				Map<String, Object> dataMap = new HashMap<String, Object>();
 				dataMap.put("err", "NO83");
-				map.put("data", dataMap);
-				ret = JSON.toJSON(map).toString();
+				ret = getResult("-2", dataMap);
 			}
 		} else {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("flag", "-1");
 			Map<String, Object> dataMap = new HashMap<String, Object>();
 			dataMap.put("err", "NO6816");
-			map.put("data", dataMap);
-			ret = JSON.toJSON(map).toString();
+			ret = getResult("-1", dataMap);
 		}
 		return ret;
 	}
@@ -289,31 +265,22 @@ public class KedeProtocolUtil {
 		String strr = str.toUpperCase();
 		if (strr.substring(0, 2).equals("68") && strr.substring(strr.length() - 2).equals("16")) {
 			if (strr.substring(16, 18).equals("9c") || strr.substring(16, 18).equals("9C")) {
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("flag", "0");
 				Map<String, Object> dataMap = new HashMap<String, Object>();
 				dataMap.put("err", "Yes");
-				map.put("data", dataMap);
-				ret = JSON.toJSON(map).toString();
+				ret = getResult("0", dataMap);
 			} else {
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("flag", "-2");
 				Map<String, Object> dataMap = new HashMap<String, Object>();
 				dataMap.put("err", "NO9C");
-				map.put("data", dataMap);
-				ret = JSON.toJSON(map).toString();
+				ret = getResult("-2", dataMap);
 			}
 		} else {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("flag", "-1");
 			Map<String, Object> dataMap = new HashMap<String, Object>();
 			dataMap.put("err", "NO6816");
-			map.put("data", dataMap);
-			ret = JSON.toJSON(map).toString();
+			ret = getResult("-1", dataMap);
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * 解析水表开关动作数据
 	 * 
@@ -325,31 +292,36 @@ public class KedeProtocolUtil {
 		String strr = str.toUpperCase();
 		if (strr.substring(0, 2).equals("68") && strr.substring(strr.length() - 2).equals("16")) {
 			if (strr.substring(16, 18).equals("94")) {
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("flag", "0");
 				Map<String, Object> dataMap = new HashMap<String, Object>();
 				dataMap.put("err", "Yes");
-				map.put("data", dataMap);
-				ret = JSON.toJSON(map).toString();
+				ret = getResult("0", dataMap);
 			} else {
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("flag", "-2");
 				Map<String, Object> dataMap = new HashMap<String, Object>();
 				dataMap.put("err", "NO94");
-				map.put("data", dataMap);
-				ret = JSON.toJSON(map).toString();
+				ret = getResult("-2", dataMap);
 			}
 		} else {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("flag", "-1");
 			Map<String, Object> dataMap = new HashMap<String, Object>();
 			dataMap.put("err", "NO6816");
-			map.put("data", dataMap);
-			ret = JSON.toJSON(map).toString();
+			ret = getResult("-1", dataMap);
 		}
 		return ret;
 	}
-	
+
+	/**
+	 * 获取结果
+	 * 
+	 * @param flag 标志位
+	 * @param data 数据映射
+	 * @return json字符串
+	 */
+	public static String getResult(String flag, Map<String, Object> data) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("flag", flag);
+		map.put("data", data);
+		return JSON.toJSON(map).toString();
+	}
+
 	/**
 	 * 序列化
 	 * 
@@ -418,20 +390,16 @@ public class KedeProtocolUtil {
 	 * @return
 	 */
 	public static byte[] hexStrToBytes(String hex) {
-		int len = (hex.length() / 2);
-		byte[] ret = new byte[len];
-		char[] achar = hex.toCharArray();
-		for (int i = 0; i < len; i++) {
-			int pos = i * 2;
-			ret[i] = (byte) (toByte(achar[pos]) << 4 | toByte(achar[pos + 1]));
+		if (hex == null || hex.isEmpty()) {
+			return null;
+		}
+		byte[] ret = new byte[hex.length() / 2];
+		for (int i = 0; i < hex.length(); i += 2) {
+			ret[i] = (byte) (Integer.parseInt(hex.substring(i, i + 2), 16) & 0xFF);
 		}
 		return ret;
 	}
 
-	private static int toByte(char c) {
-		return (byte) "0123456789ABCDEF".indexOf(c);
-	}
-	
 	/**
 	 * 字节数组转16进制字符
 	 * 
@@ -439,15 +407,74 @@ public class KedeProtocolUtil {
 	 * @return
 	 */
 	public static final String bytesToHexStr(byte[] bArr) {
-		StringBuffer sb = new StringBuffer(bArr.length);
-		String sTemp;
+		if (bArr == null || bArr.length <= 0) {
+			return null;
+		}
+		StringBuilder sb = new StringBuilder(bArr.length);
+		String hex;
 		for (int i = 0; i < bArr.length; i++) {
-			sTemp = Integer.toHexString(0xFF & bArr[i]);
-			if (sTemp.length() < 2)
+			hex = Integer.toHexString(0xFF & bArr[i]);
+			if (hex.length() < 2)
 				sb.append(0);
-			sb.append(sTemp.toUpperCase());
+			sb.append(hex.toUpperCase());
 		}
 		return sb.toString();
 	}
-	
+
+	/**
+	 * 字节合并
+	 * 
+	 * @param b1
+	 * @param b2
+	 * @param num
+	 * @return
+	 */
+	public static byte[] mergeBytes(byte[] b1, byte[] b2, int num) {
+		byte[] b3 = new byte[b1.length + num];
+		System.arraycopy(b1, 0, b3, 0, b1.length);
+		System.arraycopy(b2, 0, b3, b1.length, num);
+		return b3;
+	}
+
+	/**
+	 * 断电代码解析
+	 * 
+	 * @return 断电说明
+	 */
+	public static String tripState(String state) {
+		int code = -1;
+		try {
+			code = Integer.parseInt(state, 16);
+		} catch (Exception e) {
+			return null;
+		}
+		switch (code) {
+			case 0:
+				return "合闸";
+			case 1:
+				return "跳闸";
+			case 2:
+				return "零电量断电";
+			case 3:
+				return "超功率断电";
+			case 4:
+				return "报警断电";
+			case 5:
+				return "超最大无功断电";
+			case 6:
+				return "定时断电";
+			case 7:
+				return "超特许负载断电";
+			case 8:
+				return "超无功步进值";
+			case 9:
+				return "超夜间小功率断电";
+			case 10:
+				return "纯阻性负载且超过步进功率跳闸";
+			case 11:
+				return "禁用负载跳闸";
+		}
+		return null;
+	}
+
 }

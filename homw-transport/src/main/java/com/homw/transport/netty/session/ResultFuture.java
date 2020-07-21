@@ -2,6 +2,7 @@ package com.homw.transport.netty.session;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.TimeoutException;
  * @version 1.0
  * @since 2020-05-17
  */
-public class ResultFuture<T> implements java.util.concurrent.Future<T> {
+public class ResultFuture<T> implements Future<T> {
 
 	private T result;
 	private CountDownLatch latch = new CountDownLatch(1);
