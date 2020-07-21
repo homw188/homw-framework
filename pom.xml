@@ -79,7 +79,7 @@
 	<commons-codec-version>1.10</commons-codec-version>
 	<commons-configuration-version>1.10</commons-configuration-version>
 	<commons-logging-version>1.2</commons-logging-version>
-	<commons-beanutils-version>1.9.1</commons-beanutils-version>
+	<commons-beanutils-version>1.9.4</commons-beanutils-version>
 	<commons-lang3-version>3.3.2</commons-lang3-version>
 	<commons-cli-version>1.4</commons-cli-version>
 	
