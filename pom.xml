@@ -48,7 +48,7 @@
     
     <quartz-version>2.2.3</quartz-version>
     <poi-version>3.9</poi-version>
-    <rabbitmq-version>3.4.2</rabbitmq-version>
+    <rabbitmq-version>4.8.0</rabbitmq-version>
     <activemq-version>5.10.0</activemq-version>
     <httpclient-version>4.5.3</httpclient-version>
     <lombok-verion>1.16.10</lombok-verion>
