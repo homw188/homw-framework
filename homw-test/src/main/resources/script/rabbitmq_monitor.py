@@ -6,19 +6,37 @@
 @author: Hom
 @version: 1.0
 @since: 2020-07-16
-@note: linux backend run: nohup python rabbitmq_monitor.py > mq_monitor.log 2>&1 &
+@note: linux backend run: nohup python rabbitmq_monitor.py > /dev/null 2>&1 &
 '''
 
 import sys
+import time
+import datetime
+import logging
+import logging.handlers
+
+# log settings
+log = logging.getLogger('monitor_logger')
+log.setLevel(logging.DEBUG)
+
+stream_handler = logging.StreamHandler(sys.stdout)
+stream_handler.setLevel(logging.DEBUG)
+stream_handler.setFormatter(logging.Formatter(fmt='%(asctime)s [%(levelname)s] [%(threadName)s] - %(message)s'))
+
+file_handler = logging.handlers.TimedRotatingFileHandler('mq_monitor.log', when='midnight', backupCount=7)
+file_handler.setLevel(logging.INFO)
+file_handler.setFormatter(logging.Formatter(fmt='%(asctime)s [%(levelname)s] [%(threadName)s] %(module)s(:%(lineno)d) - %(message)s'))
+
+log.addHandler(stream_handler)
+log.addHandler(file_handler)
+
 # validate python version
 if sys.version_info[0] < 2 or (sys.version_info[2] == 2 and sys.version_info[1] < 6):
-    print('This monitor requires at least python2.6')
+    log.critical('This monitor requires at least python2.6')
     sys.exit(1)
-import time
 
 from base64 import b64encode
-from socket import error as SocketError
-from traceback import print_exc as print_trace
+from socket import error as socket_error
 
 from json import loads as load_json
 from re import search
@@ -58,7 +76,7 @@ MQ_QUEUE_PATH = '/api/queues/' + MQ_VHOST + '?' + MQ_QUERY
 SMTP_HOST = 'smtp.qq.com'
 SMTP_PORT = 25
 
-MAIL_SENDER = 'xxx@qq.com'
+MAIL_SENDER = 'admin@qq.com'
 MAIL_PASSWD = '123456'
 MAIL_RECVERS = ['aaa@qq.com', 'bbb@qq.com']
 MAIL_SUBJECT = 'RabbitMQ Monitor Alarm'
@@ -80,23 +98,27 @@ def http(path, method='GET', header={}, body=None):
         header['Content-Type'] = 'application/json'
     try:
         conn.request('GET', MQ_QUEUE_PATH, body, header)
-    except SocketError as e:
-        exception(e, 'Could not connect: {0}\n'.format(e))
+    except socket_error as e:
+        exception(e, 'could not connect: {0}\n'.format(e))
         
     resp = conn.getresponse()
     # redirect
     if resp.status == 301:
         url = urlparse.urlparse(resp.getheader('location'))
+        log.info('redirect url: %s', url)
         return http(url.path + '?' + url.query, method, header, body)
     if resp.status != 200:
-        raise Exception('Received %d %s for path %s\n%s' 
+        raise Exception('received %d %s for path %s\n%s' 
                         % (resp.status, resp.reason, path, resp.read()))
     return resp.read().decode('utf-8')
 
 def exception(err, msg=None):
-    print_trace(err, sys.stderr)
-    if msg is not None:
-        sys.stderr.write(msg)
+    '''
+    @summary: log exception
+    @param err: exception object
+    @param msg: exception description
+    '''
+    log.error(msg, exc_info=True)
 
 def email(content, format):
     '''
@@ -114,8 +136,9 @@ def email(content, format):
         smtp.connect(SMTP_HOST, SMTP_PORT)
         smtp.login(MAIL_SENDER, MAIL_PASSWD)
         smtp.sendmail(MAIL_SENDER, MAIL_RECVERS, msg.as_string())
+        log.debug('send email to %s success', msg['To'])
     except SMTPException as e:
-        exception(e, 'Send email failed, %s' % str(e))
+        exception(e, 'send email failed, %s' % str(e))
     finally:
         if smtp is not None:
             smtp.quit()
@@ -157,16 +180,20 @@ def analysis(queue_list):
             # while raise
             if cnt > 0 and cnt >= item['cnt']:
                 if time.time() - item['time'] > TIMEOUT and not item['notified']:
-                    print('Discovery a queue message blocking issue:')
-                    print('item: %s\nqname: %s\ncnt: %d' % (str(item), qname, cnt))
+                    log.info('discovery a queue message blocking issue:')
+                    log.info('item: %s\nqname: %s\ncnt: %d' % (str(item), qname, cnt))
                     # send email async
                     t = Thread(target=email(he_format(item, qname, cnt), 'html'), 
                                name='Thread-Email-' + item['space'])
                     t.start()
                     item['notified'] = True
+                # once again
+                if item['time'] is None:
+                    item['time'] = time.time()
+                    
             # while down
             if cnt < item['cnt']:
-                item['time'] = time.time()
+                item['time'] = None
                 item['notified'] = False
             item['cnt'] = cnt
         else:
@@ -182,13 +209,15 @@ def main():
         try:
             # query
             queue_list = query()
+            log.debug('queue_list: %s', str(queue_list))
             if queue_list is not None:
                 # analysis
                 analysis(queue_list)
+                log.debug('blocked_timer: %s', str(blocked_timer))
             # wait
             time.sleep(5)
         except Exception as e:
-            exception(e, 'RabbitMQ monitor loop occurs an exception: %s' % str(e))
+            exception(e, 'rabbitmq monitor loop occurs an exception: %s' % str(e))
     
 if __name__ == '__main__':
     main()
