@@ -10,8 +10,12 @@
 '''
 
 import sys
+# validate python version
+if sys.version_info[0] < 2 or (sys.version_info[2] == 2 and sys.version_info[1] < 6):
+    sys.stderr.write('This monitor requires at least python2.6')
+    sys.exit(1)
+    
 import time
-import datetime
 import logging
 import logging.handlers
 
@@ -29,11 +33,6 @@ file_handler.setFormatter(logging.Formatter(fmt='%(asctime)s [%(levelname)s] [%(
 
 log.addHandler(stream_handler)
 log.addHandler(file_handler)
-
-# validate python version
-if sys.version_info[0] < 2 or (sys.version_info[2] == 2 and sys.version_info[1] < 6):
-    log.critical('This monitor requires at least python2.6')
-    sys.exit(1)
 
 from base64 import b64encode
 from socket import error as socket_error
