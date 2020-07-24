@@ -178,16 +178,17 @@ def analysis(queue_list):
             item = blocked_timer[qname]
             # while raise
             if cnt > 0 and cnt >= item['cnt']:
-                if time.time() - item['time'] > TIMEOUT and not item['notified']:
-                    log.info('discovery a queue message blocking issue:')
-                    log.info('item: %s\nqname: %s\ncnt: %d' % (str(item), qname, cnt))
-                    # send email async
-                    t = Thread(target=email(he_format(item, qname, cnt), 'html'), 
-                               name='Thread-Email-' + item['space'])
-                    t.start()
-                    item['notified'] = True
-                # once again
-                if item['time'] is None:
+                if item['time'] is not None:
+                    if time.time() - item['time'] > TIMEOUT and not item['notified']:
+                        log.info('discovery a queue message blocking issue:')
+                        log.info('item: %s\nqname: %s\ncnt: %d' % (str(item), qname, cnt))
+                        # send email async
+                        t = Thread(target=email(he_format(item, qname, cnt), 'html'), 
+                                   name='Thread-Email-' + item['space'])
+                        t.start()
+                        item['notified'] = True
+                else:
+                    # once again
                     item['time'] = time.time()
                     
             # while down
