@@ -7,6 +7,9 @@ import java.awt.image.*;
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
+
+import cn.hutool.core.lang.Assert;
+
 import java.util.*;
 
 /**
@@ -15,12 +18,12 @@ import java.util.*;
  * @version 1.0
  * @since 2020-07-29
  */
-public class AppletFrame extends JFrame implements Runnable, AppletStub, AppletContext {
+public class AppletFrame extends JFrame implements AppletStub, AppletContext {
 
-    private String name;
+	private static final long serialVersionUID = -3481000474954768808L;
+	
+	private String name;
     private Applet applet;
-    private String[] args = null;
-
     private Label label = null;
     private Dimension appletSize;
 
@@ -35,31 +38,30 @@ public class AppletFrame extends JFrame implements Runnable, AppletStub, AppletC
     }
 
     private void build(Applet applet, String[] args, int width, int height) {
-        if (applet == null) {
-            throw new IllegalArgumentException("applet parameter must be not null");
-        }
+        Assert.notNull(applet, "applet parameter must be not null");
 
         this.applet = applet;
-        this.args = args;
-        this.name = applet.getClass().getName();
         this.appletSize = applet.getSize();
+        this.name = applet.getClass().getName();
 
         applet.setStub(this);
         setTitle(name);
 
         Properties props = getProperties();
-        if (args != null)
+        if (args != null) {
             parseArgs(args, props);
+        }
 
         // layout components
-        Container contentPane = getContentPane();
-        contentPane.add(applet, BorderLayout.CENTER);
+        getContentPane().add(applet, BorderLayout.CENTER);
 
         // setup size
-        updateSize(applet, width, height);
+        updateSize(width, height);
 
         // bind close listener
         addCloseListener();
+        
+        setVisible(true);
     }
 
     private void addCloseListener() {
@@ -69,7 +71,7 @@ public class AppletFrame extends JFrame implements Runnable, AppletStub, AppletC
                     AppletFrame.this.applet.destroy();
                 }
 
-                hide();
+                setVisible(false);
                 try {
                     dispose();
                 } catch (IllegalStateException e) {
@@ -97,18 +99,17 @@ public class AppletFrame extends JFrame implements Runnable, AppletStub, AppletC
 
     private Properties getProperties() {
         Properties props = System.getProperties();
-        props.put("browser", "AppletFrame");
+        props.put("browser", this.name);
         props.put("browser.version", "1.0.0");
         props.put("browser.vendor", "Homw");
         props.put("browser.vendor.url", "https://github.com/homw188/homw-framework");
         return props;
     }
 
-    private void updateSize(Applet applet, int width, int height) {
+    private void updateSize(int width, int height) {
         pack();
         validate();
         applet.setSize(width, height);
-        setVisible(true);
     }
 
     private static void parseArgs(String[] args, Properties props) {
@@ -124,8 +125,7 @@ public class AppletFrame extends JFrame implements Runnable, AppletStub, AppletC
         }
     }
 
-    @Override
-    public void run() {
+    public void start() {
         showStatus(name + " initializing...");
         applet.init();
         validate();
@@ -156,7 +156,7 @@ public class AppletFrame extends JFrame implements Runnable, AppletStub, AppletC
     @Override
     public URL getCodeBase() {
         String path = System.getProperty("java.class.path");
-        Enumeration st = new StringTokenizer(path, ":");
+        Enumeration<Object> st = new StringTokenizer(path, ":");
         while (st.hasMoreElements()) {
             String dir = (String) st.nextElement();
             String filename = dir + File.separatorChar + name + ".class";
@@ -192,7 +192,8 @@ public class AppletFrame extends JFrame implements Runnable, AppletStub, AppletC
         return this;
     }
 
-    @Override
+	@Override
+	@SuppressWarnings("restriction")
     public AudioClip getAudioClip(URL url) {
         return new sun.applet.AppletAudioClip(url);
     }
@@ -217,8 +218,8 @@ public class AppletFrame extends JFrame implements Runnable, AppletStub, AppletC
     }
 
     @Override
-    public Enumeration getApplets() {
-        Vector v = new Vector();
+    public Enumeration<Applet> getApplets() {
+        Vector<Applet> v = new Vector<>();
         v.addElement(applet);
         return v.elements();
     }
@@ -251,7 +252,7 @@ public class AppletFrame extends JFrame implements Runnable, AppletStub, AppletC
     }
 
     @Override
-    public Iterator getStreamKeys() {
+    public Iterator<String> getStreamKeys() {
         throw new RuntimeException("Not supported");
     }
 }

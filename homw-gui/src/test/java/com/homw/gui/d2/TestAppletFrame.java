@@ -5,6 +5,8 @@ import com.homw.gui.d2.swing.SWT;
 import com.homw.gui.d2.swing.UIInitializer;
 import org.junit.Test;
 
+import java.awt.BorderLayout;
+
 import javax.swing.*;
 
 /**
@@ -14,19 +16,20 @@ import javax.swing.*;
  * @since 2020-07-29
  */
 public class TestAppletFrame {
-    @Test
-    public void test() throws Exception {
-        UIInitializer.init();
+	@Test
+	public void test() throws Exception {
+		UIInitializer.init();
 
-        AppletFrame frame = new AppletFrame(new JApplet(){
-            @Override
-            public void init() {
-                getContentPane().add(new JLabel("Applet frame test"));
-            }
-        }, SWT.Size.getScreen().width, SWT.Size.getScreen().height);
-        frame.run();
+		AppletFrame frame = new AppletFrame(new JApplet() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void init() {
+				getContentPane().add(new JLabel("Applet frame test"), BorderLayout.CENTER);
+			}
+		}, SWT.Size.getScreen().width, SWT.Size.getScreen().height);
+		frame.start();
 
-        // block...
-        System.in.read();
-    }
+		// block...
+		System.in.read();
+	}
 }
