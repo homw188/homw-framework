@@ -3,12 +3,12 @@
 
 <mapper namespace="com.homw.tool.dao.PayRecordGenDao">
 	<select id="queryListMissingPayRecord" resultType="com.homw.tool.entity.AgreementEntity">
-		SELECT a.* FROM huge_agreement a 
-		WHERE NOT EXISTS (SELECT * FROM huge_rent_room_payrecord r WHERE r.`AGREEMENT_ID` = a.`AGREEMENT_ID` AND r.`SPACE_ID` = #{spaceId}) AND a.`SPACE_ID` = #{spaceId}
+		SELECT a.* FROM agreement a 
+		WHERE NOT EXISTS (SELECT * FROM rent_room_payrecord r WHERE r.`AGREEMENT_ID` = a.`AGREEMENT_ID` AND r.`SPACE_ID` = #{spaceId}) AND a.`SPACE_ID` = #{spaceId}
 	</select>
 	
 	<insert id="saveBatchRecord" parameterType="com.homw.tool.entity.PayRecordEntity">
-	    INSERT INTO huge_rent_room_payrecord (PAYER_ID, PAYER_TYPE, PAYER_NAME, 
+	    INSERT INTO rent_room_payrecord (PAYER_ID, PAYER_TYPE, PAYER_NAME, 
 			AGREEMENT_ID, RECORD_STATUS, TOTAL_AMT, 
 			PAY_AMT, SPACE_ID, ORDER_TYPE, 
 			PERIOD, RENT_PERIOD_NUM, YEAR, 
