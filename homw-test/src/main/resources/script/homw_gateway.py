@@ -28,7 +28,7 @@ HWGD_URL = 'http://192.168.85.138:8080'
 HWCLOUD_URL = 'http://192.168.83.166:8088/homw-cloud-web-api'
 HOMW_SECRET = 'a234d8152d2f6ef163baa68acbfb5db0'
 #云平台认证后的密码
-CLOUD_PASSWORD ='';
+CLOUD_PASSWORD =''
 
 #扫描设备URL
 url_wrgb_get_dev_list = "/light_wrgb.get_dev_list"
@@ -282,7 +282,7 @@ def cloud_mqtt_client():
     if (auth_info['code'] != '200'):
         time.sleep(5)
         print('连接平台认证识别,进行重试....!')
-        return cloud_mqtt_client();
+        return cloud_mqtt_client()
     else:
         return auth_info
 
