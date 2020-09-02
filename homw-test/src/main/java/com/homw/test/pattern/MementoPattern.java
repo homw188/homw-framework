@@ -1,7 +1,9 @@
 package com.homw.test.pattern;
 
 /**
- * @description 备忘录模式实现
+ * @description <b>行为型模式：</b>备忘录模式
+ * <p>保存一个对象的某个状态，以便在适当的时候恢复</p>
+ * 
  * @author Hom
  * @version 1.0
  * @since 2020-06-12

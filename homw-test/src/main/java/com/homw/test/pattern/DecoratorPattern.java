@@ -1,7 +1,9 @@
 package com.homw.test.pattern;
 
 /**
- * @description 装饰器模式实现
+ * @description <b>结构型模式：</b>装饰器模式
+ * <p>向一个现有的对象添加新的功能，同时又不改变其结构</p>
+ * 
  * @author Hom
  * @version 1.0
  * @since 2020-06-11

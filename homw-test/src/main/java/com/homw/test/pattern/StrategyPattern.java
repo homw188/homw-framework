@@ -1,10 +1,14 @@
 package com.homw.test.pattern;
 
 /**
- * @description 策略模式实现
+ * @description <b>行为型模式：</b>策略模式
+ * <p>将每一个算法封装到具有共同接口的独立的类中，从而使得它们可以相互替换</p>
+ * 
  * @author Hom
  * @version 1.0
  * @since 2020-06-11
+ * 
+ * @see {@link TemplatePattern}, {@link CommandPattern}
  */
 public class StrategyPattern {
 

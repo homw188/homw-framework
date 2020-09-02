@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description 调停者模式实现
+ * @description <b>行为型模式：</b>调停者模式
+ * <p>用来降低多个对象和类之间的通信复杂性</p>
+ * 
  * @author Hom
  * @version 1.0
  * @since 2020-06-12
@@ -32,7 +34,7 @@ public class MediatorPattern {
 		abstract void send(String message, Colleague colleague);
 	}
 	
-	abstract static class Colleague {
+	static abstract class Colleague {
 		Mediator mediator;
 		public Colleague(Mediator mediator) {
 			this.mediator = mediator;

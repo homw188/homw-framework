@@ -1,10 +1,14 @@
 package com.homw.test.pattern;
 
 /**
- * @description 适配器模式实现
+ * @description <b>结构型模式：</b>适配器模式
+ * <p>将一个类的接口<b>转换</b>成用户需要的接口</p>
+ * 
  * @author Hom
  * @version 1.0
  * @since 2020-06-12
+ * 
+ * @see ProxyPattern
  */
 public class AdapterPattern {
 

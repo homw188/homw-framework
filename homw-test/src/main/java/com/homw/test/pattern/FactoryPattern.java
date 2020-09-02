@@ -1,7 +1,7 @@
 package com.homw.test.pattern;
 
 /**
- * @description 工厂模式实现
+ * @description <b>创建型模式：</b>工厂模式
  * @author Hom
  * @version 1.0
  * @since 2020-06-12

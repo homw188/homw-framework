@@ -1,10 +1,12 @@
 package com.homw.test.pattern;
 
 /**
- * @description 命令模式实现
+ * @description <b>行为型模式：</b>命令模式
  * @author Hom
  * @version 1.0
  * @since 2020-06-11
+ * 
+ * @see StrategyPattern
  */
 public class CommandPattern {
 

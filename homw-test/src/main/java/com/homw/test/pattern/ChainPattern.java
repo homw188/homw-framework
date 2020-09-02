@@ -1,7 +1,9 @@
 package com.homw.test.pattern;
 
 /**
- * @description 责任链模式实现
+ * @description <b>行为型模式：</b>责任链模式
+ * <p>为请求创建了一个接收者对象的链表</p>
+ * 
  * @author Hom
  * @version 1.0
  * @since 2020-06-11

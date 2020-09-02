@@ -3,7 +3,9 @@ package com.homw.test.pattern;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @description 单例模式实现
+ * @description <b>创建型模式：</b>单例模式
+ * <p>保证一个类仅有一个实例，并提供一个访问它的全局访问点</p>
+ * 
  * @author Hom
  * @version 1.0
  * @since 2020-06-12

@@ -1,12 +1,16 @@
 package com.homw.test.pattern;
 
 /**
- * @description 模板方法模式实现
+ * @description <b>行为型模式：</b>模板方法模式
+ * <p>定义一个逻辑骨架， 子类延伸实现</p>
+ * 
  * @author Hom
  * @version 1.0
  * @since 2020-06-12
+ * 
+ * @see StrategyPattern
  */
-public class TemplateMethodPattern {
+public class TemplatePattern {
 
 	public static void main(String[] args) {
 		AbstractClazz clazz = new ClazzA();
@@ -17,7 +21,7 @@ public class TemplateMethodPattern {
 		protected abstract void partMethod();
 		
 		final void templateMethod() {
-			System.out.println("TemplateMethodPattern.AbstractClazz.templateMethod()");
+			System.out.println("TemplatePattern.AbstractClazz.templateMethod()");
 			partMethod();
 		}
 	}
@@ -25,7 +29,7 @@ public class TemplateMethodPattern {
 	static class ClazzA extends AbstractClazz {
 		@Override
 		protected void partMethod() {
-			System.out.println("TemplateMethodPattern.ClazzA.partMethod()");
+			System.out.println("TemplatePattern.ClazzA.partMethod()");
 		}
 	}
 }

@@ -1,7 +1,7 @@
 package com.homw.test.pattern;
 
 /**
- * @description 简单工厂模式实现
+ * @description <b>创建型模式：</b>简单工厂模式
  * @author Hom
  * @version 1.0
  * @since 2020-06-12
@@ -24,12 +24,12 @@ public class SimpleFactoryPattern {
 		public static Product create(ProductTypeEnum type) {
 			Product product = null;
 			switch (type) {
-			case A:
-				product = new ProductA();
-				break;
-			case B:
-				product = new ProductB();
-				break;
+				case A:
+					product = new ProductA();
+					break;
+				case B:
+					product = new ProductB();
+					break;
 			}
 			return product;
 		}

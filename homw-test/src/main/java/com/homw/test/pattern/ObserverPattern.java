@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description 观察者模式实现
+ * @description <b>行为型模式：</b>观察者模式
+ * <p>定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新</p>
+ * 
  * @author Hom
  * @version 1.0
  * @since 2020-06-12
