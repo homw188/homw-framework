@@ -96,7 +96,7 @@
 	<zookeeper-version>3.4.13</zookeeper-version>
 	
 	<validation-version>1.1.0.Final</validation-version>
-    <hibernate-validator-version>5.4.1.Final</hibernate-validator-version>
+    <hibernate-validator-version>5.4.2.Final</hibernate-validator-version>
 	
     <junit-version>4.12</junit-version>
   </properties>
