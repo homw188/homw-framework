@@ -31,7 +31,7 @@ public class Protocol_645 {
 	
 				tempZl = Arrays.copyOfRange(_obj, 0, 14);
 				// 校验
-				jy = CommonTool.makeChecksum(tempZl);
+				jy = CommonTool.checkSum(tempZl);
 				_obj[14] = (byte) Integer.parseInt(jy, 16);
 				_obj[15] = 22;
 				break;
@@ -73,7 +73,7 @@ public class Protocol_645 {
 	
 					tempZl = Arrays.copyOfRange(_obj, 0, 26);
 					// 校验
-					jy = CommonTool.makeChecksum(tempZl);
+					jy = CommonTool.checkSum(tempZl);
 					_obj[26] = (byte) Integer.parseInt(jy, 16);
 					_obj[27] = 22;
 				}
@@ -97,7 +97,7 @@ public class Protocol_645 {
 				_obj[13] = 0x37;
 				tempZl = Arrays.copyOfRange(_obj, 0, 14);
 				// 校验
-				jy = CommonTool.makeChecksum(tempZl);
+				jy = CommonTool.checkSum(tempZl);
 				_obj[14] = (byte) Integer.parseInt(jy, 16);
 				_obj[15] = 22;
 				break;
@@ -117,7 +117,7 @@ public class Protocol_645 {
 				case 0x91: // 读取数据正常返回
 					if (backHexStr.substring(20, 28).equals("33333433")) // 读电量
 					{
-						short[] tempbyte = CommonTool.HexStrtoBytes(backHexStr.substring(28, 36));
+						short[] tempbyte = CommonTool.hex2Shorts(backHexStr.substring(28, 36));
 						CommonTool.decrypt(tempbyte, 0, tempbyte.length);
 						returnBack = "-1,"
 								+ Double.parseDouble(Integer.toHexString(tempbyte[3]) + Integer.toHexString(tempbyte[2])
@@ -141,8 +141,7 @@ public class Protocol_645 {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception("数据解析异常");
+			throw new IllegalArgumentException("数据解析异常：" + backHexStr, e);
 		}
 		return returnBack;
 	}

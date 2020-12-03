@@ -64,7 +64,7 @@ public class SocketTool {
 	 *            （223 集中式电表 221 单表 255水表)
 	 * @return
 	 */
-	public Object SendData(String serverIP, int serverPort, byte[] sendContent, int headTag) {
+	public Object sendData(String serverIP, int serverPort, byte[] sendContent, int headTag) {
 		long t1;
 		isExit = false;
 		// final String backHexStr = "";
@@ -100,7 +100,7 @@ public class SocketTool {
 						while ((receiveLength = in.read(buffer)) != -1) {
 							//System.out.println("线程BB在执行..................");
 							// 输出获取到所有字节 16进制
-							backHexStr = CommonTool.bytesToHexString(buffer);
+							backHexStr = CommonTool.bytes2Hex(buffer);
 							backHexStr = backHexStr.substring(0, receiveLength * 2);
 							break;
 						}

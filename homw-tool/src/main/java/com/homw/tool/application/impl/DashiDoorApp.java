@@ -44,12 +44,12 @@ public class DashiDoorApp extends AbstractApplication {
 		StringBuffer strBuf = new StringBuffer();
 		strBuf.append("55").append("04").append(addr).append("2D").append("0001").append("0").append(readNo)
 				.append("00");
-		byte[] sumBytes = DashiDoorApi.checkSum(DashiDoorApi.hexStr2Bytes(strBuf.toString()), 2);
-		strBuf.append(DashiDoorApi.bytes2HexString(sumBytes));
+		byte[] sumBytes = DashiDoorApi.checkSum(DashiDoorApi.hex2Bytes(strBuf.toString()), 2);
+		strBuf.append(DashiDoorApi.bytes2Hex(sumBytes).toUpperCase());
 		logger.info("checksum: {}", strBuf.toString());
 
-		byte[] data = DashiDoorApi.hexStr2Bytes(strBuf.toString());
-		logger.info("send packet: {}", DashiDoorApi.bytesToHexStr(data));
+		byte[] data = DashiDoorApi.hex2Bytes(strBuf.toString());
+		logger.info("send packet: {}", DashiDoorApi.bytes2Hex(data));
 
 		DashiDoorApi.send(host, Integer.valueOf(port), data);
 		logger.info("open door success.");

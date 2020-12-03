@@ -62,7 +62,7 @@ public class CommPortService implements ICommPortService {
 				try {
 					closeCommPort();
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error("close serial port error", e);
 				}
 			}
 		}, 3600000, 3600000);
@@ -76,11 +76,10 @@ public class CommPortService implements ICommPortService {
 						+ "681C10CB333333343333334E3387873C5C3449"; // 开电源指令
 				String msg = commd + KedeProtocolUtil.checksum(commd) + "16";
 				logger.info("send data: " + msg);
-				
 				outStream.write(KedeProtocolUtil.hexStrToBytes(msg));
 				outStream.flush();
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("send packet error", e);
 			} finally {
 				Thread.sleep(500);
 				lock.unlock();
@@ -98,11 +97,10 @@ public class CommPortService implements ICommPortService {
 						+ "681C10CB333333343333334D3389873C5C3449";
 				String msg = commd + KedeProtocolUtil.checksum(commd) + 16;
 				logger.info("send data: " + msg);
-
 				outStream.write(KedeProtocolUtil.hexStrToBytes(msg));
 				outStream.flush();
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("send packet error", e);
 			} finally {
 				Thread.sleep(500);
 				lock.unlock();
@@ -119,11 +117,10 @@ public class CommPortService implements ICommPortService {
 				String commd = "68" + KedeProtocolUtil.revertEndian(elecAddr) + "6803083235B43A34333333";
 				String msg = commd + KedeProtocolUtil.checksum(commd) + 16;
 				logger.info("send data: " + msg);
-
 				outStream.write(KedeProtocolUtil.hexStrToBytes(msg));
 				outStream.flush();
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("send packet error", e);
 			} finally {
 				Thread.sleep(500);
 				lock.unlock();
@@ -247,17 +244,16 @@ public class CommPortService implements ICommPortService {
 						try {
 							searchElec(addr);
 						} catch (Exception e) {
-							e.printStackTrace();
 							logger.info("search error addr:{}", addr);
 						}
 						logger.info("success");
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("send packet error", e);
 					try {
 						closeCommPort();
 					} catch (Exception e1) {
-						e1.printStackTrace();
+						logger.error("close serial port error", e1);
 					}
 				}
 			}

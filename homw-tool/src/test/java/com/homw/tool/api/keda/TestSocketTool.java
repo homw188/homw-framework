@@ -109,7 +109,7 @@ public class TestSocketTool {
 		String thread_name = Thread.currentThread().getName();
 		byte[] request = thread_name.getBytes(UTF_8);
 		// 阻塞等待响应
-		Object response = tool.SendData("localhost", server_port, request, 221);
+		Object response = tool.sendData("localhost", server_port, request, 221);
 		if (debug_enabled) {
 			System.out.println("客户端[" + thread_name + "]收到响应：" + response);
 		}

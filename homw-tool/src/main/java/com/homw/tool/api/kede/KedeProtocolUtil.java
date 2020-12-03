@@ -123,7 +123,9 @@ public class KedeProtocolUtil {
 	 *         eg.{"data":{"lj":"000053.96","sy":"-000000.00","cs":"0000"},"flag":"0"}
 	 */
 	public static String parseElecData(String data) {
-		String ret;
+		if (data == null) return null;
+		
+		String ret = null;
 		String str = data.toUpperCase();
 		if (str.substring(0, 2).equals("68") && str.substring(str.length() - 2).equals("16")) {
 			// 控制码: 0x83
@@ -173,7 +175,9 @@ public class KedeProtocolUtil {
 	 *         eg.{"data":{"tz":"0000000.0","lj":"0000019.7","zt2":"00","zt1":"00","sy":"0000000.0","sj":"200720150800","cs":"0000"},"flag":"0"}
 	 */
 	public static String parseWaterData(String data) {
-		String ret;
+		if (data == null) return null;
+		
+		String ret = null;
 		String str = data.toUpperCase();
 		if (str.substring(0, 2).equals("68") && str.substring(str.length() - 2).equals("16")) {
 			// 控制码: 0x91
@@ -232,7 +236,9 @@ public class KedeProtocolUtil {
 	 * @return json字符串，eg.{"data":{"err":"Yes"},"flag":"0"}
 	 */
 	public static String parseElecCharge(String str) {
-		String ret;
+		if (str == null) return null;
+		
+		String ret = null;
 		String strr = str.toUpperCase();
 		if (strr.substring(0, 2).equals("68") && strr.substring(strr.length() - 2).equals("16")) {
 			if (strr.substring(14, 16).equals("68") && strr.substring(16, 18).equals("83")) {
@@ -259,7 +265,9 @@ public class KedeProtocolUtil {
 	 * @return json字符串，eg.{"data":{"err":"Yes"},"flag":"0"}
 	 */
 	public static String parseElecSwitch(String str) {
-		String ret;
+		if (str == null) return null;
+		
+		String ret = null;
 		String strr = str.toUpperCase();
 		if (strr.substring(0, 2).equals("68") && strr.substring(strr.length() - 2).equals("16")) {
 			if (strr.substring(16, 18).equals("9c") || strr.substring(16, 18).equals("9C")) {
@@ -286,7 +294,9 @@ public class KedeProtocolUtil {
 	 * @return json字符串，eg.{"data":{"err":"Yes"},"flag":"0"}
 	 */
 	public static String parseWaterSwitch(String str) {
-		String ret;
+		if (str == null) return null;
+		
+		String ret = null;
 		String strr = str.toUpperCase();
 		if (strr.substring(0, 2).equals("68") && strr.substring(strr.length() - 2).equals("16")) {
 			if (strr.substring(16, 18).equals("94")) {
@@ -414,7 +424,7 @@ public class KedeProtocolUtil {
 			hex = Integer.toHexString(0xFF & bArr[i]);
 			if (hex.length() < 2)
 				sb.append(0);
-			sb.append(hex.toUpperCase());
+			sb.append(hex);
 		}
 		return sb.toString();
 	}

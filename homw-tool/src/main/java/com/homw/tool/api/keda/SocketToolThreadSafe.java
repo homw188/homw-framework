@@ -13,8 +13,6 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.homw.common.util.CodecUtil;
-
 /**
  * @description thread-safe version of SocketTool
  * @author Hom
@@ -22,7 +20,7 @@ import com.homw.common.util.CodecUtil;
  * @since 2020-01-20
  */
 public class SocketToolThreadSafe {
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private static final Logger logger = LoggerFactory.getLogger(SocketToolThreadSafe.class);
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	/**
@@ -49,18 +47,18 @@ public class SocketToolThreadSafe {
 					break;
 				}
 			}
-			System.out.println("连接成功.....");
-			
+			logger.debug("连接成功.....");
+
 			/*byte[] b = new byte[50];
 			int x = socket.getInputStream().read(b, 0, b.length);
 			String s = new String(b, 0, x);
 			String info = s.replace("\0", "");
 			logger.info("response: " + info);
 			if (info != null && info.contains("cmd::Successful")) {
-				System.out.println("连接成功.....");
+				logger.debug("连接成功.....");
 			}*/
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("连接失败：ip={}, port={}", serverIp, serverPort, e);
 		}
 		return socket;
 	}
@@ -75,7 +73,7 @@ public class SocketToolThreadSafe {
 	 * @return
 	 * @throws Exception
 	 */
-	public Object SendData(String serverIp, int serverPort, byte[] content, int tag) {
+	public Object sendData(String serverIp, int serverPort, byte[] content, int tag) {
 		// 建立连接
 		final Socket socket = connectServer(serverIp, serverPort);
 		if (socket == null)
@@ -94,10 +92,10 @@ public class SocketToolThreadSafe {
 			System.arraycopy(heads, 0, packet, 0, heads.length);
 			System.arraycopy(content, 0, packet, heads.length, content.length);
 			try {
-				logger.info("send packet: " + CodecUtil.bytesToHex(packet));
+				logger.info("send packet: " + CommonTool.bytes2Hex(packet));
 				socket.getOutputStream().write(packet);
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("发送失败", e);
 			}
 
 			// 等待响应
@@ -109,12 +107,12 @@ public class SocketToolThreadSafe {
 					String resp = null;
 					try {
 						while ((len = socket.getInputStream().read(buf)) != -1) {
-							resp = CommonTool.bytesToHexString(buf);
+							resp = CommonTool.bytes2Hex(buf);
 							resp = resp.substring(0, len * 2);
 							break;
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
+						logger.error("等待响应失败", e);
 					}
 					logger.info("socket resp: " + resp);
 					return resp;
@@ -125,14 +123,14 @@ public class SocketToolThreadSafe {
 				// 防止read阻塞, 最长8秒无任何返回直接退出
 				result = future.get(8, TimeUnit.SECONDS);
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("等待响应失败", e);
 			}
 		} finally {
 			// 关闭连接
 			try {
 				socket.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("关闭连接失败", e);
 			}
 		}
 		return result;

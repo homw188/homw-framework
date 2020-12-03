@@ -33,7 +33,7 @@ public class WaterProtocol {
 	
 					tempZl = Arrays.copyOfRange(_obj, 0, 14);
 					// 校验
-					jy = CommonTool.makeChecksum(tempZl);
+					jy = CommonTool.checkSum(tempZl);
 					_obj[14] = (byte) Integer.parseInt(jy, 16);
 					_obj[15] = 22;
 				}
@@ -62,7 +62,7 @@ public class WaterProtocol {
 					// tempZl = Arrays.copyOfRange(_obj, 0, 14);
 					tempZl = Arrays.copyOfRange(_obj, 0, 15);
 					// 校验
-					jy = CommonTool.makeChecksum(tempZl);
+					jy = CommonTool.checkSum(tempZl);
 					_obj[15] = (byte) Integer.parseInt(jy, 16);
 					_obj[16] = 22;
 				}
@@ -94,7 +94,7 @@ public class WaterProtocol {
 		String jy = "";
 		tempZl = Arrays.copyOfRange(_obj, 0, _obj.length - 2);
 		// 校验
-		jy = CommonTool.makeChecksum(tempZl);
+		jy = CommonTool.checkSum(tempZl);
 		_obj[db.length + 11] = (byte) Integer.parseInt(jy, 16);
 		_obj[db.length + 12] = 22;
 
@@ -107,7 +107,7 @@ public class WaterProtocol {
 		try {
 			if (backHexStr.substring(0, 8).equals("cccc00ff")) {// 水表标识
 				backHexStr = backHexStr.substring(30, backHexStr.length() - 4); // 去掉封装字节数
-				String sbadd = CommonTool.getSBAddr(backHexStr.substring(4, 18)).toString(); // 得到水表地址
+				String sbadd = CommonTool.getWaterAddr(backHexStr.substring(4, 18)).toString(); // 得到水表地址
 
 				int codeTemp = Integer.parseInt(backHexStr.substring(18, 20), 16);
 				switch (codeTemp) {

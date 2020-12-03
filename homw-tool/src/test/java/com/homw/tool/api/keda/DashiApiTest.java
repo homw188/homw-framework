@@ -20,12 +20,12 @@ public class DashiApiTest {
 		StringBuffer strBuf = new StringBuffer();
 		strBuf.append("55").append("04").append(addr).append("2D").append("0001").append("0").append(readNo)
 				.append("00");
-		byte[] sumBytes = DashiDoorApi.checkSum(DashiDoorApi.hexStr2Bytes(strBuf.toString()), 2);
-		strBuf.append(DashiDoorApi.bytes2HexString(sumBytes));
+		byte[] sumBytes = DashiDoorApi.checkSum(DashiDoorApi.hex2Bytes(strBuf.toString()), 2);
+		strBuf.append(DashiDoorApi.bytes2Hex(sumBytes).toUpperCase());
 		System.out.println("checksum: " + strBuf.toString());
 
-		byte[] data = DashiDoorApi.hexStr2Bytes(strBuf.toString());
-		System.out.println("send packet: " + DashiDoorApi.bytesToHexStr(data));
+		byte[] data = DashiDoorApi.hex2Bytes(strBuf.toString());
+		System.out.println("send packet: " + DashiDoorApi.bytes2Hex(data));
 
 		DashiDoorApi.send(ip, Integer.valueOf(port), data);
 		System.out.println("open door success.");

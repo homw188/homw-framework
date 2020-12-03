@@ -5,7 +5,13 @@ import org.slf4j.LoggerFactory;
 
 public class KDZTService {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private static final Logger logger = LoggerFactory.getLogger(KDZTService.class);
+	
+	// private SocketTool socketTool = new SocketTool();
+	private SocketToolThreadSafe socketTool = new SocketToolThreadSafe();
+	private Protocol xyInfo = new Protocol(); // 集中式表
+	private WaterProtocol waterxyInfo = new WaterProtocol();// 水表协议
+	private Protocol_645 xyInfo_db = new Protocol_645(); // 单表协议
 
 	private KDZTService() {
 	}
@@ -15,22 +21,8 @@ public class KDZTService {
 	}
 
 	public static KDZTService getSingleInstance() {
-//		if (kDZTService == null) {
-//			synchronized(){
-//				kDZTService = new KDZTService();
-//			}
-//		}
-//		return kDZTService;
 		return SingletonHolder.instance;
 	}
-
-	// private SocketTool socketTool = new SocketTool();
-	private SocketToolThreadSafe socketTool = new SocketToolThreadSafe();
-
-	private Protocol xyInfo = new Protocol(); // 集中式表
-
-	private WaterProtocol waterxyInfo = new WaterProtocol();// 水表协议
-	private Protocol_645 xyInfo_db = new Protocol_645(); // 单表协议
 
 	/**
 	 * 通断控制
@@ -52,30 +44,31 @@ public class KDZTService {
 		Object backData = null;
 		if (line == -1) { // 单表通断
 			sendContent = xyInfo_db.getCommand("2", txcs);
-			backData = socketTool.SendData(serverIP, serverPort, sendContent, 221);
+			backData = socketTool.sendData(serverIP, serverPort, sendContent, 221);
 		} else {
 			sendContent = xyInfo.getCommand("28", txcs);
-			backData = socketTool.SendData(serverIP, serverPort, sendContent, 223);
+			backData = socketTool.sendData(serverIP, serverPort, sendContent, 223);
 		}
 
 		if (backData instanceof String) {
-			String resultValue = "";
-
-			if (backData.equals(""))
+			String result = "";
+			if (backData.equals("")) {
 				return "Err,0";
+			}
 			try {
-				if (line == -1)
-					resultValue = xyInfo_db.analysisBack((String) backData);
-				else
-					resultValue = xyInfo.analysisBack((String) backData);
+				if (line == -1) {
+					result = xyInfo_db.analysisBack((String) backData);
+				} else {
+					result = xyInfo.analysisBack((String) backData);
+				}
 			} catch (Exception e) {
 				socketTool.setExit(true);
-				e.printStackTrace();
+				logger.error("解析响应结果异常", e);
 			}
-			if (resultValue.equals("")) {
+			if (result.equals("")) {
 				return "Err,0"; // 无返回数据
 			} else {
-				return resultValue;
+				return result;
 			}
 		} else {
 			return "Err,-1";
@@ -100,28 +93,28 @@ public class KDZTService {
 		Object backData = null;
 		if (line == -1) {
 			sendContent = xyInfo_db.getCommand("3", txcs);
-			backData = socketTool.SendData(serverIP, serverPort, sendContent, 221);
+			backData = socketTool.sendData(serverIP, serverPort, sendContent, 221);
 		} else {
 			sendContent = xyInfo.getCommand("30", txcs);
-			backData = socketTool.SendData(serverIP, serverPort, sendContent, 223);
+			backData = socketTool.sendData(serverIP, serverPort, sendContent, 223);
 		}
 
 		if (backData instanceof String) {
-			String resultValue = "";
+			String result = "";
 			try {
-				if (line == -1)
-					resultValue = xyInfo_db.analysisBack((String) backData);
-				else
-					resultValue = xyInfo.analysisBack((String) backData);
+				if (line == -1) {
+					result = xyInfo_db.analysisBack((String) backData);
+				} else {
+					result = xyInfo.analysisBack((String) backData);
+				}
 			} catch (Exception e) {
 				socketTool.setExit(true);
-				e.printStackTrace();
+				logger.error("解析响应结果异常", e);
 			}
-
-			if (resultValue.equals("")) {
+			if (result.equals("")) {
 				return "Err,0";
 			} else {
-				return resultValue;
+				return result;
 			}
 		} else {
 			return "Err,-1";
@@ -146,29 +139,29 @@ public class KDZTService {
 
 		if (line == -1) {
 			sendContent = xyInfo_db.getCommand("1", txcs);
-			backData = socketTool.SendData(serverIP, serverPort, sendContent, 221);
+			backData = socketTool.sendData(serverIP, serverPort, sendContent, 221);
 		} else {
 			sendContent = xyInfo.getCommand("36", txcs);
-			backData = socketTool.SendData(serverIP, serverPort, sendContent, 223);
+			backData = socketTool.sendData(serverIP, serverPort, sendContent, 223);
 		}
 
 		if (backData instanceof String) {
-			String resultValue = "";
+			String result = "";
 			try {
-				if (line == -1)
-					resultValue = xyInfo_db.analysisBack((String) backData);
-				else
-					resultValue = xyInfo.analysisBack((String) backData);
+				if (line == -1) {
+					result = xyInfo_db.analysisBack((String) backData);
+				} else {
+					result = xyInfo.analysisBack((String) backData);
+				}
 			} catch (Exception e) {
 				socketTool.setExit(true);
-
-				e.printStackTrace();
+				logger.error("解析响应结果异常", e);
 			}
 
-			if (resultValue.equals("")) {
+			if (result.equals("")) {
 				return "Err,0";
 			} else {
-				return resultValue;
+				return result;
 			}
 		} else {
 			return "Err,-1";
@@ -236,20 +229,17 @@ public class KDZTService {
 	 * @return
 	 */
 	public String readWaterValue(String serverIP, int serverPort, long txadd) {
-		logger.info("start readWaterValue...");
 		String[] txcs = new String[1];
 		txcs[0] = "" + txadd;
 
 		byte[] sendContent = waterxyInfo.fzxy(waterxyInfo.getCommand("01", txcs), 1);
-		// System.out.println(xyInfo.bytesToHexString(sendContent));
-		Object backData = socketTool.SendData(serverIP, serverPort, sendContent, 255);
-		logger.info("backData: " + backData);
+		Object backData = socketTool.sendData(serverIP, serverPort, sendContent, 255);
 		if (backData instanceof String) {
-			String resultValue = waterxyInfo.analysisBack((String) backData);
-			if (resultValue.equals("")) {
+			String result = waterxyInfo.analysisBack((String) backData);
+			if (result.equals("")) {
 				return "Err,0";
 			} else {
-				return resultValue;
+				return result;
 			}
 		} else {
 			return "Err,-1";
@@ -272,20 +262,18 @@ public class KDZTService {
 		byte[] sendContent = null;
 		Object backData = null;
 		sendContent = waterxyInfo.fzxy(waterxyInfo.getCommand("04", txcs), 4);
-		backData = socketTool.SendData(serverIP, serverPort, sendContent, 255);
+		backData = socketTool.sendData(serverIP, serverPort, sendContent, 255);
 
 		if (backData instanceof String) {
-			String resultValue = "";
-
-			if (backData.equals(""))
+			String result = "";
+			if (backData.equals("")) {
 				return "Err,0";
-
-			resultValue = waterxyInfo.analysisBack((String) backData);
-
-			if (resultValue.equals("")) {
+			}
+			result = waterxyInfo.analysisBack((String) backData);
+			if (result.equals("")) {
 				return "Err,0"; // 无返回数据
 			} else {
-				return resultValue;
+				return result;
 			}
 		} else {
 			return "Err,-1";
@@ -307,20 +295,19 @@ public class KDZTService {
 		byte[] sendContent = null;
 		Object backData = null;
 		sendContent = waterxyInfo.fzxy(waterxyInfo.getCommand("04", txcs), 4);
-		backData = socketTool.SendData(serverIP, serverPort, sendContent, 255);
+		backData = socketTool.sendData(serverIP, serverPort, sendContent, 255);
 
 		if (backData instanceof String) {
-			String resultValue = "";
+			String result = "";
 
-			if (backData.equals(""))
+			if (backData.equals("")) {
 				return "Err,0";
-
-			resultValue = waterxyInfo.analysisBack((String) backData);
-
-			if (resultValue.equals("")) {
+			}
+			result = waterxyInfo.analysisBack((String) backData);
+			if (result.equals("")) {
 				return "Err,0"; // 无返回数据
 			} else {
-				return resultValue;
+				return result;
 			}
 		} else {
 			return "Err,-1";

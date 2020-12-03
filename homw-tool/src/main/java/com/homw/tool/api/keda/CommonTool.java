@@ -1,9 +1,8 @@
 package com.homw.tool.api.keda;
 
 public class CommonTool {
-	// 计算和校验
-	public static String makeChecksum(byte[] bytes) {
-		String hexStr = bytesToHexString(bytes);
+	public static String checkSum(byte[] bytes) {
+		String hexStr = bytes2Hex(bytes);
 		int total = 0;
 		int len = hexStr.length();
 		int num = 0;
@@ -22,45 +21,56 @@ public class CommonTool {
 		return hex;
 	}
 
-	// 字节数组转十六进制字符串
-	public static final String bytesToHexString(byte[] bArray) {
-		String sTemp = "";
-		for (int i = 0; i < bArray.length; i++)
-			sTemp = sTemp + String.format("%02x", new Integer(0xFF & bArray[i]));
-		return sTemp;
+	public static String bytes2Hex(byte[] bytes) {
+		String hex = "";
+		for (int i = 0; i < bytes.length; i++)
+			hex = hex + String.format("%02x", 0xFF & bytes[i]);
+		return hex;
 	}
 
-	// 十六进制字符串转字节数组
-	public static final short[] HexStrtoBytes(String str) {
+	public static short[] hex2Shorts(String str) {
 		short[] bytes = new short[str.length() / 2];
 		for (int i = 0; i < str.length() / 2; i++) {
 			String subStr = str.substring(i * 2, i * 2 + 2);
 			bytes[i] = (short) (Integer.parseInt(subStr, 16) & 0xff);
 		}
-
+		return bytes;
+	}
+	
+	public static byte[] hex2Bytes(String str) {
+		byte[] bytes = new byte[str.length() / 2];
+		for (int i = 0; i < str.length() / 2; i++) {
+			String subStr = str.substring(i * 2, i * 2 + 2);
+			bytes[i] = (byte) Integer.parseInt(subStr, 16);
+		}
 		return bytes;
 	}
 
-	// 得到水表地址
-	public static Long getSBAddr(String dbAddr) {
-		String tempS = "";
-		for (int i = dbAddr.length(); i > 0; i -= 2) {
-			tempS = tempS + dbAddr.substring(i - 2, i);
+	public static Long getWaterAddr(String addr) {
+		String result = "";
+		for (int i = addr.length(); i > 0; i -= 2) {
+			result = result + addr.substring(i - 2, i);
 		}
-		return Long.parseLong(tempS);
+		return Long.parseLong(result);
 	}
 
 	// 加33H
-	public static void encrypt(byte[] cmd, int begIdx, int len) {
+	public static void encrypt(byte[] cmd, int start, int len) {
 		for (int i = 0; i < len; i++) {
-			cmd[begIdx + i] = (byte) ((cmd[begIdx + i] + 0x33) & 0xFF);
+			cmd[start + i] = (byte) ((cmd[start + i] + 0x33) & 0xFF);
 		}
 	}
 
 	// 减33H
-	public static void decrypt(short[] cmd, int begIdx, int len) {
+	public static void decrypt(short[] cmd, int start, int len) {
 		for (int i = 0; i < len; i++) {
-			cmd[begIdx + i] -= (byte) 0x33;
+			cmd[start + i] -= (byte) 0x33;
+		}
+	}
+	
+	public static void decrypt(byte[] cmd, int start, int len) {
+		for (int i = 0; i < len; i++) {
+			cmd[start + i] -= (byte) 0x33;
 		}
 	}
 }
