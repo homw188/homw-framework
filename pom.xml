@@ -50,7 +50,7 @@
     <poi-version>3.9</poi-version>
     <rabbitmq-version>3.4.2</rabbitmq-version>
     <activemq-version>5.10.0</activemq-version>
-    <httpclient-version>4.5.3</httpclient-version>
+    <httpclient-version>4.5.13</httpclient-version>
     <lombok-verion>1.16.10</lombok-verion>
     <rxtx-version>2.1.7</rxtx-version>
     <netty-version>4.1.25.Final</netty-version>
