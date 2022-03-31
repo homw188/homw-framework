@@ -37,7 +37,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     
-    <spring-version>4.2.9.RELEASE</spring-version>
+    <spring-version>5.3.18</spring-version>
     <aspectj-version>1.8.6</aspectj-version>
     <cglib-version>3.2.0</cglib-version>
     <druid-version>1.0.26</druid-version>
